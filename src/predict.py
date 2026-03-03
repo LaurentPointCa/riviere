@@ -10,6 +10,8 @@ import argparse
 import sys
 from pathlib import Path
 
+import matplotlib.dates as mdates
+import matplotlib.pyplot as plt
 import pandas as pd
 
 sys.path.insert(0, str(Path(__file__).parent))
@@ -92,6 +94,102 @@ def print_forecast(
     print()
 
 
+def _doy_stats(X: pd.DataFrame) -> pd.DataFrame:
+    """
+    Compute per-DOY historical min, max, and mean for flow and level.
+
+    Returns a DataFrame indexed 1–365 with MultiIndex columns
+    (flow_m3s|level_m) × (min|max|mean).
+    DOY 366 (leap Feb-29) is filled with DOY 365 values.
+    """
+    import numpy as np
+    doy = np.clip(X.index.day_of_year, 1, 365)
+    stats = X.groupby(doy)[["flow_m3s", "level_m"]].agg(["min", "max", "mean"])
+    stats = stats.reindex(range(1, 366))  # ensure 1-365, fill any gaps
+    stats = stats.ffill().bfill()
+    return stats
+
+
+def plot_forecast(
+    result: pd.DataFrame,
+    anchor_date: pd.Timestamp,
+    X: pd.DataFrame,
+) -> Path:
+    """
+    Generate and save a 2-panel chart (flow + level) showing:
+      - Past 12 months of observed data
+      - Historical min/max envelope and mean per day-of-year
+      - 5-day forecast
+
+    Returns the path to the saved PNG.
+    """
+    # ── Data prep ────────────────────────────────────────────────────────────
+    obs_start = anchor_date - pd.DateOffset(months=12)
+    obs = X.loc[obs_start:anchor_date, ["flow_m3s", "level_m"]]
+
+    stats = _doy_stats(X)
+
+    # Map DOY stats to every date in the plot window
+    all_dates = pd.date_range(obs_start, result["date"].iloc[-1], freq="D")
+    import numpy as np
+    doys = np.clip(all_dates.day_of_year, 1, 365)
+    env = stats.loc[doys].copy()
+    env.index = all_dates
+
+    # ── Plot ─────────────────────────────────────────────────────────────────
+    fig, (ax_f, ax_l) = plt.subplots(2, 1, figsize=(14, 8), sharex=True)
+    fig.suptitle(
+        f"Station 043301 — Rivière des Prairies\nForecast from {anchor_date.strftime('%Y-%m-%d')}",
+        fontsize=13,
+    )
+
+    for ax, var, unit, color in [
+        (ax_f, "flow_m3s",  "Flow (m³/s)", "steelblue"),
+        (ax_l, "level_m",   "Level (m)",   "teal"),
+    ]:
+        lo  = env[(var, "min")]
+        hi  = env[(var, "max")]
+        avg = env[(var, "mean")]
+
+        # Historical envelope
+        ax.fill_between(env.index, lo, hi, color=color, alpha=0.10, label="Hist. min/max")
+        ax.plot(env.index, avg, color=color, lw=1, alpha=0.5, linestyle="--", label="Hist. mean")
+
+        # Observed past 12 months
+        ax.plot(obs.index, obs[var], color=color, lw=1.8, label="Observed")
+
+        # 5-day forecast
+        # Connect the last observed point to the first forecast point for continuity
+        bridge_dates  = [anchor_date] + result["date"].tolist()
+        bridge_values = [obs[var].iloc[-1]] + result[var].tolist()
+        ax.plot(bridge_dates, bridge_values, color="crimson", lw=2,
+                linestyle="--", marker="o", markersize=5, zorder=5, label="Forecast")
+
+        # "Today" marker
+        ax.axvline(anchor_date, color="gray", lw=0.8, linestyle=":")
+
+        ax.set_ylabel(unit, fontsize=10)
+        ax.legend(fontsize=8, loc="upper left")
+        ax.grid(True, alpha=0.25)
+        ax.margins(x=0.01)
+
+    ax_l.xaxis.set_major_locator(mdates.MonthLocator())
+    ax_l.xaxis.set_major_formatter(mdates.DateFormatter("%b\n%Y"))
+    fig.autofmt_xdate(rotation=0, ha="center")
+    plt.tight_layout()
+
+    out_path = Path(f"forecast_{anchor_date.date()}.png")
+    plt.savefig(out_path, dpi=150, bbox_inches="tight")
+    plt.close()
+    print(f"Chart saved → {out_path}")
+
+    import subprocess, sys as _sys
+    if _sys.platform == "darwin":
+        subprocess.Popen(["open", str(out_path)])
+
+    return out_path
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description="Generate a 5-day forecast for station 043301.")
     parser.add_argument(
@@ -120,6 +218,7 @@ def main() -> None:
 
     result = forecast(anchor, X)
     print_forecast(result, anchor, X)
+    plot_forecast(result, anchor, X)
 
 
 if __name__ == "__main__":
