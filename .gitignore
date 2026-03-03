@@ -1,0 +1,10 @@
+.venv/
+data/
+models/
+.claude/
+__pycache__/
+*.pyc
+*.pyo
+.DS_Store
+*.egg-info/
+.ipynb_checkpoints/
