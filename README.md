@@ -6,7 +6,8 @@ of hydrological and climate data.
 
 ## Results
 
-Test set: 2024-02-27 → 2026-02-26 (731 days)
+Held-out test set (2024-02-27 → 2026-02-26, 731 days) used for evaluation.
+The deployed model is retrained on the full dataset (1978-01-01 → 2026-02-26, 17,589 days).
 
 | Horizon | Flow RMSE (m³/s) | Level RMSE (m) | Skill vs. persistence |
 |---------|-----------------|----------------|-----------------------|
@@ -39,7 +40,7 @@ features.py       build_dataset() → (X, y)
      │
      ▼
 model.py          10 × LGBMRegressor (one per horizon)
-                  Trained on 1978–2024, tested on 2024–2026
+                  Evaluated on 2024–2026, deployed on full 1978–2026
      │
      ▼
 predict.py        5-day forecast CLI
