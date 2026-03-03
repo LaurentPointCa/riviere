@@ -4,6 +4,8 @@ Daily flow (m³/s) and water level (m) forecast for CEHQ station **043301**
 (Rivière des Prairies at Laval), using a LightGBM model trained on 45+ years
 of hydrological and climate data.
 
+![5-day forecast chart](docs/forecast_sample.png)
+
 ## Results
 
 Held-out test set (2024-02-27 → 2026-02-26, 731 days) used for evaluation.
