@@ -4,7 +4,18 @@ cd /Users/laurentchouinard/claude/riviere
 
 echo "=== $(date) ==="
 
-# Run forecast — also refreshes docs/forecast_sample.png
+# Refresh data cache (flow, level, climate)
+echo "Refreshing data cache..."
+.venv/bin/python - <<'EOF'
+import sys; sys.path.insert(0, "src")
+from load_data import load_flow, load_level
+from load_climate import load_climate
+load_flow(cache=False)
+load_level(cache=False)
+load_climate(cache=False)
+EOF
+
+# Run forecast — also updates docs/forecast_sample.png
 .venv/bin/python src/predict.py
 
 # Commit and push the updated chart if it changed

@@ -143,6 +143,11 @@ def load_climate(cache: bool = True, spacing_km: float = 50.0) -> pd.DataFrame:
     API call, averages them to produce a basin-mean time series, and caches
     the result to data/climate_daily.parquet.
 
+    When cache=True and a cache exists, returns the cached data.
+    When cache=False and a cache exists, performs an incremental update:
+      only fetches dates newer than the last cached date, then appends.
+    When no cache exists, performs a full download from CLIMATE_START.
+
     Returns a DataFrame indexed by date with columns:
       temperature_2m_mean, precipitation_sum, snowfall_sum, rain_sum
     """
@@ -154,12 +159,29 @@ def load_climate(cache: bool = True, spacing_km: float = 50.0) -> pd.DataFrame:
         print(f"Loaded {len(df):,} rows from {df.index.min().date()} to {df.index.max().date()}")
         return df
 
-    geojson = fetch_basin_boundary(cache=cache)
+    geojson = fetch_basin_boundary(cache=True)
     points = generate_grid_points(geojson, spacing_km=spacing_km)
-    print(f"Fetching ERA5 for {len(points)} grid points in one request...")
 
-    climate = fetch_climate_all_points(points)
-    climate.index.name = "date"
+    if not cache and cache_path.exists():
+        # Incremental update: only fetch missing days
+        existing = pd.read_parquet(cache_path)
+        last_date = existing.index.max()
+        start_date = (last_date + pd.Timedelta(days=1)).strftime("%Y-%m-%d")
+        today = pd.Timestamp.today().strftime("%Y-%m-%d")
+
+        if start_date > today:
+            print(f"Climate cache already up to date ({last_date.date()}).")
+            return existing
+
+        print(f"Fetching ERA5 for {len(points)} grid points ({start_date} → {today})...")
+        new_data = fetch_climate_all_points(points, start_date=start_date, end_date=today)
+        new_data.index.name = "date"
+        climate = pd.concat([existing, new_data])
+        climate = climate[~climate.index.duplicated(keep="last")].sort_index()
+    else:
+        print(f"Fetching ERA5 for {len(points)} grid points in one request...")
+        climate = fetch_climate_all_points(points)
+        climate.index.name = "date"
 
     DATA_DIR.mkdir(parents=True, exist_ok=True)
     climate.to_parquet(cache_path)
