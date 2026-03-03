@@ -179,9 +179,13 @@ def plot_forecast(
     plt.tight_layout()
 
     out_path = Path(f"forecast_{anchor_date.date()}.png")
+    sample_path = Path("docs/forecast_sample.png")
     plt.savefig(out_path, dpi=150, bbox_inches="tight")
+    sample_path.parent.mkdir(parents=True, exist_ok=True)
+    plt.savefig(sample_path, dpi=150, bbox_inches="tight")
     plt.close()
     print(f"Chart saved → {out_path}")
+    print(f"Sample updated → {sample_path}")
 
     import subprocess, sys as _sys
     if _sys.platform == "darwin":
