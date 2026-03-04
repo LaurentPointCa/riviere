@@ -25,12 +25,13 @@ The deployed model is retrained on the full dataset (1978-01-01 → 2026-02-26, 
 |--------|-----------|--------|
 | [CEHQ](https://www.cehq.gouv.qc.ca) | Flow (m³/s), Level (m) | 1922–present |
 | [Open-Meteo ERA5](https://open-meteo.com) | Temperature, precipitation, snowfall, rain | 1940–present |
+| [mghydro.com](https://mghydro.com) | Basin boundary polygon (GeoJSON) | static |
 
 ## Pipeline
 
 ```
 load_data.py      CEHQ historical + live feed
-load_climate.py   ERA5 basin-mean daily climate (Open-Meteo)
+load_climate.py   basin boundary (mghydro.com) → ERA5 basin-mean daily climate (Open-Meteo)
      │
      ▼
 features.py       build_dataset() → (X, y)
