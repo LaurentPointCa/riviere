@@ -1,3 +1,19 @@
+# Prévision du niveau de la station 043301
+
+Ce projet est une simple expérimentation que j'ai créé afin de ma familiariser 
+avec Claude Code. Aucune donné ni méthode utilisée ici est réputée être valide, 
+fonctionnelle ni n'est réputée exacte. 
+
+Les données de ce dépôt GitHub ainsi que celles produites par les outils ne 
+peuvent pas être utilisées pour aucune fin de planification ou de décision 
+par rapport au niveau de la rivière.
+
+L'auteur se dégage de toute responsabilité face à l'utilisation par quiconque 
+des données ou outils sur ce site. Le tout n'est qu'une exploration et ne sert 
+qu'à discuter sur les outils et techniques explorées ici.
+
+  -Laurent
+
 # Rivière des Prairies — 5-Day Forecast
 
 Daily flow (m³/s) and water level (m) forecast for CEHQ station **043301**
