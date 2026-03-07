@@ -20,7 +20,9 @@ Daily flow (m³/s) and water level (m) forecast for CEHQ station **043301**
 (Rivière des Prairies at Laval), using a LightGBM model trained on 45+ years
 of hydrological and climate data.
 
-![5-day forecast chart](docs/forecast_sample.png)
+![5-day forecast chart](docs/forecast.png)
+
+Latest forecast also available as machine-readable JSON: [`docs/forecast.json`](docs/forecast.json)
 
 ## Results
 
@@ -39,19 +41,20 @@ The deployed model is retrained on the full dataset (1978-01-01 → 2026-02-26, 
 
 | Source | Variables | Period |
 |--------|-----------|--------|
-| [CEHQ](https://www.cehq.gouv.qc.ca) | Flow (m³/s), Level (m) | 1922–present |
+| [CEHQ](https://www.cehq.gouv.qc.ca) | Flow (m³/s), Level (m) — station 043301 | 1922–present |
+| [CEHQ](https://www.cehq.gouv.qc.ca) | Upstream level (m) — station 043108 (Lac des Deux Montagnes) | 1986–present |
 | [Open-Meteo ERA5](https://open-meteo.com) | Temperature, precipitation, snowfall, rain | 1940–present |
 | [mghydro.com](https://mghydro.com) | Basin boundary polygon (GeoJSON) | static |
 
 ## Pipeline
 
 ```
-load_data.py      CEHQ historical + live feed
+load_data.py      CEHQ historical + live feed (stations 043301 + upstream 043108)
 load_climate.py   basin boundary (mghydro.com) → ERA5 basin-mean daily climate (Open-Meteo)
      │
      ▼
 features.py       build_dataset() → (X, y)
-                  • Lags 1–30 days (flow, level, climate)
+                  • Lags 1–30 days (flow, level, upstream level, climate)
                   • Rolling mean/max/std (3–30 days)
                   • Snowpack proxy (degree-day model)
                   • Seasonal encoding (sin/cos DOY)
@@ -62,7 +65,7 @@ model.py          10 × LGBMRegressor (one per horizon)
                   Evaluated on 2024–2026, deployed on full 1978–2026
      │
      ▼
-predict.py        5-day forecast CLI
+predict.py        5-day forecast CLI → docs/forecast.png + docs/forecast.json
 ```
 
 ## Usage
@@ -107,8 +110,8 @@ Example output:
 - **Strategy:** direct multi-output — one `LGBMRegressor` per horizon (t+1…t+5),
   separately for flow and level
 - **Training period:** 1978-01-01 onward (post-dam era)
-- **Features:** ~82 columns — lags, rolling statistics, snowpack proxy,
-  seasonal encoding, flow anomaly
+- **Features:** ~90 columns — lags, rolling statistics (including upstream station 043108),
+  snowpack proxy, seasonal encoding, flow anomaly
 - **Hyperparameters:** 500 trees, lr=0.05, 63 leaves, subsample=0.8
 - **Top features:** current flow, 3-day rolling max flow, current level,
   day-of-year (sin), 30-day mean temperature
