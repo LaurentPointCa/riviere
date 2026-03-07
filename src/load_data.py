@@ -21,9 +21,11 @@ from pathlib import Path
 
 
 SOURCES = {
-    "flow":  "https://www.cehq.gouv.qc.ca/depot/historique_donnees/fichier/043301_Q.txt",
-    "level": "https://www.cehq.gouv.qc.ca/depot/historique_donnees/fichier/043301_N.txt",
-    "live":  "https://www.cehq.gouv.qc.ca/suivihydro/fichier_donnees.asp?NoStation=043301",
+    "flow":           "https://www.cehq.gouv.qc.ca/depot/historique_donnees/fichier/043301_Q.txt",
+    "level":          "https://www.cehq.gouv.qc.ca/depot/historique_donnees/fichier/043301_N.txt",
+    "live":           "https://www.cehq.gouv.qc.ca/suivihydro/fichier_donnees.asp?NoStation=043301",
+    "upstream_level": "https://www.cehq.gouv.qc.ca/depot/historique_donnees/fichier/043108_N.txt",
+    "upstream_live":  "https://www.cehq.gouv.qc.ca/suivihydro/fichier_donnees.asp?NoStation=043108",
 }
 
 DATA_DIR = Path(__file__).parent.parent / "data"
@@ -149,14 +151,69 @@ def load_live() -> pd.DataFrame:
     return df
 
 
+def _live_daily() -> pd.DataFrame:
+    """Fetch live 15-min feed and resample to daily means (flow_m3s, level_m)."""
+    live = load_live()
+    return live[["flow_m3s", "level_m"]].resample("D").mean()
+
+
 def load_flow(cache: bool = True) -> pd.DataFrame:
-    """Load daily flow data (m³/s) for station 043301."""
-    return _load_cehq("flow", "043301_Q.txt", "flow_m3s", cache)
+    """Load daily flow data (m³/s) for station 043301, extended with live feed."""
+    hist = _load_cehq("flow", "043301_Q.txt", "flow_m3s", cache)
+    live_daily = _live_daily()
+    new_rows = live_daily[["flow_m3s"]][live_daily.index > hist.index.max()]
+    if not new_rows.empty:
+        hist = pd.concat([hist, new_rows])
+        print(f"Extended with {len(new_rows)} days from live feed (up to {new_rows.index.max().date()})")
+    return hist
 
 
 def load_level(cache: bool = True) -> pd.DataFrame:
-    """Load daily water level data (m) for station 043301."""
-    return _load_cehq("level", "043301_N.txt", "level_m", cache)
+    """Load daily water level data (m) for station 043301, extended with live feed."""
+    hist = _load_cehq("level", "043301_N.txt", "level_m", cache)
+    hist["level_m"] -= 27.62  # convert historical datum to match live feed
+    live_daily = _live_daily()
+    new_rows = live_daily[["level_m"]][live_daily.index > hist.index.max()]
+    if not new_rows.empty:
+        hist = pd.concat([hist, new_rows])
+        print(f"Extended with {len(new_rows)} days from live feed (up to {new_rows.index.max().date()})")
+    return hist
+
+
+def _load_upstream_live() -> pd.DataFrame:
+    """Fetch live 15-min level feed for upstream station 043108 (Lac des Deux Montagnes)."""
+    text = fetch_raw(SOURCES["upstream_live"], encoding="utf-8")
+    rows = []
+    for line in text.splitlines():
+        line = line.strip()
+        if not line:
+            continue
+        parts = [p.strip() for p in line.split("\t") if p.strip()]
+        if parts[0] == "Date":
+            continue
+        if len(parts) < 3:
+            continue
+        date_str, time_str, level_str = parts[0], parts[1], parts[2]
+        level_val = float(level_str.replace("\u00a0", "").replace(",", "."))
+        rows.append({
+            "datetime":         pd.to_datetime(f"{date_str} {time_str}"),
+            "upstream_level_m": level_val,
+        })
+    df = pd.DataFrame(rows).set_index("datetime").sort_index()
+    print(f"Loaded {len(df):,} upstream live rows from {df.index.min()} to {df.index.max()}")
+    return df
+
+
+def load_upstream_level(cache: bool = True) -> pd.DataFrame:
+    """Load daily level (m) for upstream station 043108 (Lac des Deux Montagnes), extended with live feed."""
+    hist = _load_cehq("upstream_level", "043108_N.txt", "upstream_level_m", cache)
+    live = _load_upstream_live()
+    live_daily = live[["upstream_level_m"]].resample("D").mean()
+    new_rows = live_daily[live_daily.index > hist.index.max()]
+    if not new_rows.empty:
+        hist = pd.concat([hist, new_rows])
+        print(f"Extended with {len(new_rows)} days from upstream live feed (up to {new_rows.index.max().date()})")
+    return hist
 
 
 if __name__ == "__main__":

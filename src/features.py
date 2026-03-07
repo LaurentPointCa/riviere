@@ -18,7 +18,7 @@ import pandas as pd
 # Allow running as a script from the project root
 sys.path.insert(0, str(Path(__file__).parent))
 
-from load_data import load_flow, load_level
+from load_data import load_flow, load_level, load_upstream_level
 from load_climate import load_climate
 
 DAM_ERA_START = "1978-01-01"
@@ -27,7 +27,7 @@ DAM_ERA_START = "1978-01-01"
 LAG_DAYS = [1, 2, 3, 4, 5, 7, 14, 30]
 
 # Variables to lag
-LAG_VARS_HYDRO = ["flow_m3s", "level_m", "temperature_2m_mean", "precipitation_sum", "rain_sum"]
+LAG_VARS_HYDRO = ["flow_m3s", "level_m", "upstream_level_m", "temperature_2m_mean", "precipitation_sum", "rain_sum"]
 
 
 def _add_lag_features(df: pd.DataFrame) -> pd.DataFrame:
@@ -52,6 +52,12 @@ def _add_rolling_features(df: pd.DataFrame) -> pd.DataFrame:
     for window, suffix in [(7, "7d"), (14, "14d")]:
         df[f"flow_roll_std_{suffix}"] = df["flow_m3s"].rolling(window, min_periods=1).std()
         df[f"level_roll_std_{suffix}"] = df["level_m"].rolling(window, min_periods=1).std()
+
+    # Upstream level rolling features
+    for window, suffix in [(3, "3d"), (7, "7d"), (14, "14d"), (30, "30d")]:
+        df[f"upstream_level_roll_mean_{suffix}"] = df["upstream_level_m"].rolling(window, min_periods=1).mean()
+    for window, suffix in [(3, "3d"), (7, "7d"), (14, "14d")]:
+        df[f"upstream_level_roll_max_{suffix}"] = df["upstream_level_m"].rolling(window, min_periods=1).max()
 
     # Climate rolling features
     for window, suffix in [(7, "7d"), (14, "14d"), (30, "30d")]:
@@ -131,7 +137,7 @@ def _add_targets(df: pd.DataFrame) -> pd.DataFrame:
     return df
 
 
-def build_dataset() -> tuple[pd.DataFrame, pd.DataFrame]:
+def build_dataset(drop_incomplete: bool = True) -> tuple[pd.DataFrame, pd.DataFrame]:
     """
     Build feature matrix X and target matrix y for the Des Prairies forecast model.
 
@@ -145,9 +151,10 @@ def build_dataset() -> tuple[pd.DataFrame, pd.DataFrame]:
     # ── 1. Load and merge data sources ─────────────────────────────────────
     flow = load_flow()[["flow_m3s"]]
     level = load_level()[["level_m"]]
+    upstream = load_upstream_level()[["upstream_level_m"]]
     climate = load_climate()
 
-    df = flow.join(level, how="outer").join(climate, how="outer")
+    df = flow.join(level, how="outer").join(upstream, how="outer").join(climate, how="outer")
     df.index.name = "date"
     df = df.sort_index()
 
@@ -175,9 +182,10 @@ def build_dataset() -> tuple[pd.DataFrame, pd.DataFrame]:
     X = df[feature_cols].copy()
 
     # Drop rows where any target is NaN (last 5 rows due to forward shift)
-    valid = y.notna().all(axis=1)
-    X = X.loc[valid]
-    y = y.loc[valid]
+    if drop_incomplete:
+        valid = y.notna().all(axis=1)
+        X = X.loc[valid]
+        y = y.loc[valid]
 
     return X, y
 
