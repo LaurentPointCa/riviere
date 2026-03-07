@@ -179,7 +179,7 @@ def plot_forecast(
     plt.tight_layout()
 
     out_path = Path(f"forecast_{anchor_date.date()}.png")
-    sample_path = Path("docs/forecast_sample.png")
+    sample_path = Path("docs/forecast.png")
     plt.savefig(out_path, dpi=150, bbox_inches="tight")
     sample_path.parent.mkdir(parents=True, exist_ok=True)
     plt.savefig(sample_path, dpi=150, bbox_inches="tight")
@@ -194,6 +194,33 @@ def plot_forecast(
     return out_path
 
 
+def save_forecast_json(result: pd.DataFrame, anchor_date: pd.Timestamp) -> Path:
+    """Save the 5-day forecast as JSON to docs/forecast.json."""
+    import json
+    from datetime import datetime, UTC
+
+    out_path = Path("docs/forecast.json")
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+
+    data = {
+        "generated_at": datetime.now(UTC).strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "anchor_date": anchor_date.strftime("%Y-%m-%d"),
+        "forecast": [
+            {
+                "day": int(h),
+                "date": row["date"].strftime("%Y-%m-%d"),
+                "flow_m3s": round(row["flow_m3s"], 1),
+                "level_m": round(row["level_m"], 3),
+            }
+            for h, row in result.iterrows()
+        ],
+    }
+
+    out_path.write_text(json.dumps(data, indent=2))
+    print(f"Forecast JSON saved → {out_path}")
+    return out_path
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description="Generate a 5-day forecast for station 043301.")
     parser.add_argument(
@@ -205,7 +232,7 @@ def main() -> None:
     args = parser.parse_args()
 
     print("Loading features...")
-    X, _ = build_dataset()
+    X, _ = build_dataset(drop_incomplete=False)
 
     if args.date is None:
         anchor = X.index[-1]
@@ -223,6 +250,7 @@ def main() -> None:
     result = forecast(anchor, X)
     print_forecast(result, anchor, X)
     plot_forecast(result, anchor, X)
+    save_forecast_json(result, anchor)
 
 
 if __name__ == "__main__":
