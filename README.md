@@ -25,6 +25,16 @@ hydrologiques en amont en temps réel.
 
 La prévision la plus récente est également disponible en JSON lisible par machine : [`docs/forecast.json`](docs/forecast.json)
 
+## Bassin versant et stations
+
+![Carte du bassin versant](docs/basin_map.png)
+
+Le bassin versant est délinéé par [mghydro.com](https://mghydro.com) à partir du point d'exutoire (région d'Ottawa). Les données météo ERA5 et la prévision Open-Meteo sont moyennées sur l'ensemble de ce bassin.
+
+![Stations de mesure](docs/basin_stations.png)
+
+Les cinq stations de mesure utilisées en entrée du modèle dans la région de Montréal–Laval.
+
 ## Résultats
 
 Ensemble de test retenu (2024-03-04 → 2026-03-03, 730 jours) utilisé pour l'évaluation.
@@ -130,6 +140,16 @@ forecast injection.
 ![5-day forecast chart](docs/forecast.png)
 
 Latest forecast also available as machine-readable JSON: [`docs/forecast.json`](docs/forecast.json)
+
+## Watershed and stations
+
+![Basin map](docs/basin_map.png)
+
+The watershed is delineated by [mghydro.com](https://mghydro.com) from the outlet point near Ottawa. ERA5 climate data and the Open-Meteo forecast are averaged across this full basin.
+
+![Monitoring stations](docs/basin_stations.png)
+
+The five monitoring stations used as model inputs in the Montréal–Laval area.
 
 ## Results
 
