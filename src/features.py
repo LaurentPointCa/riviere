@@ -128,6 +128,34 @@ def _add_flow_anomaly(df: pd.DataFrame) -> pd.DataFrame:
     return pd.concat([df, pd.DataFrame(new_cols, index=df.index)], axis=1)
 
 
+def _add_forecast_features(df: pd.DataFrame) -> pd.DataFrame:
+    """
+    Add 5-day weather forecast features.
+
+    During training, ERA5 future observed values serve as a perfect-forecast proxy
+    (e.g. temp_forecast_t1 = tomorrow's actual temperature). At inference time,
+    predict.py replaces these columns with real Open-Meteo forecast values.
+
+    LightGBM handles the NaNs in the last 5 rows of training data natively.
+    """
+    new_cols = {}
+    for h in range(1, 6):
+        new_cols[f"temp_forecast_t{h}"]   = df["temperature_2m_mean"].shift(-h)
+        new_cols[f"precip_forecast_t{h}"] = df["precipitation_sum"].shift(-h)
+        new_cols[f"rain_forecast_t{h}"]   = df["rain_sum"].shift(-h)
+        new_cols[f"snow_forecast_t{h}"]   = df["snowfall_sum"].shift(-h)
+
+    # Derived aggregates over the full 5-day window
+    new_cols["precip_forecast_sum_5d"] = sum(
+        new_cols[f"precip_forecast_t{h}"] for h in range(1, 6)
+    )
+    new_cols["temp_forecast_mean_5d"] = sum(
+        new_cols[f"temp_forecast_t{h}"] for h in range(1, 6)
+    ) / 5
+
+    return pd.concat([df, pd.DataFrame(new_cols, index=df.index)], axis=1)
+
+
 def _add_targets(df: pd.DataFrame) -> pd.DataFrame:
     new_cols = {}
     for h in range(1, 6):
@@ -169,6 +197,7 @@ def build_dataset(drop_incomplete: bool = True) -> tuple[pd.DataFrame, pd.DataFr
     df = _add_snowpack_proxy(df)
     df = _add_seasonal_features(df)
     df = _add_flow_anomaly(df)
+    df = _add_forecast_features(df)
 
     # ── 3. Build targets ────────────────────────────────────────────────────
     df = _add_targets(df)

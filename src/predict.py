@@ -17,8 +17,39 @@ import pandas as pd
 sys.path.insert(0, str(Path(__file__).parent))
 from features import build_dataset
 from model import load_model
+from load_forecast import load_weather_forecast
 
 MODEL_PATH = Path("models/lgbm_forecast.pkl")
+
+
+def _inject_weather_forecast(row: pd.DataFrame, wf: pd.DataFrame) -> pd.DataFrame:
+    """
+    Replace ERA5 perfect-forecast proxy columns with real Open-Meteo forecast values.
+
+    Parameters
+    ----------
+    row : single-row feature DataFrame for the anchor date
+    wf  : forecast DataFrame from load_weather_forecast(), indexed by date
+
+    Returns
+    -------
+    Updated row with real forecast values injected.
+    """
+    row = row.copy()
+    for h in range(1, 6):
+        if h > len(wf):
+            break
+        fc = wf.iloc[h - 1]
+        row[f"temp_forecast_t{h}"]   = fc["temperature_2m_mean"]
+        row[f"precip_forecast_t{h}"] = fc["precipitation_sum"]
+        row[f"rain_forecast_t{h}"]   = fc["rain_sum"]
+        row[f"snow_forecast_t{h}"]   = fc["snowfall_sum"]
+
+    # Recompute derived aggregates
+    row["precip_forecast_sum_5d"] = sum(float(row[f"precip_forecast_t{h}"].iloc[0]) for h in range(1, 6))
+    row["temp_forecast_mean_5d"]  = sum(float(row[f"temp_forecast_t{h}"].iloc[0])   for h in range(1, 6)) / 5
+
+    return row
 
 
 def forecast(anchor_date: pd.Timestamp, X: pd.DataFrame) -> pd.DataFrame:
@@ -36,6 +67,18 @@ def forecast(anchor_date: pd.Timestamp, X: pd.DataFrame) -> pd.DataFrame:
     """
     models = load_model(MODEL_PATH)
     row = X.loc[[anchor_date]]
+
+    # For the latest available date, inject real weather forecast.
+    # For past dates the ERA5 perfect-forecast proxy is already correct.
+    if anchor_date == X.index[-1] and "temp_forecast_t1" in X.columns:
+        try:
+            wf = load_weather_forecast(days=5)
+            future = wf[wf.index > anchor_date].head(5)
+            if not future.empty:
+                row = _inject_weather_forecast(row, future)
+                print("Weather forecast injected.")
+        except Exception as e:
+            print(f"Warning: could not load weather forecast ({e}); using ERA5 proxy.")
 
     preds = {target: float(model.predict(row)[0]) for target, model in models.items()}
 
