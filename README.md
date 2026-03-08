@@ -18,7 +18,7 @@ qu'à discuter des outils et techniques explorés ici.
 
 Prévision quotidienne du débit (m³/s) et du niveau d'eau (m) pour la station CEHQ **043301**
 (Rivière des Prairies à Laval), à l'aide d'un modèle LightGBM entraîné sur plus de 45 ans
-de données hydrologiques et climatiques.
+de données hydrologiques et climatiques, avec injection de la prévision météo sur 5 jours.
 
 ![Graphique de prévision sur 5 jours](docs/forecast.png)
 
@@ -26,16 +26,16 @@ La prévision la plus récente est également disponible en JSON lisible par mac
 
 ## Résultats
 
-Ensemble de test retenu (2024-02-27 → 2026-02-26, 731 jours) utilisé pour l'évaluation.
-Le modèle déployé est ré-entraîné sur l'ensemble complet des données (1978-01-01 → 2026-02-26, 17 589 jours).
+Ensemble de test retenu (2024-03-03 → 2026-03-02, 730 jours) utilisé pour l'évaluation.
+Le modèle déployé est ré-entraîné sur l'ensemble complet des données (1978-01-01 → 2026-03-02).
 
 | Horizon | RMSE débit (m³/s) | RMSE niveau (m) | Gain vs. persistance |
 |---------|-------------------|-----------------|----------------------|
-| t+1     | 40,1              | 0,061           | +18 %                |
-| t+2     | 71,9              | 0,100           | +13 %                |
-| t+3     | 97,1              | 0,135           | +12 %                |
-| t+4     | 117,9             | 0,160           | +12 %                |
-| t+5     | 139,8             | 0,179           | +10 %                |
+| t+1     | 40,4              | 0,059           | +17 %                |
+| t+2     | 68,7              | 0,095           | +17 %                |
+| t+3     | 92,4              | 0,122           | +17 %                |
+| t+4     | 106,4             | 0,142           | +20 %                |
+| t+5     | 118,4             | 0,159           | +22 %                |
 
 ## Sources de données
 
@@ -43,7 +43,8 @@ Le modèle déployé est ré-entraîné sur l'ensemble complet des données (197
 |--------|-----------|---------|
 | [CEHQ](https://www.cehq.gouv.qc.ca) | Débit (m³/s), Niveau (m) — station 043301 | 1922–présent |
 | [CEHQ](https://www.cehq.gouv.qc.ca) | Niveau amont (m) — station 043108 (Lac des Deux Montagnes) | 1986–présent |
-| [Open-Meteo ERA5](https://open-meteo.com) | Température, précipitations, chutes de neige, pluie | 1940–présent |
+| [Open-Meteo ERA5](https://open-meteo.com) | Température, précipitations, chutes de neige, pluie (observé) | 1940–présent |
+| [Open-Meteo Forecast](https://open-meteo.com) | Prévision météo sur 5 jours (température, précipitations, pluie, neige) | temps réel |
 | [mghydro.com](https://mghydro.com) | Polygone du bassin versant (GeoJSON) | statique |
 
 ## Pipeline
@@ -51,6 +52,7 @@ Le modèle déployé est ré-entraîné sur l'ensemble complet des données (197
 ```
 load_data.py      Données historiques CEHQ + flux en direct (stations 043301 + amont 043108)
 load_climate.py   Bassin versant (mghydro.com) → Climat journalier moyen ERA5 (Open-Meteo)
+load_forecast.py  Prévision météo 5 jours (Open-Meteo) → injectée à l'inférence
      │
      ▼
 features.py       build_dataset() → (X, y)
@@ -59,6 +61,8 @@ features.py       build_dataset() → (X, y)
                   • Proxy d'enneigement (modèle degré-jour)
                   • Encodage saisonnier (sin/cos jour de l'année)
                   • Anomalie de débit vs médiane saisonnière
+                  • Prévision météo t+1…t+5 (proxy ERA5 à l'entraînement,
+                    prévision réelle Open-Meteo à l'inférence)
      │
      ▼
 model.py          10 × LGBMRegressor (un par horizon)
@@ -87,34 +91,17 @@ python src/predict.py
 python src/predict.py --date 2025-06-01
 ```
 
-Exemple de sortie :
-
-```
-════════════════════════════════════════════════════════════
-  Prévision 5 jours — Station 043301 (Des Prairies)
-  Ancre : 2026-02-26
-════════════════════════════════════════════════════════════
-  Jour   Date           Débit (m³/s)   Niveau (m)
-  t+1    2026-02-27         923,5        47,694
-  t+2    2026-02-28         932,5        47,728
-  t+3    2026-03-01         931,8        47,705
-  t+4    2026-03-02         949,0        47,659
-  t+5    2026-03-03         938,3        47,681
-
-  Observé le 2026-02-26 : débit = 927,2 m³/s, niveau = 47,650 m
-════════════════════════════════════════════════════════════
-```
-
 ## Détails du modèle
 
 - **Stratégie :** multi-sortie directe — un `LGBMRegressor` par horizon (t+1…t+5),
   séparément pour le débit et le niveau
 - **Période d'entraînement :** à partir du 1978-01-01 (ère post-barrage)
-- **Caractéristiques :** ~90 colonnes — décalages, statistiques glissantes (incluant la station amont 043108),
-  proxy d'enneigement, encodage saisonnier, anomalie de débit
+- **Caractéristiques :** ~120 colonnes — décalages, statistiques glissantes (incluant la station amont 043108),
+  proxy d'enneigement, encodage saisonnier, anomalie de débit,
+  prévision météo 5 jours (température, précipitations, pluie, neige)
 - **Hyperparamètres :** 500 arbres, lr=0,05, 63 feuilles, subsample=0,8
 - **Meilleures caractéristiques :** débit actuel, max glissant sur 3 jours, niveau actuel,
-  jour de l'année (sin), température moyenne sur 30 jours
+  jour de l'année (sin), précipitations cumulées prévues sur 5 jours, température moyenne sur 30 jours
 
 ---
 
@@ -122,7 +109,7 @@ Exemple de sortie :
 
 Daily flow (m³/s) and water level (m) forecast for CEHQ station **043301**
 (Rivière des Prairies at Laval), using a LightGBM model trained on 45+ years
-of hydrological and climate data.
+of hydrological and climate data, with real-time 5-day weather forecast injection.
 
 ![5-day forecast chart](docs/forecast.png)
 
@@ -130,16 +117,16 @@ Latest forecast also available as machine-readable JSON: [`docs/forecast.json`](
 
 ## Results
 
-Held-out test set (2024-02-27 → 2026-02-26, 731 days) used for evaluation.
-The deployed model is retrained on the full dataset (1978-01-01 → 2026-02-26, 17,589 days).
+Held-out test set (2024-03-03 → 2026-03-02, 730 days) used for evaluation.
+The deployed model is retrained on the full dataset (1978-01-01 → 2026-03-02).
 
 | Horizon | Flow RMSE (m³/s) | Level RMSE (m) | Skill vs. persistence |
 |---------|-----------------|----------------|-----------------------|
-| t+1     | 40.1            | 0.061          | +18%                  |
-| t+2     | 71.9            | 0.100          | +13%                  |
-| t+3     | 97.1            | 0.135          | +12%                  |
-| t+4     | 117.9           | 0.160          | +12%                  |
-| t+5     | 139.8           | 0.179          | +10%                  |
+| t+1     | 40.4            | 0.059          | +17%                  |
+| t+2     | 68.7            | 0.095          | +17%                  |
+| t+3     | 92.4            | 0.122          | +17%                  |
+| t+4     | 106.4           | 0.142          | +20%                  |
+| t+5     | 118.4           | 0.159          | +22%                  |
 
 ## Data sources
 
@@ -147,7 +134,8 @@ The deployed model is retrained on the full dataset (1978-01-01 → 2026-02-26, 
 |--------|-----------|--------|
 | [CEHQ](https://www.cehq.gouv.qc.ca) | Flow (m³/s), Level (m) — station 043301 | 1922–present |
 | [CEHQ](https://www.cehq.gouv.qc.ca) | Upstream level (m) — station 043108 (Lac des Deux Montagnes) | 1986–present |
-| [Open-Meteo ERA5](https://open-meteo.com) | Temperature, precipitation, snowfall, rain | 1940–present |
+| [Open-Meteo ERA5](https://open-meteo.com) | Temperature, precipitation, snowfall, rain (observed) | 1940–present |
+| [Open-Meteo Forecast](https://open-meteo.com) | 5-day weather forecast (temperature, precipitation, rain, snow) | real-time |
 | [mghydro.com](https://mghydro.com) | Basin boundary polygon (GeoJSON) | static |
 
 ## Pipeline
@@ -155,6 +143,7 @@ The deployed model is retrained on the full dataset (1978-01-01 → 2026-02-26, 
 ```
 load_data.py      CEHQ historical + live feed (stations 043301 + upstream 043108)
 load_climate.py   basin boundary (mghydro.com) → ERA5 basin-mean daily climate (Open-Meteo)
+load_forecast.py  5-day weather forecast (Open-Meteo) → injected at inference time
      │
      ▼
 features.py       build_dataset() → (X, y)
@@ -163,6 +152,8 @@ features.py       build_dataset() → (X, y)
                   • Snowpack proxy (degree-day model)
                   • Seasonal encoding (sin/cos DOY)
                   • Flow anomaly vs seasonal median
+                  • Weather forecast t+1…t+5 (ERA5 perfect-forecast proxy at
+                    training time, real Open-Meteo forecast at inference time)
      │
      ▼
 model.py          10 × LGBMRegressor (one per horizon)
@@ -191,31 +182,14 @@ python src/predict.py
 python src/predict.py --date 2025-06-01
 ```
 
-Example output:
-
-```
-════════════════════════════════════════════════════════════
-  5-day forecast — Station 043301 (Des Prairies)
-  Anchor: 2026-02-26
-════════════════════════════════════════════════════════════
-  Day    Date           Flow (m³/s)   Level (m)
-  t+1    2026-02-27         923.5      47.694
-  t+2    2026-02-28         932.5      47.728
-  t+3    2026-03-01         931.8      47.705
-  t+4    2026-03-02         949.0      47.659
-  t+5    2026-03-03         938.3      47.681
-
-  Observed on 2026-02-26: flow = 927.2 m³/s, level = 47.650 m
-════════════════════════════════════════════════════════════
-```
-
 ## Model details
 
 - **Strategy:** direct multi-output — one `LGBMRegressor` per horizon (t+1…t+5),
   separately for flow and level
 - **Training period:** 1978-01-01 onward (post-dam era)
-- **Features:** ~90 columns — lags, rolling statistics (including upstream station 043108),
-  snowpack proxy, seasonal encoding, flow anomaly
+- **Features:** ~120 columns — lags, rolling statistics (including upstream station 043108),
+  snowpack proxy, seasonal encoding, flow anomaly,
+  5-day weather forecast (temperature, precipitation, rain, snowfall)
 - **Hyperparameters:** 500 trees, lr=0.05, 63 leaves, subsample=0.8
 - **Top features:** current flow, 3-day rolling max flow, current level,
-  day-of-year (sin), 30-day mean temperature
+  day-of-year (sin), 5-day cumulative forecast precipitation, 30-day mean temperature
