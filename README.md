@@ -57,7 +57,7 @@ Le modèle déployé est ré-entraîné sur l'ensemble complet des données (197
 | [Open-Meteo ERA5](https://open-meteo.com) | Température, précipitations, chutes de neige, pluie (observé) | 1940–présent |
 | [Open-Meteo Forecast](https://open-meteo.com) | Prévision météo sur 5 jours (température, précipitations, pluie, neige) | temps réel |
 | [Crues Grand Montréal](https://www.cruesgrandmontreal.ca) | Niveau (m) + débit (m³/s) — stations amont 39_RDP09, 01_RDP11, 11_LDM01 | temps réel + historique glissant |
-| [mghydro.com](https://mghydro.com) | Polygone du bassin versant (GeoJSON) | statique |
+| [mghydro.com](https://mghydro.com/app/report?lat=45.454&lng=-74.106&precision=low&simplify=true) | Polygone du bassin versant (GeoJSON) — ID M72047806, ~148 202 km² | statique |
 
 ### Stations amont Crues Grand Montréal
 

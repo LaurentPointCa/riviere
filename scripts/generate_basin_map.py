@@ -87,8 +87,8 @@ def main():
     ax.add_collection(pc)
     add_basemap(ax, zoom=6)
 
-    # Delineation point
-    ox, oy = to_wm(-75.926, 45.426)
+    # Delineation point (mghydro.com outlet, wid=M72047806)
+    ox, oy = to_wm(-74.106, 45.454)
     ax.plot(ox, oy, "s", ms=7, color="purple", zorder=5,
             markeredgecolor="white", markeredgewidth=0.8)
     ax.annotate("Point de\ndélineation\ndu bassin", (ox, oy),

@@ -8,6 +8,11 @@ Approach:
   4. Average all points to produce basin-mean daily values.
   5. Cache result to data/climate_daily.parquet.
 
+Watershed:
+  mghydro.com watershed ID M72047806, area ≈ 148 202 km².
+  Direct download: https://mghydro.com/app/download_watershed?format=json&wid=M72047806
+  Full report:     https://mghydro.com/app/report?lat=45.454&lng=-74.106&precision=low&simplify=true
+
 Variables (daily):
   temperature_2m_mean   °C    — basin-mean air temperature
   precipitation_sum     mm    — total water input (rain + snow water equiv.)
@@ -26,8 +31,8 @@ from shapely.geometry import shape, Point
 DATA_DIR = Path(__file__).parent.parent / "data"
 
 BASIN_URL = (
-    "https://mghydro.com/app/watershed_api"
-    "?lat=45.426&lng=-75.926&precision=low&simplify=true"
+    "https://mghydro.com/app/download_watershed"
+    "?format=json&wid=M72047806"
 )
 
 OPEN_METEO_URL = "https://archive-api.open-meteo.com/v1/archive"

@@ -41,7 +41,7 @@ The deployed model is retrained on the full dataset (1978-01-01 → 2026-03-03).
 | [Open-Meteo ERA5](https://open-meteo.com) | Temperature, precipitation, snowfall, rain (observed) | 1940–present |
 | [Open-Meteo Forecast](https://open-meteo.com) | 5-day weather forecast (temperature, precipitation, rain, snow) | real-time |
 | [Crues Grand Montréal](https://www.cruesgrandmontreal.ca) | Level (m) + flow (m³/s) — upstream stations 39_RDP09, 01_RDP11, 11_LDM01 | real-time + rolling history |
-| [mghydro.com](https://mghydro.com) | Basin boundary polygon (GeoJSON) | static |
+| [mghydro.com](https://mghydro.com/app/report?lat=45.454&lng=-74.106&precision=low&simplify=true) | Basin boundary polygon (GeoJSON) — ID M72047806, ~148,202 km² | static |
 
 ### Crues Grand Montréal upstream stations
 
