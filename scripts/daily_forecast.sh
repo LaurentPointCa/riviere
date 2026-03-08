@@ -12,6 +12,14 @@ from load_climate import load_climate
 load_climate(cache=False)
 EOF
 
+# Refresh CGM upstream station cache
+echo "Refreshing CGM upstream station cache..."
+.venv/bin/python - <<'EOF'
+import sys; sys.path.insert(0, "src")
+from load_cgm import load_cgm_history
+load_cgm_history(cache=False)
+EOF
+
 # Run forecast — also updates docs/forecast_sample.png
 .venv/bin/python src/predict.py
 
