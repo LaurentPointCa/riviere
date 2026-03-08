@@ -157,17 +157,24 @@ def plot_forecast(
     result: pd.DataFrame,
     anchor_date: pd.Timestamp,
     X: pd.DataFrame,
+    days_back: int = 365,
+    docs_name: str = "forecast.png",
 ) -> Path:
     """
     Generate and save a 2-panel chart (flow + level) showing:
-      - Past 12 months of observed data
+      - Past `days_back` days of observed data
       - Historical min/max envelope and mean per day-of-year
       - 5-day forecast
+
+    Parameters
+    ----------
+    days_back  : how many days of observed history to show (default 365)
+    docs_name  : filename to write under docs/ (default "forecast.png")
 
     Returns the path to the saved PNG.
     """
     # ── Data prep ────────────────────────────────────────────────────────────
-    obs_start = anchor_date - pd.DateOffset(months=12)
+    obs_start = anchor_date - pd.Timedelta(days=days_back)
     obs = X.loc[obs_start:anchor_date, ["flow_m3s", "level_m"]]
 
     stats = _doy_stats(X)
@@ -198,11 +205,10 @@ def plot_forecast(
         ax.fill_between(env.index, lo, hi, color=color, alpha=0.10, label="Hist. min/max")
         ax.plot(env.index, avg, color=color, lw=1, alpha=0.5, linestyle="--", label="Hist. mean")
 
-        # Observed past 12 months
+        # Observed history
         ax.plot(obs.index, obs[var], color=color, lw=1.8, label="Observed")
 
-        # 5-day forecast
-        # Connect the last observed point to the first forecast point for continuity
+        # 5-day forecast — connect last observed point for continuity
         bridge_dates  = [anchor_date] + result["date"].tolist()
         bridge_values = [obs[var].iloc[-1]] + result[var].tolist()
         ax.plot(bridge_dates, bridge_values, color="crimson", lw=2,
@@ -216,13 +222,19 @@ def plot_forecast(
         ax.grid(True, alpha=0.25)
         ax.margins(x=0.01)
 
-    ax_l.xaxis.set_major_locator(mdates.MonthLocator())
-    ax_l.xaxis.set_major_formatter(mdates.DateFormatter("%b\n%Y"))
+    # Tick density depends on window length
+    if days_back <= 60:
+        ax_l.xaxis.set_major_locator(mdates.WeekdayLocator(byweekday=0))
+        ax_l.xaxis.set_major_formatter(mdates.DateFormatter("%b %d"))
+    else:
+        ax_l.xaxis.set_major_locator(mdates.MonthLocator())
+        ax_l.xaxis.set_major_formatter(mdates.DateFormatter("%b\n%Y"))
+
     fig.autofmt_xdate(rotation=0, ha="center")
     plt.tight_layout()
 
     out_path = Path(f"forecast_{anchor_date.date()}.png")
-    sample_path = Path("docs/forecast.png")
+    sample_path = Path("docs") / docs_name
     plt.savefig(out_path, dpi=150, bbox_inches="tight")
     sample_path.parent.mkdir(parents=True, exist_ok=True)
     plt.savefig(sample_path, dpi=150, bbox_inches="tight")
@@ -292,7 +304,8 @@ def main() -> None:
 
     result = forecast(anchor, X)
     print_forecast(result, anchor, X)
-    plot_forecast(result, anchor, X)
+    plot_forecast(result, anchor, X, days_back=365, docs_name="forecast.png")
+    plot_forecast(result, anchor, X, days_back=30,  docs_name="forecast_30d.png")
     save_forecast_json(result, anchor)
 
 
