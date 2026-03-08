@@ -159,6 +159,7 @@ def plot_forecast(
     X: pd.DataFrame,
     days_back: int = 365,
     docs_name: str = "forecast.png",
+    figsize: tuple = (14, 8),
 ) -> Path:
     """
     Generate and save a 2-panel chart (flow + level) showing:
@@ -187,7 +188,7 @@ def plot_forecast(
     env.index = all_dates
 
     # ── Plot ─────────────────────────────────────────────────────────────────
-    fig, (ax_f, ax_l) = plt.subplots(2, 1, figsize=(14, 8), sharex=True)
+    fig, (ax_f, ax_l) = plt.subplots(2, 1, figsize=figsize, sharex=True)
     fig.suptitle(
         f"Station 043301 — Rivière des Prairies\nForecast from {anchor_date.strftime('%Y-%m-%d')}",
         fontsize=13,
@@ -304,8 +305,8 @@ def main() -> None:
 
     result = forecast(anchor, X)
     print_forecast(result, anchor, X)
-    plot_forecast(result, anchor, X, days_back=365, docs_name="forecast.png")
-    plot_forecast(result, anchor, X, days_back=30,  docs_name="forecast_30d.png")
+    plot_forecast(result, anchor, X, days_back=365, docs_name="forecast.png",    figsize=(14, 8))
+    plot_forecast(result, anchor, X, days_back=30,  docs_name="forecast_30d.png", figsize=(7, 8))
     save_forecast_json(result, anchor)
 
 
