@@ -146,6 +146,10 @@ def load_live() -> pd.DataFrame:
             "ice_corrected": ice_corrected,
         })
 
+    if not rows:
+        print("Warning: live feed returned no parseable rows — skipping.")
+        return pd.DataFrame(columns=["level_m", "flow_m3s", "ice_corrected"]).rename_axis("datetime")
+
     df = pd.DataFrame(rows).set_index("datetime").sort_index()
     print(f"Loaded {len(df):,} live rows from {df.index.min()} to {df.index.max()}")
     return df
@@ -199,6 +203,10 @@ def _load_upstream_live() -> pd.DataFrame:
             "datetime":         pd.to_datetime(f"{date_str} {time_str}"),
             "upstream_level_m": level_val,
         })
+    if not rows:
+        print("Warning: upstream live feed returned no parseable rows — skipping.")
+        return pd.DataFrame(columns=["upstream_level_m"]).rename_axis("datetime")
+
     df = pd.DataFrame(rows).set_index("datetime").sort_index()
     print(f"Loaded {len(df):,} upstream live rows from {df.index.min()} to {df.index.max()}")
     return df
