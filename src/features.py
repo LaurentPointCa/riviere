@@ -31,52 +31,49 @@ LAG_VARS_HYDRO = ["flow_m3s", "level_m", "upstream_level_m", "temperature_2m_mea
 
 
 def _add_lag_features(df: pd.DataFrame) -> pd.DataFrame:
+    new_cols = {}
     for var in LAG_VARS_HYDRO:
         if var not in df.columns:
             continue
         for n in LAG_DAYS:
-            df[f"{var}_lag{n}"] = df[var].shift(n)
-    return df
+            new_cols[f"{var}_lag{n}"] = df[var].shift(n)
+    return pd.concat([df, pd.DataFrame(new_cols, index=df.index)], axis=1)
 
 
 def _add_rolling_features(df: pd.DataFrame) -> pd.DataFrame:
+    new_cols = {}
+
     # Hydro rolling features
     for window, suffix in [(3, "3d"), (7, "7d"), (14, "14d"), (30, "30d")]:
-        df[f"flow_roll_mean_{suffix}"] = df["flow_m3s"].rolling(window, min_periods=1).mean()
-        df[f"level_roll_mean_{suffix}"] = df["level_m"].rolling(window, min_periods=1).mean()
+        new_cols[f"flow_roll_mean_{suffix}"]  = df["flow_m3s"].rolling(window, min_periods=1).mean()
+        new_cols[f"level_roll_mean_{suffix}"] = df["level_m"].rolling(window, min_periods=1).mean()
 
     for window, suffix in [(3, "3d"), (7, "7d"), (14, "14d")]:
-        df[f"flow_roll_max_{suffix}"] = df["flow_m3s"].rolling(window, min_periods=1).max()
-        df[f"level_roll_max_{suffix}"] = df["level_m"].rolling(window, min_periods=1).max()
+        new_cols[f"flow_roll_max_{suffix}"]  = df["flow_m3s"].rolling(window, min_periods=1).max()
+        new_cols[f"level_roll_max_{suffix}"] = df["level_m"].rolling(window, min_periods=1).max()
 
     for window, suffix in [(7, "7d"), (14, "14d")]:
-        df[f"flow_roll_std_{suffix}"] = df["flow_m3s"].rolling(window, min_periods=1).std()
-        df[f"level_roll_std_{suffix}"] = df["level_m"].rolling(window, min_periods=1).std()
+        new_cols[f"flow_roll_std_{suffix}"]  = df["flow_m3s"].rolling(window, min_periods=1).std()
+        new_cols[f"level_roll_std_{suffix}"] = df["level_m"].rolling(window, min_periods=1).std()
 
     # Upstream level rolling features
     for window, suffix in [(3, "3d"), (7, "7d"), (14, "14d"), (30, "30d")]:
-        df[f"upstream_level_roll_mean_{suffix}"] = df["upstream_level_m"].rolling(window, min_periods=1).mean()
+        new_cols[f"upstream_level_roll_mean_{suffix}"] = df["upstream_level_m"].rolling(window, min_periods=1).mean()
     for window, suffix in [(3, "3d"), (7, "7d"), (14, "14d")]:
-        df[f"upstream_level_roll_max_{suffix}"] = df["upstream_level_m"].rolling(window, min_periods=1).max()
+        new_cols[f"upstream_level_roll_max_{suffix}"] = df["upstream_level_m"].rolling(window, min_periods=1).max()
 
     # Climate rolling features
     for window, suffix in [(7, "7d"), (14, "14d"), (30, "30d")]:
-        df[f"temp_roll_mean_{suffix}"] = (
-            df["temperature_2m_mean"].rolling(window, min_periods=1).mean()
-        )
-        df[f"precip_roll_sum_{suffix}"] = (
-            df["precipitation_sum"].rolling(window, min_periods=1).sum()
-        )
-        df[f"snow_roll_sum_{suffix}"] = (
-            df["snowfall_sum"].rolling(window, min_periods=1).sum()
-        )
+        new_cols[f"temp_roll_mean_{suffix}"]   = df["temperature_2m_mean"].rolling(window, min_periods=1).mean()
+        new_cols[f"precip_roll_sum_{suffix}"]  = df["precipitation_sum"].rolling(window, min_periods=1).sum()
+        new_cols[f"snow_roll_sum_{suffix}"]    = df["snowfall_sum"].rolling(window, min_periods=1).sum()
 
     for window, suffix in [(3, "3d"), (7, "7d"), (14, "14d")]:
-        df[f"rain_roll_sum_{suffix}"] = df["rain_sum"].rolling(window, min_periods=1).sum()
+        new_cols[f"rain_roll_sum_{suffix}"] = df["rain_sum"].rolling(window, min_periods=1).sum()
 
-    df[f"snow_roll_sum_90d"] = df["snowfall_sum"].rolling(90, min_periods=1).sum()
+    new_cols["snow_roll_sum_90d"] = df["snowfall_sum"].rolling(90, min_periods=1).sum()
 
-    return df
+    return pd.concat([df, pd.DataFrame(new_cols, index=df.index)], axis=1)
 
 
 def _add_snowpack_proxy(df: pd.DataFrame) -> pd.DataFrame:
@@ -110,31 +107,33 @@ def _add_snowpack_proxy(df: pd.DataFrame) -> pd.DataFrame:
         swe = max(0.0, swe)
         snowpack[i] = swe
 
-    df["snowpack_proxy_mm"] = snowpack
-    return df
+    return pd.concat([df, pd.DataFrame({"snowpack_proxy_mm": snowpack}, index=df.index)], axis=1)
 
 
 def _add_seasonal_features(df: pd.DataFrame) -> pd.DataFrame:
     doy = df.index.day_of_year.astype(float)
-    df["doy_sin"] = np.sin(2 * np.pi * doy / 365.25)
-    df["doy_cos"] = np.cos(2 * np.pi * doy / 365.25)
-    df["month"] = df.index.month
-    return df
+    new_cols = {
+        "doy_sin": np.sin(2 * np.pi * doy / 365.25),
+        "doy_cos": np.cos(2 * np.pi * doy / 365.25),
+        "month":   df.index.month,
+    }
+    return pd.concat([df, pd.DataFrame(new_cols, index=df.index)], axis=1)
 
 
 def _add_flow_anomaly(df: pd.DataFrame) -> pd.DataFrame:
     """Flow deviation from long-term seasonal median by day-of-year."""
     doy = df.index.day_of_year
     seasonal_median = df.groupby(doy)["flow_m3s"].transform("median")
-    df["flow_anom"] = df["flow_m3s"] - seasonal_median
-    return df
+    new_cols = {"flow_anom": df["flow_m3s"] - seasonal_median}
+    return pd.concat([df, pd.DataFrame(new_cols, index=df.index)], axis=1)
 
 
 def _add_targets(df: pd.DataFrame) -> pd.DataFrame:
+    new_cols = {}
     for h in range(1, 6):
-        df[f"flow_t{h}"] = df["flow_m3s"].shift(-h)
-        df[f"level_t{h}"] = df["level_m"].shift(-h)
-    return df
+        new_cols[f"flow_t{h}"]  = df["flow_m3s"].shift(-h)
+        new_cols[f"level_t{h}"] = df["level_m"].shift(-h)
+    return pd.concat([df, pd.DataFrame(new_cols, index=df.index)], axis=1)
 
 
 def build_dataset(drop_incomplete: bool = True) -> tuple[pd.DataFrame, pd.DataFrame]:
