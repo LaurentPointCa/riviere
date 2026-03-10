@@ -1,0 +1,8 @@
+[Unit]
+Description=Riviere daily forecast
+
+[Service]
+Type=oneshot
+User=riviere
+WorkingDirectory=/home/riviere/riviere
+ExecStart=/home/riviere/riviere/scripts/daily_forecast.sh

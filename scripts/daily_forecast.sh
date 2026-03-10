@@ -1,6 +1,6 @@
 #!/bin/bash
 set -e
-cd /Users/laurentchouinard/claude/riviere
+cd "$(dirname "$0")/.."
 
 echo "=== $(date) ==="
 

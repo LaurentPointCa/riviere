@@ -1,0 +1,8 @@
+lightgbm
+matplotlib
+numpy<2
+pandas
+pyarrow
+requests
+scikit-learn
+shapely
