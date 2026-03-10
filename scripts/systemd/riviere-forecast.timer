@@ -1,8 +1,9 @@
 [Unit]
-Description=Run riviere forecast daily at 7:00
+Description=Run riviere forecast daily at 7:00 and 16:00
 
 [Timer]
 OnCalendar=*-*-* 07:00:00
+OnCalendar=*-*-* 16:00:00
 Persistent=true
 
 [Install]
