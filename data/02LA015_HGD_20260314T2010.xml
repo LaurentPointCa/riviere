@@ -1,0 +1,2199 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<realTimeData>
+	<stationid>02LA015</stationid>
+	<fromdate>2025-01-01 00:00:00.000</fromdate>
+	<todate>2026-03-14 00:00:00.000</todate>
+	<timezone>HNE</timezone>
+	<data>
+		<record>
+			<datestamp>2025-01-01 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.911</value>
+		</record>
+		<record>
+			<datestamp>2025-01-02 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.886</value>
+		</record>
+		<record>
+			<datestamp>2025-01-03 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.965</value>
+		</record>
+		<record>
+			<datestamp>2025-01-04 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>42.201</value>
+		</record>
+		<record>
+			<datestamp>2025-01-05 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>42.532</value>
+		</record>
+		<record>
+			<datestamp>2025-01-06 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>42.602</value>
+		</record>
+		<record>
+			<datestamp>2025-01-07 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>42.621</value>
+		</record>
+		<record>
+			<datestamp>2025-01-08 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>42.742</value>
+		</record>
+		<record>
+			<datestamp>2025-01-09 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>42.649</value>
+		</record>
+		<record>
+			<datestamp>2025-01-10 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>42.590</value>
+		</record>
+		<record>
+			<datestamp>2025-01-11 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>42.535</value>
+		</record>
+		<record>
+			<datestamp>2025-01-12 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>42.541</value>
+		</record>
+		<record>
+			<datestamp>2025-01-13 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>42.561</value>
+		</record>
+		<record>
+			<datestamp>2025-01-14 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>42.546</value>
+		</record>
+		<record>
+			<datestamp>2025-01-15 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>42.519</value>
+		</record>
+		<record>
+			<datestamp>2025-01-16 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>42.531</value>
+		</record>
+		<record>
+			<datestamp>2025-01-17 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>42.510</value>
+		</record>
+		<record>
+			<datestamp>2025-01-18 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>42.479</value>
+		</record>
+		<record>
+			<datestamp>2025-01-19 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>42.479</value>
+		</record>
+		<record>
+			<datestamp>2025-01-20 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>42.457</value>
+		</record>
+		<record>
+			<datestamp>2025-01-21 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>42.324</value>
+		</record>
+		<record>
+			<datestamp>2025-01-22 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>42.280</value>
+		</record>
+		<record>
+			<datestamp>2025-01-23 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>42.321</value>
+		</record>
+		<record>
+			<datestamp>2025-01-24 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>42.348</value>
+		</record>
+		<record>
+			<datestamp>2025-01-25 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>42.327</value>
+		</record>
+		<record>
+			<datestamp>2025-01-26 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>42.264</value>
+		</record>
+		<record>
+			<datestamp>2025-01-27 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>42.267</value>
+		</record>
+		<record>
+			<datestamp>2025-01-28 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>42.339</value>
+		</record>
+		<record>
+			<datestamp>2025-01-29 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>42.326</value>
+		</record>
+		<record>
+			<datestamp>2025-01-30 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>42.273</value>
+		</record>
+		<record>
+			<datestamp>2025-01-31 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>42.258</value>
+		</record>
+		<record>
+			<datestamp>2025-02-01 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>42.229</value>
+		</record>
+		<record>
+			<datestamp>2025-02-02 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>42.220</value>
+		</record>
+		<record>
+			<datestamp>2025-02-03 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>42.233</value>
+		</record>
+		<record>
+			<datestamp>2025-02-04 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>42.232</value>
+		</record>
+		<record>
+			<datestamp>2025-02-05 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>42.218</value>
+		</record>
+		<record>
+			<datestamp>2025-02-06 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>42.206</value>
+		</record>
+		<record>
+			<datestamp>2025-02-07 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>42.195</value>
+		</record>
+		<record>
+			<datestamp>2025-02-08 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>42.201</value>
+		</record>
+		<record>
+			<datestamp>2025-02-09 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>42.213</value>
+		</record>
+		<record>
+			<datestamp>2025-02-10 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>42.221</value>
+		</record>
+		<record>
+			<datestamp>2025-02-11 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>42.214</value>
+		</record>
+		<record>
+			<datestamp>2025-02-12 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>42.198</value>
+		</record>
+		<record>
+			<datestamp>2025-02-13 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>42.221</value>
+		</record>
+		<record>
+			<datestamp>2025-02-14 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>42.183</value>
+		</record>
+		<record>
+			<datestamp>2025-02-15 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>42.155</value>
+		</record>
+		<record>
+			<datestamp>2025-02-16 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>42.171</value>
+		</record>
+		<record>
+			<datestamp>2025-02-17 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>42.152</value>
+		</record>
+		<record>
+			<datestamp>2025-02-18 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>42.179</value>
+		</record>
+		<record>
+			<datestamp>2025-02-19 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>42.224</value>
+		</record>
+		<record>
+			<datestamp>2025-02-20 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>42.240</value>
+		</record>
+		<record>
+			<datestamp>2025-02-21 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>42.236</value>
+		</record>
+		<record>
+			<datestamp>2025-02-22 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>42.270</value>
+		</record>
+		<record>
+			<datestamp>2025-02-23 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>42.261</value>
+		</record>
+		<record>
+			<datestamp>2025-02-24 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>42.274</value>
+		</record>
+		<record>
+			<datestamp>2025-02-25 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>42.311</value>
+		</record>
+		<record>
+			<datestamp>2025-02-26 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>42.284</value>
+		</record>
+		<record>
+			<datestamp>2025-02-27 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>42.255</value>
+		</record>
+		<record>
+			<datestamp>2025-02-28 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>42.258</value>
+		</record>
+		<record>
+			<datestamp>2025-03-01 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>42.281</value>
+		</record>
+		<record>
+			<datestamp>2025-03-02 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>42.270</value>
+		</record>
+		<record>
+			<datestamp>2025-03-03 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>42.286</value>
+		</record>
+		<record>
+			<datestamp>2025-03-04 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>42.328</value>
+		</record>
+		<record>
+			<datestamp>2025-03-05 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>42.337</value>
+		</record>
+		<record>
+			<datestamp>2025-03-06 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>42.311</value>
+		</record>
+		<record>
+			<datestamp>2025-03-07 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>42.267</value>
+		</record>
+		<record>
+			<datestamp>2025-03-08 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>42.298</value>
+		</record>
+		<record>
+			<datestamp>2025-03-09 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>42.315</value>
+		</record>
+		<record>
+			<datestamp>2025-03-10 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>42.357</value>
+		</record>
+		<record>
+			<datestamp>2025-03-11 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>42.367</value>
+		</record>
+		<record>
+			<datestamp>2025-03-12 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>42.393</value>
+		</record>
+		<record>
+			<datestamp>2025-03-13 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>42.404</value>
+		</record>
+		<record>
+			<datestamp>2025-03-14 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>42.433</value>
+		</record>
+		<record>
+			<datestamp>2025-03-15 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>42.437</value>
+		</record>
+		<record>
+			<datestamp>2025-03-16 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>42.452</value>
+		</record>
+		<record>
+			<datestamp>2025-03-17 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>43.068</value>
+		</record>
+		<record>
+			<datestamp>2025-03-18 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>43.193</value>
+		</record>
+		<record>
+			<datestamp>2025-03-19 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>43.016</value>
+		</record>
+		<record>
+			<datestamp>2025-03-20 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>42.941</value>
+		</record>
+		<record>
+			<datestamp>2025-03-21 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>42.937</value>
+		</record>
+		<record>
+			<datestamp>2025-03-22 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>42.871</value>
+		</record>
+		<record>
+			<datestamp>2025-03-23 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>42.795</value>
+		</record>
+		<record>
+			<datestamp>2025-03-24 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>42.795</value>
+		</record>
+		<record>
+			<datestamp>2025-03-25 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>42.719</value>
+		</record>
+		<record>
+			<datestamp>2025-03-26 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>42.654</value>
+		</record>
+		<record>
+			<datestamp>2025-03-27 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>42.596</value>
+		</record>
+		<record>
+			<datestamp>2025-03-28 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>42.584</value>
+		</record>
+		<record>
+			<datestamp>2025-03-29 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>42.564</value>
+		</record>
+		<record>
+			<datestamp>2025-03-30 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>42.532</value>
+		</record>
+		<record>
+			<datestamp>2025-03-31 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>42.475</value>
+		</record>
+		<record>
+			<datestamp>2025-04-01 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>42.462</value>
+		</record>
+		<record>
+			<datestamp>2025-04-02 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>42.458</value>
+		</record>
+		<record>
+			<datestamp>2025-04-03 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>42.513</value>
+		</record>
+		<record>
+			<datestamp>2025-04-04 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>42.606</value>
+		</record>
+		<record>
+			<datestamp>2025-04-05 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>42.709</value>
+		</record>
+		<record>
+			<datestamp>2025-04-06 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>42.768</value>
+		</record>
+		<record>
+			<datestamp>2025-04-07 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>42.754</value>
+		</record>
+		<record>
+			<datestamp>2025-04-08 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>42.713</value>
+		</record>
+		<record>
+			<datestamp>2025-04-09 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>42.591</value>
+		</record>
+		<record>
+			<datestamp>2025-04-10 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>42.510</value>
+		</record>
+		<record>
+			<datestamp>2025-04-11 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>42.473</value>
+		</record>
+		<record>
+			<datestamp>2025-04-12 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>42.451</value>
+		</record>
+		<record>
+			<datestamp>2025-04-13 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>42.431</value>
+		</record>
+		<record>
+			<datestamp>2025-04-14 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>42.387</value>
+		</record>
+		<record>
+			<datestamp>2025-04-15 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>42.336</value>
+		</record>
+		<record>
+			<datestamp>2025-04-16 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>42.317</value>
+		</record>
+		<record>
+			<datestamp>2025-04-17 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>42.324</value>
+		</record>
+		<record>
+			<datestamp>2025-04-18 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>42.382</value>
+		</record>
+		<record>
+			<datestamp>2025-04-19 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>42.410</value>
+		</record>
+		<record>
+			<datestamp>2025-04-20 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>42.428</value>
+		</record>
+		<record>
+			<datestamp>2025-04-21 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>42.477</value>
+		</record>
+		<record>
+			<datestamp>2025-04-22 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>42.500</value>
+		</record>
+		<record>
+			<datestamp>2025-04-23 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>42.547</value>
+		</record>
+		<record>
+			<datestamp>2025-04-24 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>42.635</value>
+		</record>
+		<record>
+			<datestamp>2025-04-25 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>42.720</value>
+		</record>
+		<record>
+			<datestamp>2025-04-26 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>42.788</value>
+		</record>
+		<record>
+			<datestamp>2025-04-27 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>42.857</value>
+		</record>
+		<record>
+			<datestamp>2025-04-28 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>42.987</value>
+		</record>
+		<record>
+			<datestamp>2025-04-29 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>43.173</value>
+		</record>
+		<record>
+			<datestamp>2025-04-30 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>43.347</value>
+		</record>
+		<record>
+			<datestamp>2025-05-01 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>43.389</value>
+		</record>
+		<record>
+			<datestamp>2025-05-02 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>43.446</value>
+		</record>
+		<record>
+			<datestamp>2025-05-03 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>43.494</value>
+		</record>
+		<record>
+			<datestamp>2025-05-04 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>43.515</value>
+		</record>
+		<record>
+			<datestamp>2025-05-05 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>43.524</value>
+		</record>
+		<record>
+			<datestamp>2025-05-06 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>43.520</value>
+		</record>
+		<record>
+			<datestamp>2025-05-07 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>43.509</value>
+		</record>
+		<record>
+			<datestamp>2025-05-08 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>43.501</value>
+		</record>
+		<record>
+			<datestamp>2025-05-09 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>43.470</value>
+		</record>
+		<record>
+			<datestamp>2025-05-10 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>43.400</value>
+		</record>
+		<record>
+			<datestamp>2025-05-11 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>43.316</value>
+		</record>
+		<record>
+			<datestamp>2025-05-12 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>43.242</value>
+		</record>
+		<record>
+			<datestamp>2025-05-13 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>43.186</value>
+		</record>
+		<record>
+			<datestamp>2025-05-14 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>43.124</value>
+		</record>
+		<record>
+			<datestamp>2025-05-15 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>43.049</value>
+		</record>
+		<record>
+			<datestamp>2025-05-16 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>42.960</value>
+		</record>
+		<record>
+			<datestamp>2025-05-17 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>42.857</value>
+		</record>
+		<record>
+			<datestamp>2025-05-18 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>42.806</value>
+		</record>
+		<record>
+			<datestamp>2025-05-19 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>42.731</value>
+		</record>
+		<record>
+			<datestamp>2025-05-20 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>42.685</value>
+		</record>
+		<record>
+			<datestamp>2025-05-21 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>42.659</value>
+		</record>
+		<record>
+			<datestamp>2025-05-22 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>42.650</value>
+		</record>
+		<record>
+			<datestamp>2025-05-23 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>42.618</value>
+		</record>
+		<record>
+			<datestamp>2025-05-24 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>42.490</value>
+		</record>
+		<record>
+			<datestamp>2025-05-25 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>42.319</value>
+		</record>
+		<record>
+			<datestamp>2025-05-26 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>42.226</value>
+		</record>
+		<record>
+			<datestamp>2025-05-27 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>42.157</value>
+		</record>
+		<record>
+			<datestamp>2025-05-28 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>42.082</value>
+		</record>
+		<record>
+			<datestamp>2025-05-29 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>42.057</value>
+		</record>
+		<record>
+			<datestamp>2025-05-30 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>42.030</value>
+		</record>
+		<record>
+			<datestamp>2025-05-31 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>42.012</value>
+		</record>
+		<record>
+			<datestamp>2025-06-01 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.922</value>
+		</record>
+		<record>
+			<datestamp>2025-06-02 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.875</value>
+		</record>
+		<record>
+			<datestamp>2025-06-03 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.743</value>
+		</record>
+		<record>
+			<datestamp>2025-06-04 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.707</value>
+		</record>
+		<record>
+			<datestamp>2025-06-05 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.702</value>
+		</record>
+		<record>
+			<datestamp>2025-06-06 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.725</value>
+		</record>
+		<record>
+			<datestamp>2025-06-07 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.697</value>
+		</record>
+		<record>
+			<datestamp>2025-06-08 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.572</value>
+		</record>
+		<record>
+			<datestamp>2025-06-09 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.564</value>
+		</record>
+		<record>
+			<datestamp>2025-06-10 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.534</value>
+		</record>
+		<record>
+			<datestamp>2025-06-11 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.489</value>
+		</record>
+		<record>
+			<datestamp>2025-06-12 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.462</value>
+		</record>
+		<record>
+			<datestamp>2025-06-13 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.484</value>
+		</record>
+		<record>
+			<datestamp>2025-06-14 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.531</value>
+		</record>
+		<record>
+			<datestamp>2025-06-15 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.474</value>
+		</record>
+		<record>
+			<datestamp>2025-06-16 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.457</value>
+		</record>
+		<record>
+			<datestamp>2025-06-17 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.473</value>
+		</record>
+		<record>
+			<datestamp>2025-06-18 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.495</value>
+		</record>
+		<record>
+			<datestamp>2025-06-19 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.447</value>
+		</record>
+		<record>
+			<datestamp>2025-06-20 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.413</value>
+		</record>
+		<record>
+			<datestamp>2025-06-21 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.456</value>
+		</record>
+		<record>
+			<datestamp>2025-06-22 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.500</value>
+		</record>
+		<record>
+			<datestamp>2025-06-23 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.550</value>
+		</record>
+		<record>
+			<datestamp>2025-06-24 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.604</value>
+		</record>
+		<record>
+			<datestamp>2025-06-25 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.758</value>
+		</record>
+		<record>
+			<datestamp>2025-06-26 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.847</value>
+		</record>
+		<record>
+			<datestamp>2025-06-27 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.884</value>
+		</record>
+		<record>
+			<datestamp>2025-06-28 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.815</value>
+		</record>
+		<record>
+			<datestamp>2025-06-29 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.740</value>
+		</record>
+		<record>
+			<datestamp>2025-06-30 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.744</value>
+		</record>
+		<record>
+			<datestamp>2025-07-01 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.713</value>
+		</record>
+		<record>
+			<datestamp>2025-07-02 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.714</value>
+		</record>
+		<record>
+			<datestamp>2025-07-03 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.706</value>
+		</record>
+		<record>
+			<datestamp>2025-07-04 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.691</value>
+		</record>
+		<record>
+			<datestamp>2025-07-05 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.680</value>
+		</record>
+		<record>
+			<datestamp>2025-07-06 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.608</value>
+		</record>
+		<record>
+			<datestamp>2025-07-07 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.638</value>
+		</record>
+		<record>
+			<datestamp>2025-07-08 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.727</value>
+		</record>
+		<record>
+			<datestamp>2025-07-09 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.732</value>
+		</record>
+		<record>
+			<datestamp>2025-07-10 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.813</value>
+		</record>
+		<record>
+			<datestamp>2025-07-11 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.848</value>
+		</record>
+		<record>
+			<datestamp>2025-07-12 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.878</value>
+		</record>
+		<record>
+			<datestamp>2025-07-13 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.886</value>
+		</record>
+		<record>
+			<datestamp>2025-07-14 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.897</value>
+		</record>
+		<record>
+			<datestamp>2025-07-15 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.838</value>
+		</record>
+		<record>
+			<datestamp>2025-07-16 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.735</value>
+		</record>
+		<record>
+			<datestamp>2025-07-17 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.698</value>
+		</record>
+		<record>
+			<datestamp>2025-07-18 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.673</value>
+		</record>
+		<record>
+			<datestamp>2025-07-19 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.674</value>
+		</record>
+		<record>
+			<datestamp>2025-07-20 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.649</value>
+		</record>
+		<record>
+			<datestamp>2025-07-21 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.603</value>
+		</record>
+		<record>
+			<datestamp>2025-07-22 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.614</value>
+		</record>
+		<record>
+			<datestamp>2025-07-23 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.588</value>
+		</record>
+		<record>
+			<datestamp>2025-07-24 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.542</value>
+		</record>
+		<record>
+			<datestamp>2025-07-25 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.539</value>
+		</record>
+		<record>
+			<datestamp>2025-07-26 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.536</value>
+		</record>
+		<record>
+			<datestamp>2025-07-27 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.509</value>
+		</record>
+		<record>
+			<datestamp>2025-07-28 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.493</value>
+		</record>
+		<record>
+			<datestamp>2025-07-29 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.467</value>
+		</record>
+		<record>
+			<datestamp>2025-07-30 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.471</value>
+		</record>
+		<record>
+			<datestamp>2025-07-31 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.464</value>
+		</record>
+		<record>
+			<datestamp>2025-08-01 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.426</value>
+		</record>
+		<record>
+			<datestamp>2025-08-02 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.403</value>
+		</record>
+		<record>
+			<datestamp>2025-08-03 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.373</value>
+		</record>
+		<record>
+			<datestamp>2025-08-04 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.382</value>
+		</record>
+		<record>
+			<datestamp>2025-08-05 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.405</value>
+		</record>
+		<record>
+			<datestamp>2025-08-06 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.382</value>
+		</record>
+		<record>
+			<datestamp>2025-08-07 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.347</value>
+		</record>
+		<record>
+			<datestamp>2025-08-08 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.317</value>
+		</record>
+		<record>
+			<datestamp>2025-08-09 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.300</value>
+		</record>
+		<record>
+			<datestamp>2025-08-10 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.281</value>
+		</record>
+		<record>
+			<datestamp>2025-08-11 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.296</value>
+		</record>
+		<record>
+			<datestamp>2025-08-12 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.311</value>
+		</record>
+		<record>
+			<datestamp>2025-08-13 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.312</value>
+		</record>
+		<record>
+			<datestamp>2025-08-14 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.294</value>
+		</record>
+		<record>
+			<datestamp>2025-08-15 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.313</value>
+		</record>
+		<record>
+			<datestamp>2025-08-16 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.304</value>
+		</record>
+		<record>
+			<datestamp>2025-08-17 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.303</value>
+		</record>
+		<record>
+			<datestamp>2025-08-18 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.285</value>
+		</record>
+		<record>
+			<datestamp>2025-08-19 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.313</value>
+		</record>
+		<record>
+			<datestamp>2025-08-20 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.332</value>
+		</record>
+		<record>
+			<datestamp>2025-08-21 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.310</value>
+		</record>
+		<record>
+			<datestamp>2025-08-22 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.277</value>
+		</record>
+		<record>
+			<datestamp>2025-08-23 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.259</value>
+		</record>
+		<record>
+			<datestamp>2025-08-24 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.246</value>
+		</record>
+		<record>
+			<datestamp>2025-08-25 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.248</value>
+		</record>
+		<record>
+			<datestamp>2025-08-26 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.210</value>
+		</record>
+		<record>
+			<datestamp>2025-08-27 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.229</value>
+		</record>
+		<record>
+			<datestamp>2025-08-28 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.268</value>
+		</record>
+		<record>
+			<datestamp>2025-08-29 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.221</value>
+		</record>
+		<record>
+			<datestamp>2025-08-30 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.215</value>
+		</record>
+		<record>
+			<datestamp>2025-08-31 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.224</value>
+		</record>
+		<record>
+			<datestamp>2025-09-01 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.251</value>
+		</record>
+		<record>
+			<datestamp>2025-09-02 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.252</value>
+		</record>
+		<record>
+			<datestamp>2025-09-03 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.263</value>
+		</record>
+		<record>
+			<datestamp>2025-09-04 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.262</value>
+		</record>
+		<record>
+			<datestamp>2025-09-05 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.222</value>
+		</record>
+		<record>
+			<datestamp>2025-09-06 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.232</value>
+		</record>
+		<record>
+			<datestamp>2025-09-07 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.218</value>
+		</record>
+		<record>
+			<datestamp>2025-09-08 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.217</value>
+		</record>
+		<record>
+			<datestamp>2025-09-09 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.244</value>
+		</record>
+		<record>
+			<datestamp>2025-09-10 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.241</value>
+		</record>
+		<record>
+			<datestamp>2025-09-11 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.229</value>
+		</record>
+		<record>
+			<datestamp>2025-09-12 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.246</value>
+		</record>
+		<record>
+			<datestamp>2025-09-13 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.246</value>
+		</record>
+		<record>
+			<datestamp>2025-09-14 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.234</value>
+		</record>
+		<record>
+			<datestamp>2025-09-15 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.236</value>
+		</record>
+		<record>
+			<datestamp>2025-09-16 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.245</value>
+		</record>
+		<record>
+			<datestamp>2025-09-17 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.250</value>
+		</record>
+		<record>
+			<datestamp>2025-09-18 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.231</value>
+		</record>
+		<record>
+			<datestamp>2025-09-19 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.220</value>
+		</record>
+		<record>
+			<datestamp>2025-09-20 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.224</value>
+		</record>
+		<record>
+			<datestamp>2025-09-21 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.253</value>
+		</record>
+		<record>
+			<datestamp>2025-09-22 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.271</value>
+		</record>
+		<record>
+			<datestamp>2025-09-23 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.247</value>
+		</record>
+		<record>
+			<datestamp>2025-09-24 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.286</value>
+		</record>
+		<record>
+			<datestamp>2025-09-25 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.296</value>
+		</record>
+		<record>
+			<datestamp>2025-09-26 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.227</value>
+		</record>
+		<record>
+			<datestamp>2025-09-27 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.249</value>
+		</record>
+		<record>
+			<datestamp>2025-09-28 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.218</value>
+		</record>
+		<record>
+			<datestamp>2025-09-29 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.197</value>
+		</record>
+		<record>
+			<datestamp>2025-09-30 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.238</value>
+		</record>
+		<record>
+			<datestamp>2025-10-01 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.240</value>
+		</record>
+		<record>
+			<datestamp>2025-10-02 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.253</value>
+		</record>
+		<record>
+			<datestamp>2025-10-03 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.226</value>
+		</record>
+		<record>
+			<datestamp>2025-10-04 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.208</value>
+		</record>
+		<record>
+			<datestamp>2025-10-05 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.208</value>
+		</record>
+		<record>
+			<datestamp>2025-10-06 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.213</value>
+		</record>
+		<record>
+			<datestamp>2025-10-07 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.239</value>
+		</record>
+		<record>
+			<datestamp>2025-10-08 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.208</value>
+		</record>
+		<record>
+			<datestamp>2025-10-09 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.195</value>
+		</record>
+		<record>
+			<datestamp>2025-10-10 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.224</value>
+		</record>
+		<record>
+			<datestamp>2025-10-11 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.245</value>
+		</record>
+		<record>
+			<datestamp>2025-10-12 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.270</value>
+		</record>
+		<record>
+			<datestamp>2025-10-13 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.264</value>
+		</record>
+		<record>
+			<datestamp>2025-10-14 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.208</value>
+		</record>
+		<record>
+			<datestamp>2025-10-15 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.199</value>
+		</record>
+		<record>
+			<datestamp>2025-10-16 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.189</value>
+		</record>
+		<record>
+			<datestamp>2025-10-17 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.214</value>
+		</record>
+		<record>
+			<datestamp>2025-10-18 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.253</value>
+		</record>
+		<record>
+			<datestamp>2025-10-19 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.301</value>
+		</record>
+		<record>
+			<datestamp>2025-10-20 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.251</value>
+		</record>
+		<record>
+			<datestamp>2025-10-21 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.204</value>
+		</record>
+		<record>
+			<datestamp>2025-10-22 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.253</value>
+		</record>
+		<record>
+			<datestamp>2025-10-23 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.215</value>
+		</record>
+		<record>
+			<datestamp>2025-10-24 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.214</value>
+		</record>
+		<record>
+			<datestamp>2025-10-25 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.220</value>
+		</record>
+		<record>
+			<datestamp>2025-10-26 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.228</value>
+		</record>
+		<record>
+			<datestamp>2025-10-27 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.234</value>
+		</record>
+		<record>
+			<datestamp>2025-10-28 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.218</value>
+		</record>
+		<record>
+			<datestamp>2025-10-29 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.050</value>
+		</record>
+		<record>
+			<datestamp>2025-10-30 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.114</value>
+		</record>
+		<record>
+			<datestamp>2025-10-31 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.196</value>
+		</record>
+		<record>
+			<datestamp>2025-11-01 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.184</value>
+		</record>
+		<record>
+			<datestamp>2025-11-02 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.246</value>
+		</record>
+		<record>
+			<datestamp>2025-11-03 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.246</value>
+		</record>
+		<record>
+			<datestamp>2025-11-04 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.164</value>
+		</record>
+		<record>
+			<datestamp>2025-11-05 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.267</value>
+		</record>
+		<record>
+			<datestamp>2025-11-06 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.204</value>
+		</record>
+		<record>
+			<datestamp>2025-11-07 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.315</value>
+		</record>
+		<record>
+			<datestamp>2025-11-08 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.219</value>
+		</record>
+		<record>
+			<datestamp>2025-11-09 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.297</value>
+		</record>
+		<record>
+			<datestamp>2025-11-10 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.240</value>
+		</record>
+		<record>
+			<datestamp>2025-11-11 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.191</value>
+		</record>
+		<record>
+			<datestamp>2025-11-12 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.248</value>
+		</record>
+		<record>
+			<datestamp>2025-11-13 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.241</value>
+		</record>
+		<record>
+			<datestamp>2025-11-14 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.232</value>
+		</record>
+		<record>
+			<datestamp>2025-11-15 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.268</value>
+		</record>
+		<record>
+			<datestamp>2025-11-16 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.216</value>
+		</record>
+		<record>
+			<datestamp>2025-11-17 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.156</value>
+		</record>
+		<record>
+			<datestamp>2025-11-18 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.199</value>
+		</record>
+		<record>
+			<datestamp>2025-11-19 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.247</value>
+		</record>
+		<record>
+			<datestamp>2025-11-20 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.265</value>
+		</record>
+		<record>
+			<datestamp>2025-11-21 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.270</value>
+		</record>
+		<record>
+			<datestamp>2025-11-22 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.223</value>
+		</record>
+		<record>
+			<datestamp>2025-11-23 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.254</value>
+		</record>
+		<record>
+			<datestamp>2025-11-24 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.231</value>
+		</record>
+		<record>
+			<datestamp>2025-11-25 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.255</value>
+		</record>
+		<record>
+			<datestamp>2025-11-26 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.270</value>
+		</record>
+		<record>
+			<datestamp>2025-11-27 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.207</value>
+		</record>
+		<record>
+			<datestamp>2025-11-28 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.149</value>
+		</record>
+		<record>
+			<datestamp>2025-11-29 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.164</value>
+		</record>
+		<record>
+			<datestamp>2025-11-30 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.281</value>
+		</record>
+		<record>
+			<datestamp>2025-12-01 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.115</value>
+		</record>
+		<record>
+			<datestamp>2025-12-02 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.183</value>
+		</record>
+		<record>
+			<datestamp>2025-12-03 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.157</value>
+		</record>
+		<record>
+			<datestamp>2025-12-04 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.103</value>
+		</record>
+		<record>
+			<datestamp>2025-12-05 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.194</value>
+		</record>
+		<record>
+			<datestamp>2025-12-06 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.224</value>
+		</record>
+		<record>
+			<datestamp>2025-12-07 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.215</value>
+		</record>
+		<record>
+			<datestamp>2025-12-08 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.228</value>
+		</record>
+		<record>
+			<datestamp>2025-12-09 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.303</value>
+		</record>
+		<record>
+			<datestamp>2025-12-10 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.322</value>
+		</record>
+		<record>
+			<datestamp>2025-12-11 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.306</value>
+		</record>
+		<record>
+			<datestamp>2025-12-12 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.277</value>
+		</record>
+		<record>
+			<datestamp>2025-12-13 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.327</value>
+		</record>
+		<record>
+			<datestamp>2025-12-14 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.314</value>
+		</record>
+		<record>
+			<datestamp>2025-12-15 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.278</value>
+		</record>
+		<record>
+			<datestamp>2025-12-16 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.281</value>
+		</record>
+		<record>
+			<datestamp>2025-12-17 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.316</value>
+		</record>
+		<record>
+			<datestamp>2025-12-18 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.328</value>
+		</record>
+		<record>
+			<datestamp>2025-12-19 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.335</value>
+		</record>
+		<record>
+			<datestamp>2025-12-20 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.341</value>
+		</record>
+		<record>
+			<datestamp>2025-12-21 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.353</value>
+		</record>
+		<record>
+			<datestamp>2025-12-22 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.355</value>
+		</record>
+		<record>
+			<datestamp>2025-12-23 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.367</value>
+		</record>
+		<record>
+			<datestamp>2025-12-24 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.371</value>
+		</record>
+		<record>
+			<datestamp>2025-12-25 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.369</value>
+		</record>
+		<record>
+			<datestamp>2025-12-26 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.371</value>
+		</record>
+		<record>
+			<datestamp>2025-12-27 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.385</value>
+		</record>
+		<record>
+			<datestamp>2025-12-28 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.373</value>
+		</record>
+		<record>
+			<datestamp>2025-12-29 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.404</value>
+		</record>
+		<record>
+			<datestamp>2025-12-30 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.379</value>
+		</record>
+		<record>
+			<datestamp>2025-12-31 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.409</value>
+		</record>
+		<record>
+			<datestamp>2026-01-01 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.411</value>
+		</record>
+		<record>
+			<datestamp>2026-01-02 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.433</value>
+		</record>
+		<record>
+			<datestamp>2026-01-03 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.442</value>
+		</record>
+		<record>
+			<datestamp>2026-01-04 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.455</value>
+		</record>
+		<record>
+			<datestamp>2026-01-05 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.494</value>
+		</record>
+		<record>
+			<datestamp>2026-01-06 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.529</value>
+		</record>
+		<record>
+			<datestamp>2026-01-07 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.542</value>
+		</record>
+		<record>
+			<datestamp>2026-01-08 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.554</value>
+		</record>
+		<record>
+			<datestamp>2026-01-09 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.580</value>
+		</record>
+		<record>
+			<datestamp>2026-01-10 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.584</value>
+		</record>
+		<record>
+			<datestamp>2026-01-11 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.584</value>
+		</record>
+		<record>
+			<datestamp>2026-01-12 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.605</value>
+		</record>
+		<record>
+			<datestamp>2026-01-13 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.651</value>
+		</record>
+		<record>
+			<datestamp>2026-01-14 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.697</value>
+		</record>
+		<record>
+			<datestamp>2026-01-15 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.734</value>
+		</record>
+		<record>
+			<datestamp>2026-01-16 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.808</value>
+		</record>
+		<record>
+			<datestamp>2026-01-17 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.848</value>
+		</record>
+		<record>
+			<datestamp>2026-01-18 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.844</value>
+		</record>
+		<record>
+			<datestamp>2026-01-19 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.886</value>
+		</record>
+		<record>
+			<datestamp>2026-01-20 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.871</value>
+		</record>
+		<record>
+			<datestamp>2026-01-21 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.866</value>
+		</record>
+		<record>
+			<datestamp>2026-01-22 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.905</value>
+		</record>
+		<record>
+			<datestamp>2026-01-23 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.903</value>
+		</record>
+		<record>
+			<datestamp>2026-01-24 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.848</value>
+		</record>
+		<record>
+			<datestamp>2026-01-25 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.816</value>
+		</record>
+		<record>
+			<datestamp>2026-01-26 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.804</value>
+		</record>
+		<record>
+			<datestamp>2026-01-27 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.864</value>
+		</record>
+		<record>
+			<datestamp>2026-01-28 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.868</value>
+		</record>
+		<record>
+			<datestamp>2026-01-29 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.864</value>
+		</record>
+		<record>
+			<datestamp>2026-01-30 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.842</value>
+		</record>
+		<record>
+			<datestamp>2026-01-31 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.864</value>
+		</record>
+		<record>
+			<datestamp>2026-02-01 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.876</value>
+		</record>
+		<record>
+			<datestamp>2026-02-02 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.888</value>
+		</record>
+		<record>
+			<datestamp>2026-02-03 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.871</value>
+		</record>
+		<record>
+			<datestamp>2026-02-04 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.825</value>
+		</record>
+		<record>
+			<datestamp>2026-02-05 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.866</value>
+		</record>
+		<record>
+			<datestamp>2026-02-06 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.803</value>
+		</record>
+		<record>
+			<datestamp>2026-02-07 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.735</value>
+		</record>
+		<record>
+			<datestamp>2026-02-08 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.671</value>
+		</record>
+		<record>
+			<datestamp>2026-02-09 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.657</value>
+		</record>
+		<record>
+			<datestamp>2026-02-10 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.733</value>
+		</record>
+		<record>
+			<datestamp>2026-02-11 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.785</value>
+		</record>
+		<record>
+			<datestamp>2026-02-12 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.798</value>
+		</record>
+		<record>
+			<datestamp>2026-02-13 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.805</value>
+		</record>
+		<record>
+			<datestamp>2026-02-14 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.791</value>
+		</record>
+		<record>
+			<datestamp>2026-02-15 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.865</value>
+		</record>
+		<record>
+			<datestamp>2026-02-16 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.857</value>
+		</record>
+		<record>
+			<datestamp>2026-02-17 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.809</value>
+		</record>
+		<record>
+			<datestamp>2026-02-18 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.761</value>
+		</record>
+		<record>
+			<datestamp>2026-02-19 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.676</value>
+		</record>
+		<record>
+			<datestamp>2026-02-20 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.670</value>
+		</record>
+		<record>
+			<datestamp>2026-02-21 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.762</value>
+		</record>
+		<record>
+			<datestamp>2026-02-22 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.795</value>
+		</record>
+		<record>
+			<datestamp>2026-02-23 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.809</value>
+		</record>
+		<record>
+			<datestamp>2026-02-24 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.795</value>
+		</record>
+		<record>
+			<datestamp>2026-02-25 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.800</value>
+		</record>
+		<record>
+			<datestamp>2026-02-26 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.773</value>
+		</record>
+		<record>
+			<datestamp>2026-02-27 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.781</value>
+		</record>
+		<record>
+			<datestamp>2026-02-28 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.804</value>
+		</record>
+		<record>
+			<datestamp>2026-03-01 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.801</value>
+		</record>
+		<record>
+			<datestamp>2026-03-02 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.809</value>
+		</record>
+		<record>
+			<datestamp>2026-03-03 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.797</value>
+		</record>
+		<record>
+			<datestamp>2026-03-04 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.778</value>
+		</record>
+		<record>
+			<datestamp>2026-03-05 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.837</value>
+		</record>
+		<record>
+			<datestamp>2026-03-06 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.803</value>
+		</record>
+		<record>
+			<datestamp>2026-03-07 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.855</value>
+		</record>
+		<record>
+			<datestamp>2026-03-08 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>41.865</value>
+		</record>
+		<record>
+			<datestamp>2026-03-09 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>42.102</value>
+		</record>
+		<record>
+			<datestamp>2026-03-10 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>42.351</value>
+		</record>
+		<record>
+			<datestamp>2026-03-11 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>42.476</value>
+		</record>
+		<record>
+			<datestamp>2026-03-12 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>42.437</value>
+		</record>
+		<record>
+			<datestamp>2026-03-13 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>42.393</value>
+		</record>
+		<record>
+			<datestamp>2026-03-14 00:00:00.000</datestamp>
+			<code>HGD</code>
+			<value>42.308</value>
+		</record>
+	</data>
+</realTimeData>

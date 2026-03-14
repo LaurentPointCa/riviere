@@ -1,0 +1,2199 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<realTimeData>
+	<stationid>02KF005</stationid>
+	<fromdate>2025-01-01 00:00:00.000</fromdate>
+	<todate>2026-03-14 00:00:00.000</todate>
+	<timezone>HNE</timezone>
+	<data>
+		<record>
+			<datestamp>2025-01-01 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1420</value>
+		</record>
+		<record>
+			<datestamp>2025-01-02 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1580</value>
+		</record>
+		<record>
+			<datestamp>2025-01-03 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1670</value>
+		</record>
+		<record>
+			<datestamp>2025-01-04 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1800</value>
+		</record>
+		<record>
+			<datestamp>2025-01-05 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1850</value>
+		</record>
+		<record>
+			<datestamp>2025-01-06 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1740</value>
+		</record>
+		<record>
+			<datestamp>2025-01-07 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1700</value>
+		</record>
+		<record>
+			<datestamp>2025-01-08 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1720</value>
+		</record>
+		<record>
+			<datestamp>2025-01-09 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1550</value>
+		</record>
+		<record>
+			<datestamp>2025-01-10 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1480</value>
+		</record>
+		<record>
+			<datestamp>2025-01-11 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1570</value>
+		</record>
+		<record>
+			<datestamp>2025-01-12 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1670</value>
+		</record>
+		<record>
+			<datestamp>2025-01-13 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1690</value>
+		</record>
+		<record>
+			<datestamp>2025-01-14 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1690</value>
+		</record>
+		<record>
+			<datestamp>2025-01-15 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1670</value>
+		</record>
+		<record>
+			<datestamp>2025-01-16 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1670</value>
+		</record>
+		<record>
+			<datestamp>2025-01-17 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1670</value>
+		</record>
+		<record>
+			<datestamp>2025-01-18 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1670</value>
+		</record>
+		<record>
+			<datestamp>2025-01-19 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1710</value>
+		</record>
+		<record>
+			<datestamp>2025-01-20 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1610</value>
+		</record>
+		<record>
+			<datestamp>2025-01-21 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1350</value>
+		</record>
+		<record>
+			<datestamp>2025-01-22 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1420</value>
+		</record>
+		<record>
+			<datestamp>2025-01-23 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1520</value>
+		</record>
+		<record>
+			<datestamp>2025-01-24 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1550</value>
+		</record>
+		<record>
+			<datestamp>2025-01-25 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1540</value>
+		</record>
+		<record>
+			<datestamp>2025-01-26 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1490</value>
+		</record>
+		<record>
+			<datestamp>2025-01-27 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1530</value>
+		</record>
+		<record>
+			<datestamp>2025-01-28 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1660</value>
+		</record>
+		<record>
+			<datestamp>2025-01-29 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1580</value>
+		</record>
+		<record>
+			<datestamp>2025-01-30 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1530</value>
+		</record>
+		<record>
+			<datestamp>2025-01-31 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1520</value>
+		</record>
+		<record>
+			<datestamp>2025-02-01 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1520</value>
+		</record>
+		<record>
+			<datestamp>2025-02-02 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1510</value>
+		</record>
+		<record>
+			<datestamp>2025-02-03 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1520</value>
+		</record>
+		<record>
+			<datestamp>2025-02-04 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1520</value>
+		</record>
+		<record>
+			<datestamp>2025-02-05 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1510</value>
+		</record>
+		<record>
+			<datestamp>2025-02-06 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1510</value>
+		</record>
+		<record>
+			<datestamp>2025-02-07 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1520</value>
+		</record>
+		<record>
+			<datestamp>2025-02-08 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1510</value>
+		</record>
+		<record>
+			<datestamp>2025-02-09 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1510</value>
+		</record>
+		<record>
+			<datestamp>2025-02-10 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1510</value>
+		</record>
+		<record>
+			<datestamp>2025-02-11 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1510</value>
+		</record>
+		<record>
+			<datestamp>2025-02-12 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1510</value>
+		</record>
+		<record>
+			<datestamp>2025-02-13 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1480</value>
+		</record>
+		<record>
+			<datestamp>2025-02-14 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1430</value>
+		</record>
+		<record>
+			<datestamp>2025-02-15 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1410</value>
+		</record>
+		<record>
+			<datestamp>2025-02-16 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1420</value>
+		</record>
+		<record>
+			<datestamp>2025-02-17 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1440</value>
+		</record>
+		<record>
+			<datestamp>2025-02-18 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1470</value>
+		</record>
+		<record>
+			<datestamp>2025-02-19 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1460</value>
+		</record>
+		<record>
+			<datestamp>2025-02-20 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1480</value>
+		</record>
+		<record>
+			<datestamp>2025-02-21 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1500</value>
+		</record>
+		<record>
+			<datestamp>2025-02-22 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1540</value>
+		</record>
+		<record>
+			<datestamp>2025-02-23 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1530</value>
+		</record>
+		<record>
+			<datestamp>2025-02-24 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1550</value>
+		</record>
+		<record>
+			<datestamp>2025-02-25 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1590</value>
+		</record>
+		<record>
+			<datestamp>2025-02-26 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1510</value>
+		</record>
+		<record>
+			<datestamp>2025-02-27 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1490</value>
+		</record>
+		<record>
+			<datestamp>2025-02-28 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1510</value>
+		</record>
+		<record>
+			<datestamp>2025-03-01 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1510</value>
+		</record>
+		<record>
+			<datestamp>2025-03-02 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1510</value>
+		</record>
+		<record>
+			<datestamp>2025-03-03 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1520</value>
+		</record>
+		<record>
+			<datestamp>2025-03-04 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1560</value>
+		</record>
+		<record>
+			<datestamp>2025-03-05 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1530</value>
+		</record>
+		<record>
+			<datestamp>2025-03-06 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1520</value>
+		</record>
+		<record>
+			<datestamp>2025-03-07 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1520</value>
+		</record>
+		<record>
+			<datestamp>2025-03-08 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1580</value>
+		</record>
+		<record>
+			<datestamp>2025-03-09 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1600</value>
+		</record>
+		<record>
+			<datestamp>2025-03-10 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1620</value>
+		</record>
+		<record>
+			<datestamp>2025-03-11 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1620</value>
+		</record>
+		<record>
+			<datestamp>2025-03-12 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1620</value>
+		</record>
+		<record>
+			<datestamp>2025-03-13 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1640</value>
+		</record>
+		<record>
+			<datestamp>2025-03-14 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1660</value>
+		</record>
+		<record>
+			<datestamp>2025-03-15 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1600</value>
+		</record>
+		<record>
+			<datestamp>2025-03-16 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1620</value>
+		</record>
+		<record>
+			<datestamp>2025-03-17 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>2060</value>
+		</record>
+		<record>
+			<datestamp>2025-03-18 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>2100</value>
+		</record>
+		<record>
+			<datestamp>2025-03-19 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>2020</value>
+		</record>
+		<record>
+			<datestamp>2025-03-20 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>2100</value>
+		</record>
+		<record>
+			<datestamp>2025-03-21 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>2230</value>
+		</record>
+		<record>
+			<datestamp>2025-03-22 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>2350</value>
+		</record>
+		<record>
+			<datestamp>2025-03-23 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>2440</value>
+		</record>
+		<record>
+			<datestamp>2025-03-24 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>2550</value>
+		</record>
+		<record>
+			<datestamp>2025-03-25 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>2610</value>
+		</record>
+		<record>
+			<datestamp>2025-03-26 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>2620</value>
+		</record>
+		<record>
+			<datestamp>2025-03-27 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>2570</value>
+		</record>
+		<record>
+			<datestamp>2025-03-28 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>2560</value>
+		</record>
+		<record>
+			<datestamp>2025-03-29 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>2520</value>
+		</record>
+		<record>
+			<datestamp>2025-03-30 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>2480</value>
+		</record>
+		<record>
+			<datestamp>2025-03-31 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>2390</value>
+		</record>
+		<record>
+			<datestamp>2025-04-01 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>2280</value>
+		</record>
+		<record>
+			<datestamp>2025-04-02 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>2180</value>
+		</record>
+		<record>
+			<datestamp>2025-04-03 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>2220</value>
+		</record>
+		<record>
+			<datestamp>2025-04-04 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>2350</value>
+		</record>
+		<record>
+			<datestamp>2025-04-05 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>2410</value>
+		</record>
+		<record>
+			<datestamp>2025-04-06 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>2450</value>
+		</record>
+		<record>
+			<datestamp>2025-04-07 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>2420</value>
+		</record>
+		<record>
+			<datestamp>2025-04-08 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>2480</value>
+		</record>
+		<record>
+			<datestamp>2025-04-09 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>2430</value>
+		</record>
+		<record>
+			<datestamp>2025-04-10 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>2420</value>
+		</record>
+		<record>
+			<datestamp>2025-04-11 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>2420</value>
+		</record>
+		<record>
+			<datestamp>2025-04-12 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>2450</value>
+		</record>
+		<record>
+			<datestamp>2025-04-13 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>2430</value>
+		</record>
+		<record>
+			<datestamp>2025-04-14 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>2360</value>
+		</record>
+		<record>
+			<datestamp>2025-04-15 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>2370</value>
+		</record>
+		<record>
+			<datestamp>2025-04-16 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>2380</value>
+		</record>
+		<record>
+			<datestamp>2025-04-17 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>2370</value>
+		</record>
+		<record>
+			<datestamp>2025-04-18 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>2430</value>
+		</record>
+		<record>
+			<datestamp>2025-04-19 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>2510</value>
+		</record>
+		<record>
+			<datestamp>2025-04-20 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>2580</value>
+		</record>
+		<record>
+			<datestamp>2025-04-21 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>2580</value>
+		</record>
+		<record>
+			<datestamp>2025-04-22 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>2700</value>
+		</record>
+		<record>
+			<datestamp>2025-04-23 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>2780</value>
+		</record>
+		<record>
+			<datestamp>2025-04-24 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>2860</value>
+		</record>
+		<record>
+			<datestamp>2025-04-25 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>2970</value>
+		</record>
+		<record>
+			<datestamp>2025-04-26 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>3090</value>
+		</record>
+		<record>
+			<datestamp>2025-04-27 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>3180</value>
+		</record>
+		<record>
+			<datestamp>2025-04-28 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>3290</value>
+		</record>
+		<record>
+			<datestamp>2025-04-29 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>3520</value>
+		</record>
+		<record>
+			<datestamp>2025-04-30 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>3690</value>
+		</record>
+		<record>
+			<datestamp>2025-05-01 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>3710</value>
+		</record>
+		<record>
+			<datestamp>2025-05-02 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>3830</value>
+		</record>
+		<record>
+			<datestamp>2025-05-03 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>3850</value>
+		</record>
+		<record>
+			<datestamp>2025-05-04 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>3860</value>
+		</record>
+		<record>
+			<datestamp>2025-05-05 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>3830</value>
+		</record>
+		<record>
+			<datestamp>2025-05-06 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>3840</value>
+		</record>
+		<record>
+			<datestamp>2025-05-07 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>3830</value>
+		</record>
+		<record>
+			<datestamp>2025-05-08 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>3780</value>
+		</record>
+		<record>
+			<datestamp>2025-05-09 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>3700</value>
+		</record>
+		<record>
+			<datestamp>2025-05-10 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>3630</value>
+		</record>
+		<record>
+			<datestamp>2025-05-11 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>3510</value>
+		</record>
+		<record>
+			<datestamp>2025-05-12 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>3420</value>
+		</record>
+		<record>
+			<datestamp>2025-05-13 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>3350</value>
+		</record>
+		<record>
+			<datestamp>2025-05-14 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>3300</value>
+		</record>
+		<record>
+			<datestamp>2025-05-15 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>3230</value>
+		</record>
+		<record>
+			<datestamp>2025-05-16 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>3140</value>
+		</record>
+		<record>
+			<datestamp>2025-05-17 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>3070</value>
+		</record>
+		<record>
+			<datestamp>2025-05-18 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>3010</value>
+		</record>
+		<record>
+			<datestamp>2025-05-19 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>2910</value>
+		</record>
+		<record>
+			<datestamp>2025-05-20 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>2810</value>
+		</record>
+		<record>
+			<datestamp>2025-05-21 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>2750</value>
+		</record>
+		<record>
+			<datestamp>2025-05-22 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>2700</value>
+		</record>
+		<record>
+			<datestamp>2025-05-23 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>2650</value>
+		</record>
+		<record>
+			<datestamp>2025-05-24 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>2500</value>
+		</record>
+		<record>
+			<datestamp>2025-05-25 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>2310</value>
+		</record>
+		<record>
+			<datestamp>2025-05-26 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>2130</value>
+		</record>
+		<record>
+			<datestamp>2025-05-27 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1950</value>
+		</record>
+		<record>
+			<datestamp>2025-05-28 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1880</value>
+		</record>
+		<record>
+			<datestamp>2025-05-29 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1880</value>
+		</record>
+		<record>
+			<datestamp>2025-05-30 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1860</value>
+		</record>
+		<record>
+			<datestamp>2025-05-31 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1850</value>
+		</record>
+		<record>
+			<datestamp>2025-06-01 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1800</value>
+		</record>
+		<record>
+			<datestamp>2025-06-02 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1730</value>
+		</record>
+		<record>
+			<datestamp>2025-06-03 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1470</value>
+		</record>
+		<record>
+			<datestamp>2025-06-04 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1470</value>
+		</record>
+		<record>
+			<datestamp>2025-06-05 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1520</value>
+		</record>
+		<record>
+			<datestamp>2025-06-06 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1560</value>
+		</record>
+		<record>
+			<datestamp>2025-06-07 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1510</value>
+		</record>
+		<record>
+			<datestamp>2025-06-08 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1250</value>
+		</record>
+		<record>
+			<datestamp>2025-06-09 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1230</value>
+		</record>
+		<record>
+			<datestamp>2025-06-10 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1120</value>
+		</record>
+		<record>
+			<datestamp>2025-06-11 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1110</value>
+		</record>
+		<record>
+			<datestamp>2025-06-12 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1080</value>
+		</record>
+		<record>
+			<datestamp>2025-06-13 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1080</value>
+		</record>
+		<record>
+			<datestamp>2025-06-14 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1140</value>
+		</record>
+		<record>
+			<datestamp>2025-06-15 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1010</value>
+		</record>
+		<record>
+			<datestamp>2025-06-16 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1020</value>
+		</record>
+		<record>
+			<datestamp>2025-06-17 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1090</value>
+		</record>
+		<record>
+			<datestamp>2025-06-18 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1120</value>
+		</record>
+		<record>
+			<datestamp>2025-06-19 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1030</value>
+		</record>
+		<record>
+			<datestamp>2025-06-20 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1070</value>
+		</record>
+		<record>
+			<datestamp>2025-06-21 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1050</value>
+		</record>
+		<record>
+			<datestamp>2025-06-22 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1120</value>
+		</record>
+		<record>
+			<datestamp>2025-06-23 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1190</value>
+		</record>
+		<record>
+			<datestamp>2025-06-24 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1390</value>
+		</record>
+		<record>
+			<datestamp>2025-06-25 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1590</value>
+		</record>
+		<record>
+			<datestamp>2025-06-26 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1690</value>
+		</record>
+		<record>
+			<datestamp>2025-06-27 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1670</value>
+		</record>
+		<record>
+			<datestamp>2025-06-28 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1540</value>
+		</record>
+		<record>
+			<datestamp>2025-06-29 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1530</value>
+		</record>
+		<record>
+			<datestamp>2025-06-30 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1510</value>
+		</record>
+		<record>
+			<datestamp>2025-07-01 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1470</value>
+		</record>
+		<record>
+			<datestamp>2025-07-02 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1460</value>
+		</record>
+		<record>
+			<datestamp>2025-07-03 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1430</value>
+		</record>
+		<record>
+			<datestamp>2025-07-04 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1410</value>
+		</record>
+		<record>
+			<datestamp>2025-07-05 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1360</value>
+		</record>
+		<record>
+			<datestamp>2025-07-06 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1230</value>
+		</record>
+		<record>
+			<datestamp>2025-07-07 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1270</value>
+		</record>
+		<record>
+			<datestamp>2025-07-08 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1310</value>
+		</record>
+		<record>
+			<datestamp>2025-07-09 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1320</value>
+		</record>
+		<record>
+			<datestamp>2025-07-10 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1460</value>
+		</record>
+		<record>
+			<datestamp>2025-07-11 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1470</value>
+		</record>
+		<record>
+			<datestamp>2025-07-12 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1510</value>
+		</record>
+		<record>
+			<datestamp>2025-07-13 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1540</value>
+		</record>
+		<record>
+			<datestamp>2025-07-14 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1570</value>
+		</record>
+		<record>
+			<datestamp>2025-07-15 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1470</value>
+		</record>
+		<record>
+			<datestamp>2025-07-16 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1380</value>
+		</record>
+		<record>
+			<datestamp>2025-07-17 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1320</value>
+		</record>
+		<record>
+			<datestamp>2025-07-18 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1310</value>
+		</record>
+		<record>
+			<datestamp>2025-07-19 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1250</value>
+		</record>
+		<record>
+			<datestamp>2025-07-20 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1260</value>
+		</record>
+		<record>
+			<datestamp>2025-07-21 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1180</value>
+		</record>
+		<record>
+			<datestamp>2025-07-22 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1270</value>
+		</record>
+		<record>
+			<datestamp>2025-07-23 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1200</value>
+		</record>
+		<record>
+			<datestamp>2025-07-24 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1170</value>
+		</record>
+		<record>
+			<datestamp>2025-07-25 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1190</value>
+		</record>
+		<record>
+			<datestamp>2025-07-26 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1170</value>
+		</record>
+		<record>
+			<datestamp>2025-07-27 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1100</value>
+		</record>
+		<record>
+			<datestamp>2025-07-28 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1120</value>
+		</record>
+		<record>
+			<datestamp>2025-07-29 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1080</value>
+		</record>
+		<record>
+			<datestamp>2025-07-30 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1090</value>
+		</record>
+		<record>
+			<datestamp>2025-07-31 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1030</value>
+		</record>
+		<record>
+			<datestamp>2025-08-01 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1010</value>
+		</record>
+		<record>
+			<datestamp>2025-08-02 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>993</value>
+		</record>
+		<record>
+			<datestamp>2025-08-03 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>910</value>
+		</record>
+		<record>
+			<datestamp>2025-08-04 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>879</value>
+		</record>
+		<record>
+			<datestamp>2025-08-05 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>875</value>
+		</record>
+		<record>
+			<datestamp>2025-08-06 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>800</value>
+		</record>
+		<record>
+			<datestamp>2025-08-07 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>745</value>
+		</record>
+		<record>
+			<datestamp>2025-08-08 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>714</value>
+		</record>
+		<record>
+			<datestamp>2025-08-09 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>684</value>
+		</record>
+		<record>
+			<datestamp>2025-08-10 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>662</value>
+		</record>
+		<record>
+			<datestamp>2025-08-11 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>650</value>
+		</record>
+		<record>
+			<datestamp>2025-08-12 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>660</value>
+		</record>
+		<record>
+			<datestamp>2025-08-13 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>657</value>
+		</record>
+		<record>
+			<datestamp>2025-08-14 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>665</value>
+		</record>
+		<record>
+			<datestamp>2025-08-15 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>643</value>
+		</record>
+		<record>
+			<datestamp>2025-08-16 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>648</value>
+		</record>
+		<record>
+			<datestamp>2025-08-17 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>633</value>
+		</record>
+		<record>
+			<datestamp>2025-08-18 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>598</value>
+		</record>
+		<record>
+			<datestamp>2025-08-19 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>613</value>
+		</record>
+		<record>
+			<datestamp>2025-08-20 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>629</value>
+		</record>
+		<record>
+			<datestamp>2025-08-21 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>649</value>
+		</record>
+		<record>
+			<datestamp>2025-08-22 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>625</value>
+		</record>
+		<record>
+			<datestamp>2025-08-23 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>585</value>
+		</record>
+		<record>
+			<datestamp>2025-08-24 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>560</value>
+		</record>
+		<record>
+			<datestamp>2025-08-25 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>575</value>
+		</record>
+		<record>
+			<datestamp>2025-08-26 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>537</value>
+		</record>
+		<record>
+			<datestamp>2025-08-27 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>514</value>
+		</record>
+		<record>
+			<datestamp>2025-08-28 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>508</value>
+		</record>
+		<record>
+			<datestamp>2025-08-29 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>506</value>
+		</record>
+		<record>
+			<datestamp>2025-08-30 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>496</value>
+		</record>
+		<record>
+			<datestamp>2025-08-31 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>486</value>
+		</record>
+		<record>
+			<datestamp>2025-09-01 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>503</value>
+		</record>
+		<record>
+			<datestamp>2025-09-02 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>487</value>
+		</record>
+		<record>
+			<datestamp>2025-09-03 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>477</value>
+		</record>
+		<record>
+			<datestamp>2025-09-04 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>452</value>
+		</record>
+		<record>
+			<datestamp>2025-09-05 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>439</value>
+		</record>
+		<record>
+			<datestamp>2025-09-06 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>440</value>
+		</record>
+		<record>
+			<datestamp>2025-09-07 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>445</value>
+		</record>
+		<record>
+			<datestamp>2025-09-08 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>458</value>
+		</record>
+		<record>
+			<datestamp>2025-09-09 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>447</value>
+		</record>
+		<record>
+			<datestamp>2025-09-10 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>444</value>
+		</record>
+		<record>
+			<datestamp>2025-09-11 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>441</value>
+		</record>
+		<record>
+			<datestamp>2025-09-12 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>430</value>
+		</record>
+		<record>
+			<datestamp>2025-09-13 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>425</value>
+		</record>
+		<record>
+			<datestamp>2025-09-14 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>428</value>
+		</record>
+		<record>
+			<datestamp>2025-09-15 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>426</value>
+		</record>
+		<record>
+			<datestamp>2025-09-16 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>437</value>
+		</record>
+		<record>
+			<datestamp>2025-09-17 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>443</value>
+		</record>
+		<record>
+			<datestamp>2025-09-18 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>457</value>
+		</record>
+		<record>
+			<datestamp>2025-09-19 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>455</value>
+		</record>
+		<record>
+			<datestamp>2025-09-20 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>451</value>
+		</record>
+		<record>
+			<datestamp>2025-09-21 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>440</value>
+		</record>
+		<record>
+			<datestamp>2025-09-22 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>442</value>
+		</record>
+		<record>
+			<datestamp>2025-09-23 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>445</value>
+		</record>
+		<record>
+			<datestamp>2025-09-24 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>442</value>
+		</record>
+		<record>
+			<datestamp>2025-09-25 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>457</value>
+		</record>
+		<record>
+			<datestamp>2025-09-26 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>452</value>
+		</record>
+		<record>
+			<datestamp>2025-09-27 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>430</value>
+		</record>
+		<record>
+			<datestamp>2025-09-28 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>431</value>
+		</record>
+		<record>
+			<datestamp>2025-09-29 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>430</value>
+		</record>
+		<record>
+			<datestamp>2025-09-30 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>430</value>
+		</record>
+		<record>
+			<datestamp>2025-10-01 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>437</value>
+		</record>
+		<record>
+			<datestamp>2025-10-02 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>440</value>
+		</record>
+		<record>
+			<datestamp>2025-10-03 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>422</value>
+		</record>
+		<record>
+			<datestamp>2025-10-04 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>391</value>
+		</record>
+		<record>
+			<datestamp>2025-10-05 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>379</value>
+		</record>
+		<record>
+			<datestamp>2025-10-06 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>372</value>
+		</record>
+		<record>
+			<datestamp>2025-10-07 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>381</value>
+		</record>
+		<record>
+			<datestamp>2025-10-08 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>383</value>
+		</record>
+		<record>
+			<datestamp>2025-10-09 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>364</value>
+		</record>
+		<record>
+			<datestamp>2025-10-10 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>355</value>
+		</record>
+		<record>
+			<datestamp>2025-10-11 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>357</value>
+		</record>
+		<record>
+			<datestamp>2025-10-12 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>344</value>
+		</record>
+		<record>
+			<datestamp>2025-10-13 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>332</value>
+		</record>
+		<record>
+			<datestamp>2025-10-14 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>340</value>
+		</record>
+		<record>
+			<datestamp>2025-10-15 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>352</value>
+		</record>
+		<record>
+			<datestamp>2025-10-16 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>354</value>
+		</record>
+		<record>
+			<datestamp>2025-10-17 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>369</value>
+		</record>
+		<record>
+			<datestamp>2025-10-18 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>390</value>
+		</record>
+		<record>
+			<datestamp>2025-10-19 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>390</value>
+		</record>
+		<record>
+			<datestamp>2025-10-20 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>455</value>
+		</record>
+		<record>
+			<datestamp>2025-10-21 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>451</value>
+		</record>
+		<record>
+			<datestamp>2025-10-22 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>463</value>
+		</record>
+		<record>
+			<datestamp>2025-10-23 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>471</value>
+		</record>
+		<record>
+			<datestamp>2025-10-24 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>482</value>
+		</record>
+		<record>
+			<datestamp>2025-10-25 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>514</value>
+		</record>
+		<record>
+			<datestamp>2025-10-26 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>514</value>
+		</record>
+		<record>
+			<datestamp>2025-10-27 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>506</value>
+		</record>
+		<record>
+			<datestamp>2025-10-28 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>492</value>
+		</record>
+		<record>
+			<datestamp>2025-10-29 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>489</value>
+		</record>
+		<record>
+			<datestamp>2025-10-30 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>488</value>
+		</record>
+		<record>
+			<datestamp>2025-10-31 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>552</value>
+		</record>
+		<record>
+			<datestamp>2025-11-01 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>584</value>
+		</record>
+		<record>
+			<datestamp>2025-11-02 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>551</value>
+		</record>
+		<record>
+			<datestamp>2025-11-03 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>550</value>
+		</record>
+		<record>
+			<datestamp>2025-11-04 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>553</value>
+		</record>
+		<record>
+			<datestamp>2025-11-05 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>559</value>
+		</record>
+		<record>
+			<datestamp>2025-11-06 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>567</value>
+		</record>
+		<record>
+			<datestamp>2025-11-07 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>544</value>
+		</record>
+		<record>
+			<datestamp>2025-11-08 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>579</value>
+		</record>
+		<record>
+			<datestamp>2025-11-09 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>574</value>
+		</record>
+		<record>
+			<datestamp>2025-11-10 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>576</value>
+		</record>
+		<record>
+			<datestamp>2025-11-11 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>583</value>
+		</record>
+		<record>
+			<datestamp>2025-11-12 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>574</value>
+		</record>
+		<record>
+			<datestamp>2025-11-13 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>584</value>
+		</record>
+		<record>
+			<datestamp>2025-11-14 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>575</value>
+		</record>
+		<record>
+			<datestamp>2025-11-15 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>569</value>
+		</record>
+		<record>
+			<datestamp>2025-11-16 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>588</value>
+		</record>
+		<record>
+			<datestamp>2025-11-17 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>565</value>
+		</record>
+		<record>
+			<datestamp>2025-11-18 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>566</value>
+		</record>
+		<record>
+			<datestamp>2025-11-19 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>575</value>
+		</record>
+		<record>
+			<datestamp>2025-11-20 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>561</value>
+		</record>
+		<record>
+			<datestamp>2025-11-21 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>550</value>
+		</record>
+		<record>
+			<datestamp>2025-11-22 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>524</value>
+		</record>
+		<record>
+			<datestamp>2025-11-23 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>504</value>
+		</record>
+		<record>
+			<datestamp>2025-11-24 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>489</value>
+		</record>
+		<record>
+			<datestamp>2025-11-25 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>471</value>
+		</record>
+		<record>
+			<datestamp>2025-11-26 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>467</value>
+		</record>
+		<record>
+			<datestamp>2025-11-27 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>476</value>
+		</record>
+		<record>
+			<datestamp>2025-11-28 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>491</value>
+		</record>
+		<record>
+			<datestamp>2025-11-29 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>482</value>
+		</record>
+		<record>
+			<datestamp>2025-11-30 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>515</value>
+		</record>
+		<record>
+			<datestamp>2025-12-01 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>552</value>
+		</record>
+		<record>
+			<datestamp>2025-12-02 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>562</value>
+		</record>
+		<record>
+			<datestamp>2025-12-03 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>555</value>
+		</record>
+		<record>
+			<datestamp>2025-12-04 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>560</value>
+		</record>
+		<record>
+			<datestamp>2025-12-05 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>540</value>
+		</record>
+		<record>
+			<datestamp>2025-12-06 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>546</value>
+		</record>
+		<record>
+			<datestamp>2025-12-07 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>543</value>
+		</record>
+		<record>
+			<datestamp>2025-12-08 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>559</value>
+		</record>
+		<record>
+			<datestamp>2025-12-09 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>552</value>
+		</record>
+		<record>
+			<datestamp>2025-12-10 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>556</value>
+		</record>
+		<record>
+			<datestamp>2025-12-11 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>567</value>
+		</record>
+		<record>
+			<datestamp>2025-12-12 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>567</value>
+		</record>
+		<record>
+			<datestamp>2025-12-13 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>570</value>
+		</record>
+		<record>
+			<datestamp>2025-12-14 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>571</value>
+		</record>
+		<record>
+			<datestamp>2025-12-15 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>567</value>
+		</record>
+		<record>
+			<datestamp>2025-12-16 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>561</value>
+		</record>
+		<record>
+			<datestamp>2025-12-17 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>559</value>
+		</record>
+		<record>
+			<datestamp>2025-12-18 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>558</value>
+		</record>
+		<record>
+			<datestamp>2025-12-19 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>572</value>
+		</record>
+		<record>
+			<datestamp>2025-12-20 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>581</value>
+		</record>
+		<record>
+			<datestamp>2025-12-21 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>580</value>
+		</record>
+		<record>
+			<datestamp>2025-12-22 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>559</value>
+		</record>
+		<record>
+			<datestamp>2025-12-23 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>567</value>
+		</record>
+		<record>
+			<datestamp>2025-12-24 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>590</value>
+		</record>
+		<record>
+			<datestamp>2025-12-25 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>579</value>
+		</record>
+		<record>
+			<datestamp>2025-12-26 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>582</value>
+		</record>
+		<record>
+			<datestamp>2025-12-27 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>590</value>
+		</record>
+		<record>
+			<datestamp>2025-12-28 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>589</value>
+		</record>
+		<record>
+			<datestamp>2025-12-29 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>633</value>
+		</record>
+		<record>
+			<datestamp>2025-12-30 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>646</value>
+		</record>
+		<record>
+			<datestamp>2025-12-31 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>655</value>
+		</record>
+		<record>
+			<datestamp>2026-01-01 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>671</value>
+		</record>
+		<record>
+			<datestamp>2026-01-02 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>695</value>
+		</record>
+		<record>
+			<datestamp>2026-01-03 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>713</value>
+		</record>
+		<record>
+			<datestamp>2026-01-04 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>743</value>
+		</record>
+		<record>
+			<datestamp>2026-01-05 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>784</value>
+		</record>
+		<record>
+			<datestamp>2026-01-06 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>815</value>
+		</record>
+		<record>
+			<datestamp>2026-01-07 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>852</value>
+		</record>
+		<record>
+			<datestamp>2026-01-08 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>875</value>
+		</record>
+		<record>
+			<datestamp>2026-01-09 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>885</value>
+		</record>
+		<record>
+			<datestamp>2026-01-10 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>884</value>
+		</record>
+		<record>
+			<datestamp>2026-01-11 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>837</value>
+		</record>
+		<record>
+			<datestamp>2026-01-12 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>906</value>
+		</record>
+		<record>
+			<datestamp>2026-01-13 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>934</value>
+		</record>
+		<record>
+			<datestamp>2026-01-14 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>997</value>
+		</record>
+		<record>
+			<datestamp>2026-01-15 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1060</value>
+		</record>
+		<record>
+			<datestamp>2026-01-16 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1110</value>
+		</record>
+		<record>
+			<datestamp>2026-01-17 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1110</value>
+		</record>
+		<record>
+			<datestamp>2026-01-18 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1100</value>
+		</record>
+		<record>
+			<datestamp>2026-01-19 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1130</value>
+		</record>
+		<record>
+			<datestamp>2026-01-20 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1130</value>
+		</record>
+		<record>
+			<datestamp>2026-01-21 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1140</value>
+		</record>
+		<record>
+			<datestamp>2026-01-22 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1200</value>
+		</record>
+		<record>
+			<datestamp>2026-01-23 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1240</value>
+		</record>
+		<record>
+			<datestamp>2026-01-24 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1240</value>
+		</record>
+		<record>
+			<datestamp>2026-01-25 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1150</value>
+		</record>
+		<record>
+			<datestamp>2026-01-26 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1200</value>
+		</record>
+		<record>
+			<datestamp>2026-01-27 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1180</value>
+		</record>
+		<record>
+			<datestamp>2026-01-28 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1170</value>
+		</record>
+		<record>
+			<datestamp>2026-01-29 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1190</value>
+		</record>
+		<record>
+			<datestamp>2026-01-30 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1220</value>
+		</record>
+		<record>
+			<datestamp>2026-01-31 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1220</value>
+		</record>
+		<record>
+			<datestamp>2026-02-01 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1220</value>
+		</record>
+		<record>
+			<datestamp>2026-02-02 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1210</value>
+		</record>
+		<record>
+			<datestamp>2026-02-03 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1210</value>
+		</record>
+		<record>
+			<datestamp>2026-02-04 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1220</value>
+		</record>
+		<record>
+			<datestamp>2026-02-05 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1220</value>
+		</record>
+		<record>
+			<datestamp>2026-02-06 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1190</value>
+		</record>
+		<record>
+			<datestamp>2026-02-07 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1140</value>
+		</record>
+		<record>
+			<datestamp>2026-02-08 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1110</value>
+		</record>
+		<record>
+			<datestamp>2026-02-09 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1080</value>
+		</record>
+		<record>
+			<datestamp>2026-02-10 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1070</value>
+		</record>
+		<record>
+			<datestamp>2026-02-11 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1090</value>
+		</record>
+		<record>
+			<datestamp>2026-02-12 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1100</value>
+		</record>
+		<record>
+			<datestamp>2026-02-13 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1120</value>
+		</record>
+		<record>
+			<datestamp>2026-02-14 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1140</value>
+		</record>
+		<record>
+			<datestamp>2026-02-15 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1160</value>
+		</record>
+		<record>
+			<datestamp>2026-02-16 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1140</value>
+		</record>
+		<record>
+			<datestamp>2026-02-17 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1060</value>
+		</record>
+		<record>
+			<datestamp>2026-02-18 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1080</value>
+		</record>
+		<record>
+			<datestamp>2026-02-19 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1060</value>
+		</record>
+		<record>
+			<datestamp>2026-02-20 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1050</value>
+		</record>
+		<record>
+			<datestamp>2026-02-21 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1070</value>
+		</record>
+		<record>
+			<datestamp>2026-02-22 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1100</value>
+		</record>
+		<record>
+			<datestamp>2026-02-23 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1120</value>
+		</record>
+		<record>
+			<datestamp>2026-02-24 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1150</value>
+		</record>
+		<record>
+			<datestamp>2026-02-25 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1150</value>
+		</record>
+		<record>
+			<datestamp>2026-02-26 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1160</value>
+		</record>
+		<record>
+			<datestamp>2026-02-27 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1150</value>
+		</record>
+		<record>
+			<datestamp>2026-02-28 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1130</value>
+		</record>
+		<record>
+			<datestamp>2026-03-01 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1120</value>
+		</record>
+		<record>
+			<datestamp>2026-03-02 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1130</value>
+		</record>
+		<record>
+			<datestamp>2026-03-03 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1130</value>
+		</record>
+		<record>
+			<datestamp>2026-03-04 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1120</value>
+		</record>
+		<record>
+			<datestamp>2026-03-05 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1180</value>
+		</record>
+		<record>
+			<datestamp>2026-03-06 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1160</value>
+		</record>
+		<record>
+			<datestamp>2026-03-07 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1120</value>
+		</record>
+		<record>
+			<datestamp>2026-03-08 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1150</value>
+		</record>
+		<record>
+			<datestamp>2026-03-09 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1250</value>
+		</record>
+		<record>
+			<datestamp>2026-03-10 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1390</value>
+		</record>
+		<record>
+			<datestamp>2026-03-11 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1460</value>
+		</record>
+		<record>
+			<datestamp>2026-03-12 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1460</value>
+		</record>
+		<record>
+			<datestamp>2026-03-13 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1460</value>
+		</record>
+		<record>
+			<datestamp>2026-03-14 00:00:00.000</datestamp>
+			<code>QRD</code>
+			<value>1400</value>
+		</record>
+	</data>
+</realTimeData>
