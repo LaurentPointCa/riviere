@@ -33,7 +33,7 @@ Le bassin versant est délinéé par [mghydro.com](https://mghydro.com) à parti
 
 ![Stations de mesure](docs/basin_stations.png)
 
-Les cinq stations de mesure utilisées en entrée du modèle dans la région de Montréal–Laval.
+Les sept stations de mesure utilisées en entrée du modèle, de la région d'Ottawa jusqu'à Laval.
 
 ## Résultats
 
@@ -75,13 +75,21 @@ Deux modèles saisonniers distincts : **froid** (nov–mai, fonte des neiges / c
 | [Crues Grand Montréal](https://www.cruesgrandmontreal.ca) | Niveau (m) + débit (m³/s) — stations amont 39_RDP09, 01_RDP11, 11_LDM01 | temps réel + historique glissant |
 | [mghydro.com](https://mghydro.com/app/report?lat=45.454&lng=-74.106&precision=low&simplify=true) | Polygone du bassin versant (GeoJSON) — ID M72047806, ~148 202 km² | statique |
 
+### Stations hydrologiques amont
+
+| Station | Source | Localisation | Dist. amont | Variable |
+|---------|--------|-------------|-------------|----------|
+| 043108 | CEHQ | Lac des Deux Montagnes | ~22 km | Niveau (m) |
+| 02LA015 | ECCC | Rivière des Outaouais à Hull | ~50 km | Niveau (m) |
+| 02KF005 | ECCC | Rivière des Outaouais à Britannia | ~100 km | Débit (m³/s) |
+
 ### Stations amont Crues Grand Montréal
 
-| Station | Localisation | Distance amont | Débit max ref. |
-|---------|-------------|----------------|----------------|
-| 39_RDP09 | Rue Marceau, Pierrefonds-Roxboro | ~0,8 km | 3 172 m³/s |
-| 01_RDP11 | Parc Terrasse-Sacré-Cœur, Île-Bizard | ~3,5 km | 3 172 m³/s |
-| 11_LDM01 | Parc Philippe-Lavallée, Oka | ~22 km (Lac des Deux Montagnes) | 11 340 m³/s |
+| Station | Localisation | Distance amont | Variable |
+|---------|-------------|----------------|----------|
+| 39_RDP09 | Rue Marceau, Pierrefonds-Roxboro | ~0,8 km | Niveau + débit |
+| 01_RDP11 | Parc Terrasse-Sacré-Cœur, Île-Bizard | ~3,5 km | Niveau + débit |
+| 11_LDM01 | Parc Philippe-Lavallée, Oka | ~22 km (Lac des Deux Montagnes) | Niveau + débit |
 
 ## Pipeline
 
