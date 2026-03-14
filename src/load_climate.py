@@ -43,8 +43,12 @@ CLIMATE_VARIABLES = [
     "precipitation_sum",    # mm   — total water input (rain + snow water equiv.)
     "snowfall_sum",         # cm   — daily snowfall
     "rain_sum",             # mm   — liquid precipitation only
-    "snow_depth",           # m    — basin-mean SWE from ERA5 land surface model
 ]
+
+# snow_depth is only available as hourly in ERA5-Land; fetched separately and
+# aggregated to daily mean via fetch_snow_depth_daily() / load_snow_depth().
+SNOW_DEPTH_CACHE = DATA_DIR / "snow_depth_daily.parquet"
+SNOW_DEPTH_SPACING_KM = 100.0  # coarser grid — snowpack is spatially smooth
 
 # ERA5 starts 1940-01-01
 CLIMATE_START = "1940-01-01"
@@ -142,6 +146,97 @@ def fetch_climate_all_points(
     return pd.concat(all_dfs).groupby(level=0).mean()
 
 
+def fetch_snow_depth_daily(
+    points: list[tuple],
+    start_date: str,
+    end_date: str,
+) -> pd.Series:
+    """
+    Fetch hourly snow_depth from ERA5-Land for all grid points,
+    then aggregate to a daily mean basin-average Series.
+
+    ERA5-Land provides snow_depth (m, water equivalent) as hourly only.
+    We take the mean across hours and across basin grid points.
+    """
+    lats = ",".join(str(lat) for lat, _ in points)
+    lons = ",".join(str(lon) for _, lon in points)
+
+    params = [
+        ("latitude",   lats),
+        ("longitude",  lons),
+        ("start_date", start_date),
+        ("end_date",   end_date),
+        ("timezone",   "America/Toronto"),
+        ("hourly",     "snow_depth"),
+        ("models",     "era5_land"),
+    ]
+
+    response = requests.get(OPEN_METEO_URL, params=params, timeout=300)
+    response.raise_for_status()
+
+    data = response.json()
+    if isinstance(data, dict):
+        data = [data]
+
+    daily_series = []
+    for loc in data:
+        df = pd.DataFrame({"time": loc["hourly"]["time"],
+                           "snow_depth": loc["hourly"]["snow_depth"]})
+        df["date"] = pd.to_datetime(df["time"]).dt.normalize()
+        daily = df.groupby("date")["snow_depth"].mean()
+        daily_series.append(daily)
+
+    basin_mean = pd.concat(daily_series, axis=1).mean(axis=1)
+    basin_mean.index.name = "date"
+    return basin_mean.rename("snow_depth")
+
+
+def load_snow_depth(cache: bool = True) -> pd.Series:
+    """
+    Load basin-mean daily snow depth (m SWE) from ERA5-Land.
+
+    Fetches hourly data in 10-year chunks to stay within API limits,
+    averages to daily basin-mean, and caches to data/snow_depth_daily.parquet.
+    When cache=False, performs an incremental update from the last cached date.
+    """
+    if cache and SNOW_DEPTH_CACHE.exists():
+        print(f"Loading snow depth from cache: {SNOW_DEPTH_CACHE}")
+        return pd.read_parquet(SNOW_DEPTH_CACHE)["snow_depth"]
+
+    geojson = fetch_basin_boundary(cache=True)
+    points = generate_grid_points(geojson, spacing_km=SNOW_DEPTH_SPACING_KM)
+    print(f"Fetching ERA5-Land hourly snow_depth for {len(points)} grid points...")
+
+    today = pd.Timestamp.today().strftime("%Y-%m-%d")
+
+    if not cache and SNOW_DEPTH_CACHE.exists():
+        existing = pd.read_parquet(SNOW_DEPTH_CACHE)["snow_depth"]
+        start = (existing.index.max() + pd.Timedelta(days=1)).strftime("%Y-%m-%d")
+        if start > today:
+            print(f"Snow depth cache already up to date ({existing.index.max().date()}).")
+            return existing
+        new = fetch_snow_depth_daily(points, start, today)
+        result = pd.concat([existing, new])
+        result = result[~result.index.duplicated(keep="last")].sort_index()
+    else:
+        # Batch by decade to stay within API limits
+        parts = []
+        start_year = 1940
+        end_year = pd.Timestamp.today().year
+        for y in range(start_year, end_year + 1, 10):
+            y_end = min(y + 9, end_year)
+            chunk_end = today if y_end == end_year else f"{y_end}-12-31"
+            print(f"  Fetching {y}–{y_end}...")
+            parts.append(fetch_snow_depth_daily(points, f"{y}-01-01", chunk_end))
+        result = pd.concat(parts)
+        result = result[~result.index.duplicated(keep="last")].sort_index()
+
+    DATA_DIR.mkdir(parents=True, exist_ok=True)
+    result.to_frame().to_parquet(SNOW_DEPTH_CACHE)
+    print(f"Saved snow depth to: {SNOW_DEPTH_CACHE}")
+    return result
+
+
 def load_climate(cache: bool = True, spacing_km: float = 50.0) -> pd.DataFrame:
     """
     Load basin-mean daily climate data.
@@ -157,6 +252,7 @@ def load_climate(cache: bool = True, spacing_km: float = 50.0) -> pd.DataFrame:
 
     Returns a DataFrame indexed by date with columns:
       temperature_2m_mean, precipitation_sum, snowfall_sum, rain_sum, snow_depth
+    where snow_depth is basin-mean SWE (m) from ERA5-Land (hourly, aggregated to daily).
     """
     cache_path = DATA_DIR / "climate_daily.parquet"
 
@@ -164,6 +260,10 @@ def load_climate(cache: bool = True, spacing_km: float = 50.0) -> pd.DataFrame:
         print(f"Loading climate from cache: {cache_path}")
         df = pd.read_parquet(cache_path)
         print(f"Loaded {len(df):,} rows from {df.index.min().date()} to {df.index.max().date()}")
+        # Back-fill snow_depth if an older cache is missing it
+        if "snow_depth" not in df.columns:
+            snow = load_snow_depth(cache=True)
+            df = df.join(snow, how="left")
         return df
 
     geojson = fetch_basin_boundary(cache=True)
@@ -178,6 +278,9 @@ def load_climate(cache: bool = True, spacing_km: float = 50.0) -> pd.DataFrame:
 
         if start_date > today:
             print(f"Climate cache already up to date ({last_date.date()}).")
+            if "snow_depth" not in existing.columns:
+                snow = load_snow_depth(cache=False)
+                existing = existing.join(snow, how="left")
             return existing
 
         print(f"Fetching ERA5 for {len(points)} grid points ({start_date} → {today})...")
@@ -194,6 +297,10 @@ def load_climate(cache: bool = True, spacing_km: float = 50.0) -> pd.DataFrame:
     climate.to_parquet(cache_path)
     print(f"Saved to: {cache_path}")
     print(f"Loaded {len(climate):,} rows from {climate.index.min().date()} to {climate.index.max().date()}")
+
+    # Join ERA5-Land snow depth (fetched separately as hourly and aggregated)
+    snow = load_snow_depth(cache=cache)
+    climate = climate.join(snow, how="left")
     return climate
 
 
