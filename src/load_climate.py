@@ -39,6 +39,33 @@ BASIN_URL = (
 
 OPEN_METEO_URL = "https://archive-api.open-meteo.com/v1/archive"
 
+# Open-Meteo API limits: 600/min, 5k/hr, 10k/day, 300k/month.
+# We enforce 150ms minimum between calls (~400/min, 33% headroom).
+_RATE_MIN_INTERVAL = 0.15   # seconds between calls
+_last_call_time: float = 0.0
+
+
+def _openmeteo_get(params: list, timeout: int = 300) -> requests.Response:
+    """Rate-limited GET to the Open-Meteo archive API with retry on 429."""
+    global _last_call_time
+    elapsed = time.monotonic() - _last_call_time
+    if elapsed < _RATE_MIN_INTERVAL:
+        time.sleep(_RATE_MIN_INTERVAL - elapsed)
+
+    for attempt in range(5):
+        _last_call_time = time.monotonic()
+        response = requests.get(OPEN_METEO_URL, params=params, timeout=timeout)
+        if response.status_code == 429:
+            wait = 5 * (2 ** attempt)   # 5, 10, 20, 40, 80 s
+            print(f"  Rate limited (429); retrying in {wait}s...")
+            time.sleep(wait)
+            continue
+        response.raise_for_status()
+        return response
+
+    response.raise_for_status()   # re-raise after exhausting retries
+    return response                # unreachable, satisfies type checkers
+
 CLIMATE_VARIABLES = [
     "temperature_2m_mean",  # °C   — drives snowmelt
     "precipitation_sum",    # mm   — total water input (rain + snow water equiv.)
@@ -133,8 +160,7 @@ def fetch_climate_all_points(
         ("timezone",   "America/Toronto"),
     ] + [("daily", v) for v in CLIMATE_VARIABLES]
 
-    response = requests.get(OPEN_METEO_URL, params=params, timeout=120)
-    response.raise_for_status()
+    response = _openmeteo_get(params, timeout=120)
 
     # Response is a list — one dict per location
     location_responses = response.json()
@@ -168,16 +194,7 @@ def fetch_snow_depth_daily(start_date: str, end_date: str) -> pd.Series:
         ("models",     "era5_land"),
     ]
 
-    for attempt in range(5):
-        response = requests.get(OPEN_METEO_URL, params=params, timeout=300)
-        if response.status_code == 429:
-            wait = 30 * (2 ** attempt)
-            print(f"  Rate limited; retrying in {wait}s...")
-            time.sleep(wait)
-            continue
-        response.raise_for_status()
-        break
-
+    response = _openmeteo_get(params, timeout=300)
     data = response.json()
     df = pd.DataFrame({"time": data["hourly"]["time"],
                        "snow_depth": data["hourly"]["snow_depth"]})
