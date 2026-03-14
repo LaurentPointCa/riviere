@@ -28,10 +28,10 @@ SOURCES = {
     "upstream_live":  "https://www.cehq.gouv.qc.ca/suivihydro/fichier_donnees.asp?NoStation=043108",
 }
 
-# MSC GeoMet API — daily hydrometric data for station 02KF005
+# MSC GeoMet API — daily hydrometric data (works for any station)
 ECCC_DAILY_URL = (
     "https://api.weather.gc.ca/collections/hydrometric-daily-mean/items"
-    "?STATION_NUMBER=02KF005&datetime={start}/{end}&limit=500&f=json&sortby=DATE"
+    "?STATION_NUMBER={station}&datetime={start}/{end}&limit=500&f=json&sortby=DATE"
 )
 
 DATA_DIR = Path(__file__).parent.parent / "data"
@@ -249,30 +249,38 @@ def _parse_eccc_csv(path: Path, param: int, col_name: str) -> pd.DataFrame:
     return df
 
 
-def _fetch_eccc_recent(start: str, end: str) -> pd.DataFrame:
+def _fetch_eccc_recent(station: str, start: str, end: str, col_name: str,
+                       field: str = "DISCHARGE") -> pd.DataFrame:
     """
-    Fetch recent daily flow data for 02KF005 from the MSC GeoMet API.
-    Returns a DataFrame indexed by date with column 'ottawa_flow_m3s',
-    or an empty DataFrame if the fetch fails or no new data exists.
+    Fetch recent daily hydrometric data from the MSC GeoMet API.
+
+    Parameters
+    ----------
+    station  : ECCC station number (e.g. '02KF005')
+    start    : start date string YYYY-MM-DD
+    end      : end date string YYYY-MM-DD
+    col_name : output column name
+    field    : 'DISCHARGE' or 'LEVEL'
     """
-    url = ECCC_DAILY_URL.format(start=start, end=end)
+    url = ECCC_DAILY_URL.format(station=station, start=start, end=end)
     try:
         resp = requests.get(url, timeout=30)
         resp.raise_for_status()
         features = resp.json().get("features", [])
         if not features:
-            return pd.DataFrame(columns=["ottawa_flow_m3s"]).rename_axis("date")
+            return pd.DataFrame(columns=[col_name]).rename_axis("date")
         rows = [
             {"date": pd.to_datetime(f["properties"]["DATE"]),
-             "ottawa_flow_m3s": f["properties"]["DISCHARGE"]}
+             col_name: f["properties"][field]}
             for f in features
-            if f["properties"].get("DISCHARGE") is not None
+            if f["properties"].get(field) is not None
         ]
-        df = pd.DataFrame(rows).set_index("date").sort_index()
-        return df
+        if not rows:
+            return pd.DataFrame(columns=[col_name]).rename_axis("date")
+        return pd.DataFrame(rows).set_index("date").sort_index()
     except Exception as e:
-        print(f"Warning: could not fetch ECCC recent data ({e})")
-        return pd.DataFrame(columns=["ottawa_flow_m3s"]).rename_axis("date")
+        print(f"Warning: could not fetch ECCC recent data for {station} ({e})")
+        return pd.DataFrame(columns=[col_name]).rename_axis("date")
 
 
 def _parse_eccc_xml(path: Path, col_name: str) -> pd.DataFrame:
@@ -325,7 +333,40 @@ def load_ottawa_flow(cache: bool = True) -> pd.DataFrame:
     start = (hist.index.max() + pd.Timedelta(days=1)).strftime("%Y-%m-%d")
     end   = pd.Timestamp.today().strftime("%Y-%m-%d")
     if start <= end:
-        recent = _fetch_eccc_recent(start, end)
+        recent = _fetch_eccc_recent("02KF005", start, end, "ottawa_flow_m3s", field="DISCHARGE")
+        if not recent.empty:
+            hist = pd.concat([hist, recent])
+            print(f"Extended with {len(recent)} days from ECCC API (up to {recent.index.max().date()})")
+
+    return hist
+
+
+def load_hull_level(cache: bool = True) -> pd.DataFrame:
+    """
+    Load daily water level (m) for ECCC station 02LA015 (Ottawa River at Hull).
+
+    Reads from data/02LA015.csv, extends with any 02LA015_HGD_*.xml exports,
+    then tries the MSC GeoMet API for anything still missing.
+    """
+    cache_path = DATA_DIR / "02LA015.csv"
+    hist = _parse_eccc_csv(cache_path, param=2, col_name="hull_level_m")
+    print(f"Loaded {len(hist):,} rows of Hull level from {hist.index.min().date()} to {hist.index.max().date()}")
+
+    # Extend with any XML exports found in data/ (e.g. 02LA015_HGD_*.xml)
+    xml_files = sorted(DATA_DIR.glob("02LA015_HGD_*.xml"))
+    if xml_files:
+        frames = [_parse_eccc_xml(f, "hull_level_m") for f in xml_files]
+        xml_df = pd.concat(frames).groupby(level=0).mean()
+        new_rows = xml_df[xml_df.index > hist.index.max()]
+        if not new_rows.empty:
+            hist = pd.concat([hist, new_rows])
+            print(f"Extended with {len(new_rows)} days from XML export(s) (up to {new_rows.index.max().date()})")
+
+    # Try ECCC API for anything still missing
+    start = (hist.index.max() + pd.Timedelta(days=1)).strftime("%Y-%m-%d")
+    end   = pd.Timestamp.today().strftime("%Y-%m-%d")
+    if start <= end:
+        recent = _fetch_eccc_recent("02LA015", start, end, "hull_level_m", field="LEVEL")
         if not recent.empty:
             hist = pd.concat([hist, recent])
             print(f"Extended with {len(recent)} days from ECCC API (up to {recent.index.max().date()})")
