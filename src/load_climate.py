@@ -246,8 +246,12 @@ def load_climate(cache: bool = True, spacing_km: float = 50.0) -> pd.DataFrame:
         print(f"Loaded {len(df):,} rows from {df.index.min().date()} to {df.index.max().date()}")
         # Back-fill snow_depth if an older cache is missing it
         if "snow_depth" not in df.columns:
-            snow = load_snow_depth(cache=True)
-            df = df.join(snow, how="left")
+            try:
+                snow = load_snow_depth(cache=True)
+                df = df.join(snow, how="left")
+            except Exception as e:
+                print(f"Warning: could not load snow depth ({e}); snow_depth will be NaN.")
+                df["snow_depth"] = float("nan")
         return df
 
     geojson = fetch_basin_boundary(cache=True)
@@ -283,8 +287,12 @@ def load_climate(cache: bool = True, spacing_km: float = 50.0) -> pd.DataFrame:
     print(f"Loaded {len(climate):,} rows from {climate.index.min().date()} to {climate.index.max().date()}")
 
     # Join ERA5-Land snow depth (fetched separately as hourly and aggregated)
-    snow = load_snow_depth(cache=cache)
-    climate = climate.join(snow, how="left")
+    try:
+        snow = load_snow_depth(cache=cache)
+        climate = climate.join(snow, how="left")
+    except Exception as e:
+        print(f"Warning: could not load snow depth ({e}); snow_depth will be NaN.")
+        climate["snow_depth"] = float("nan")
     return climate
 
 
