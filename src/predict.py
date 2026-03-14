@@ -214,35 +214,35 @@ def plot_forecast(
     # ── Plot ─────────────────────────────────────────────────────────────────
     fig, (ax_f, ax_l) = plt.subplots(2, 1, figsize=figsize, sharex=True)
     fig.suptitle(
-        f"Station 043301 — Rivière des Prairies\nForecast from {anchor_date.strftime('%Y-%m-%d')}",
+        f"Station 043301 — Rivière des Prairies\nPrévision du {anchor_date.strftime('%Y-%m-%d')}",
         fontsize=13,
     )
 
     for ax, var, unit, color in [
-        (ax_f, "flow_m3s",  "Flow (m³/s)", "steelblue"),
-        (ax_l, "level_m",   "Level (m)",   "teal"),
+        (ax_f, "flow_m3s",  "Débit (m³/s)", "steelblue"),
+        (ax_l, "level_m",   "Niveau (m)",   "teal"),
     ]:
         lo  = env[(var, "min")]
         hi  = env[(var, "max")]
         avg = env[(var, "mean")]
 
         # Historical envelope
-        ax.fill_between(env.index, lo, hi, color=color, alpha=0.10, label="Hist. min/max")
-        ax.plot(env.index, avg, color=color, lw=1, alpha=0.5, linestyle="--", label="Hist. mean")
+        ax.fill_between(env.index, lo, hi, color=color, alpha=0.10, label="Min/max hist.")
+        ax.plot(env.index, avg, color=color, lw=1, alpha=0.5, linestyle="--", label="Moyenne hist.")
 
         # Observed history
-        ax.plot(obs.index, obs[var], color=color, lw=1.8, label="Observed")
+        ax.plot(obs.index, obs[var], color=color, lw=1.8, label="Observé")
 
         # 5-day forecast — connect last observed point for continuity
         bridge_dates  = [anchor_date] + result["date"].tolist()
         bridge_values = [obs[var].iloc[-1]] + result[var].tolist()
         ax.plot(bridge_dates, bridge_values, color="crimson", lw=2,
-                linestyle="--", marker="o", markersize=5, zorder=5, label="Forecast")
+                linestyle="--", marker="o", markersize=5, zorder=5, label="Prévision")
 
         # Danger zone line (level panel only)
         if var == "level_m":
             ax.axhline(22.5, color="crimson", lw=1.2, linestyle=":",
-                       alpha=0.5, label="Danger (22.5 m)", zorder=4)
+                       alpha=0.5, label="Zone de danger (22.5 m)", zorder=4)
 
         # "Today" marker
         ax.axvline(anchor_date, color="gray", lw=0.8, linestyle=":")
