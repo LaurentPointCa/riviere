@@ -239,6 +239,11 @@ def plot_forecast(
         ax.plot(bridge_dates, bridge_values, color="crimson", lw=2,
                 linestyle="--", marker="o", markersize=5, zorder=5, label="Forecast")
 
+        # Danger zone line (level panel only)
+        if var == "level_m":
+            ax.axhline(22.5, color="crimson", lw=1.2, linestyle=":",
+                       alpha=0.5, label="Danger (22.5 m)", zorder=4)
+
         # "Today" marker
         ax.axvline(anchor_date, color="gray", lw=0.8, linestyle=":")
 
