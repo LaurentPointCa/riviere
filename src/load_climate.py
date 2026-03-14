@@ -201,6 +201,22 @@ def load_snow_depth(cache: bool = True) -> pd.Series:
 
     today = pd.Timestamp.today().strftime("%Y-%m-%d")
 
+    def _fetch_in_chunks(start: str, end: str) -> pd.Series:
+        """Fetch snow_depth in 5-year chunks to avoid large payloads."""
+        parts = []
+        y_start = pd.Timestamp(start).year
+        y_end   = pd.Timestamp(end).year
+        for y in range(y_start, y_end + 1, 5):
+            chunk_start = max(start, f"{y}-01-01")
+            chunk_end   = min(end, f"{min(y + 4, y_end)}-12-31")
+            if chunk_start > today:
+                break
+            print(f"  Fetching {chunk_start} → {chunk_end}...")
+            parts.append(fetch_snow_depth_daily(chunk_start, chunk_end))
+            time.sleep(3)
+        result = pd.concat(parts)
+        return result[~result.index.duplicated(keep="last")].sort_index()
+
     if not cache and SNOW_DEPTH_CACHE.exists():
         existing = pd.read_parquet(SNOW_DEPTH_CACHE)["snow_depth"]
         start = (existing.index.max() + pd.Timedelta(days=1)).strftime("%Y-%m-%d")
@@ -212,8 +228,8 @@ def load_snow_depth(cache: bool = True) -> pd.Series:
         result = pd.concat([existing, new])
         result = result[~result.index.duplicated(keep="last")].sort_index()
     else:
-        print(f"Fetching ERA5-Land hourly snow_depth (1940 → {today}), single centroid point...")
-        result = fetch_snow_depth_daily(CLIMATE_START, today)
+        print(f"Fetching ERA5-Land hourly snow_depth ({CLIMATE_START} → {today}) in 5-year chunks...")
+        result = _fetch_in_chunks(CLIMATE_START, today)
 
     DATA_DIR.mkdir(parents=True, exist_ok=True)
     result.to_frame().to_parquet(SNOW_DEPTH_CACHE)
