@@ -16,8 +16,9 @@ Watershed:
 Variables (daily):
   temperature_2m_mean   °C    — basin-mean air temperature
   precipitation_sum     mm    — total water input (rain + snow water equiv.)
-  snowfall_sum          cm    — daily snowfall; used to build snowpack proxy
+  snowfall_sum          cm    — daily snowfall
   rain_sum              mm    — liquid precipitation only
+  snow_depth            m     — basin-mean snow water equivalent (ERA5 land surface model)
 """
 
 import json
@@ -40,8 +41,9 @@ OPEN_METEO_URL = "https://archive-api.open-meteo.com/v1/archive"
 CLIMATE_VARIABLES = [
     "temperature_2m_mean",  # °C   — drives snowmelt
     "precipitation_sum",    # mm   — total water input (rain + snow water equiv.)
-    "snowfall_sum",         # cm   — daily snowfall; used to build snowpack proxy
+    "snowfall_sum",         # cm   — daily snowfall
     "rain_sum",             # mm   — liquid precipitation only
+    "snow_depth",           # m    — basin-mean SWE from ERA5 land surface model
 ]
 
 # ERA5 starts 1940-01-01
@@ -154,7 +156,7 @@ def load_climate(cache: bool = True, spacing_km: float = 50.0) -> pd.DataFrame:
     When no cache exists, performs a full download from CLIMATE_START.
 
     Returns a DataFrame indexed by date with columns:
-      temperature_2m_mean, precipitation_sum, snowfall_sum, rain_sum
+      temperature_2m_mean, precipitation_sum, snowfall_sum, rain_sum, snow_depth
     """
     cache_path = DATA_DIR / "climate_daily.parquet"
 

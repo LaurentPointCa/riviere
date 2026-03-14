@@ -30,7 +30,7 @@ LAG_DAYS = [1, 2, 3, 4, 5, 7, 14, 30]
 # Variables to lag
 LAG_VARS_HYDRO = [
     "flow_m3s", "level_m", "upstream_level_m", "ottawa_flow_m3s", "hull_level_m",
-    "temperature_2m_mean", "precipitation_sum", "rain_sum",
+    "temperature_2m_mean", "precipitation_sum", "rain_sum", "snow_depth",
 ] + CGM_COLS
 
 
@@ -97,6 +97,12 @@ def _add_rolling_features(df: pd.DataFrame) -> pd.DataFrame:
         new_cols[f"rain_roll_sum_{suffix}"] = df["rain_sum"].rolling(window, min_periods=1).sum()
 
     new_cols["snow_roll_sum_90d"] = df["snowfall_sum"].rolling(90, min_periods=1).sum()
+
+    # ERA5 snow depth (SWE) rolling features
+    if "snow_depth" in df.columns:
+        for window, suffix in [(7, "7d"), (14, "14d"), (30, "30d")]:
+            new_cols[f"snow_depth_roll_mean_{suffix}"] = df["snow_depth"].rolling(window, min_periods=1).mean()
+        new_cols["snow_depth_roll_max_30d"] = df["snow_depth"].rolling(30, min_periods=1).max()
 
     return pd.concat([df, pd.DataFrame(new_cols, index=df.index)], axis=1)
 
