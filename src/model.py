@@ -16,6 +16,7 @@ Public API:
     feature_importances(models, ...)   -> pd.DataFrame
 """
 
+import argparse
 import pickle
 import sys
 from pathlib import Path
@@ -181,6 +182,111 @@ def time_split(
     return X[train_mask], X[test_mask], y[train_mask], y[test_mask]
 
 
+# ── Walk-forward cross-validation ────────────────────────────────────────────
+
+def walk_forward_cv(
+    X: pd.DataFrame,
+    y: pd.DataFrame,
+    first_test_year: int = 2019,
+    last_test_year: int | None = None,
+) -> pd.DataFrame:
+    """
+    Walk-forward cross-validation with expanding training window.
+
+    For each test year Y in [first_test_year, last_test_year]:
+      - Train on all data up to Dec 31 of Y-1
+      - Evaluate on all available data in year Y
+      - Repeat for cold and warm seasons separately
+
+    Parameters
+    ----------
+    first_test_year : first calendar year used as test fold (default 2019)
+    last_test_year  : last calendar year used as test fold (default: last full
+                      year in X)
+
+    Returns
+    -------
+    pd.DataFrame
+        Rows = targets, columns = (season, metric) MultiIndex.
+        Summary rows show mean and std RMSE across folds.
+    """
+    if last_test_year is None:
+        last_year = X.index[-1].year
+        # Only use full years as test folds
+        last_test_year = last_year if X.index[-1].month == 12 else last_year - 1
+
+    fold_years = list(range(first_test_year, last_test_year + 1))
+    print(f"\nWalk-forward CV: {len(fold_years)} folds "
+          f"({first_test_year}–{last_test_year})\n")
+
+    # Accumulate per-fold RMSE: fold_results[season][target] = [rmse, ...]
+    fold_results: dict[str, dict[str, list]] = {
+        "cold": {t: [] for t in TARGET_COLS},
+        "warm": {t: [] for t in TARGET_COLS},
+    }
+
+    for fold_year in fold_years:
+        cutoff    = pd.Timestamp(f"{fold_year - 1}-12-31")
+        year_start = pd.Timestamp(f"{fold_year}-01-01")
+        year_end   = pd.Timestamp(f"{fold_year}-12-31")
+
+        train_mask = X.index <= cutoff
+        test_mask  = (X.index >= year_start) & (X.index <= year_end)
+
+        if train_mask.sum() == 0 or test_mask.sum() == 0:
+            print(f"  [{fold_year}] skipped (insufficient data)")
+            continue
+
+        X_tr, y_tr = X[train_mask], y[train_mask]
+        X_te, y_te = X[test_mask],  y[test_mask]
+
+        fold_rmse = {}
+        for season, months in [("cold", COLD_MONTHS), ("warm", WARM_MONTHS)]:
+            s_tr = _season_mask(X_tr.index, months)
+            s_te = _season_mask(X_te.index, months)
+
+            if s_tr.sum() < 30 or s_te.sum() == 0:
+                continue
+
+            models = train(X_tr[s_tr], y_tr[s_tr])
+            metrics = evaluate(models, X_te[s_te], y_te[s_te])
+
+            for target, m in metrics.items():
+                fold_results[season][target].append(m["rmse"])
+
+            fold_rmse[season] = {t: round(metrics[t]["rmse"], 2) for t in ["flow_t1", "level_t1"]}
+
+        print(f"  [{fold_year}]  "
+              f"cold  flow_t1={fold_rmse.get('cold', {}).get('flow_t1', '-'):>6}  "
+              f"level_t1={fold_rmse.get('cold', {}).get('level_t1', '-'):>6}  |  "
+              f"warm  flow_t1={fold_rmse.get('warm', {}).get('flow_t1', '-'):>6}  "
+              f"level_t1={fold_rmse.get('warm', {}).get('level_t1', '-'):>6}")
+
+    # Summarise
+    print(f"\n{'═'*65}")
+    print("  Walk-forward CV summary")
+    print(f"{'═'*65}")
+    for season in ("cold", "warm"):
+        label = "Nov–May" if season == "cold" else "Jun–Oct"
+        print(f"\n── {season.upper()} ({label}) ────────────────────────────────────")
+        rows = []
+        for target in TARGET_COLS:
+            vals = fold_results[season][target]
+            if vals:
+                rows.append({
+                    "target": target,
+                    "mean_RMSE": round(np.mean(vals), 2),
+                    "std_RMSE":  round(np.std(vals),  2),
+                    "min_RMSE":  round(np.min(vals),  2),
+                    "max_RMSE":  round(np.max(vals),  2),
+                    "n_folds":   len(vals),
+                })
+        df = pd.DataFrame(rows).set_index("target")
+        print(df.to_string())
+
+    return df
+
+
 # ── Display helpers ──────────────────────────────────────────────────────────
 
 def _print_metrics(metrics: dict, y_test: pd.DataFrame, X_test: pd.DataFrame,
@@ -225,11 +331,26 @@ def _print_importances(models: dict, feature_names: list[str], top_n: int = 15,
 # ── Entry point ──────────────────────────────────────────────────────────────
 
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="Train or evaluate the Des Prairies forecast model.")
+    parser.add_argument("--cv", action="store_true",
+                        help="Run walk-forward cross-validation instead of training")
+    parser.add_argument("--first-test-year", type=int, default=2019,
+                        help="First test year for CV (default: 2019)")
+    parser.add_argument("--last-test-year",  type=int, default=None,
+                        help="Last test year for CV (default: last full year in dataset)")
+    args = parser.parse_args()
+
     # 1. Build dataset
     print("Loading dataset...")
     X, y = build_dataset()
     print(f"  X: {X.shape}  |  y: {y.shape}")
     print(f"  Date range: {X.index[0].date()} → {X.index[-1].date()}")
+
+    if args.cv:
+        walk_forward_cv(X, y,
+                        first_test_year=args.first_test_year,
+                        last_test_year=args.last_test_year)
+        sys.exit(0)
 
     # 2. Chronological train / test split
     X_train, X_test, y_train, y_test = time_split(X, y, test_years=2)
