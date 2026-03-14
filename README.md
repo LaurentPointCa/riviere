@@ -40,13 +40,27 @@ Les cinq stations de mesure utilisées en entrée du modèle dans la région de 
 Ensemble de test retenu (2024-03-04 → 2026-03-03, 730 jours) utilisé pour l'évaluation.
 Le modèle déployé est ré-entraîné sur l'ensemble complet des données (1978-01-01 → 2026-03-03).
 
+Deux modèles saisonniers distincts : **froid** (nov–mai, fonte des neiges / crue printanière) et **chaud** (juin–oct, pluie / étiage).
+
+### Saison froide (nov–mai)
+
 | Horizon | RMSE débit (m³/s) | RMSE niveau (m) | Gain vs. persistance |
 |---------|-------------------|-----------------|----------------------|
-| t+1     | 38,2              | 0,057           | +22 %                |
-| t+2     | 64,0              | 0,091           | +23 %                |
-| t+3     | 85,5              | 0,114           | +22 %                |
-| t+4     | 100,5             | 0,133           | +24 %                |
-| t+5     | 109,6             | 0,145           | +28 %                |
+| t+1     | 37,0              | 0,056           | +24 %                |
+| t+2     | 64,6              | 0,097           | +23 %                |
+| t+3     | 89,1              | 0,126           | +22 %                |
+| t+4     | 104,7             | 0,146           | +26 %                |
+| t+5     | 117,4             | 0,157           | +28 %                |
+
+### Saison chaude (juin–oct)
+
+| Horizon | RMSE débit (m³/s) | RMSE niveau (m) | Gain vs. persistance |
+|---------|-------------------|-----------------|----------------------|
+| t+1     | 31,0              | 0,040           | +37 %                |
+| t+2     | 51,7              | 0,067           | +37 %                |
+| t+3     | 66,2              | 0,086           | +36 %                |
+| t+4     | 77,5              | 0,100           | +37 %                |
+| t+5     | 85,2              | 0,110           | +40 %                |
 
 ## Sources de données
 
@@ -54,6 +68,8 @@ Le modèle déployé est ré-entraîné sur l'ensemble complet des données (197
 |--------|-----------|---------|
 | [CEHQ](https://www.cehq.gouv.qc.ca) | Débit (m³/s), Niveau (m) — station 043301 | 1922–présent |
 | [CEHQ](https://www.cehq.gouv.qc.ca) | Niveau amont (m) — station 043108 (Lac des Deux Montagnes) | 1986–présent |
+| [ECCC / HYDAT](https://eau.ec.gc.ca) | Débit (m³/s) — station 02KF005 (rivière des Outaouais à Britannia) | 1960–présent |
+| [ECCC / HYDAT](https://eau.ec.gc.ca) | Niveau (m) — station 02LA015 (rivière des Outaouais à Hull) | 1964–présent |
 | [Open-Meteo ERA5](https://open-meteo.com) | Température, précipitations, chutes de neige, pluie (observé) | 1940–présent |
 | [Open-Meteo Forecast](https://open-meteo.com) | Prévision météo sur 5 jours (température, précipitations, pluie, neige) | temps réel |
 | [Crues Grand Montréal](https://www.cruesgrandmontreal.ca) | Niveau (m) + débit (m³/s) — stations amont 39_RDP09, 01_RDP11, 11_LDM01 | temps réel + historique glissant |
@@ -70,15 +86,17 @@ Le modèle déployé est ré-entraîné sur l'ensemble complet des données (197
 ## Pipeline
 
 ```
-load_data.py      Données historiques CEHQ + flux en direct (stations 043301 + amont 043108)
+load_data.py      Données historiques CEHQ (043301 + 043108) + ECCC (02KF005 + 02LA015)
+                  Format HYDAT CSV + exports XML temps réel → chargés via glob
 load_climate.py   Bassin versant (mghydro.com) → Climat journalier moyen ERA5 (Open-Meteo)
 load_forecast.py  Prévision météo 5 jours (Open-Meteo) → injectée à l'inférence
 load_cgm.py       Niveau + débit horaires des 3 stations amont (cruesgrandmontreal.ca)
                   → cache journalier (data/cgm_daily.parquet) + prévision 5 jours
      │
      ▼
-features.py       build_dataset() → (X, y)   [222 colonnes]
-                  • Décalages 1–30 jours (débit, niveau, amont 043108 + 3 stations CGM, climat)
+features.py       build_dataset() → (X, y)   [254 colonnes]
+                  • Décalages 1–30 jours (débit, niveau, amont 043108, Outaouais 02KF005 +
+                    02LA015, 3 stations CGM, climat)
                   • Moyenne/max/écart-type glissants (3–30 jours)
                   • Proxy d'enneigement (modèle degré-jour)
                   • Encodage saisonnier (sin/cos jour de l'année)
@@ -89,12 +107,15 @@ features.py       build_dataset() → (X, y)   [222 colonnes]
                     prévision réelle CMM à l'inférence)
      │
      ▼
-model.py          10 × LGBMRegressor (un par horizon)
+model.py          2 ensembles saisonniers × 10 LGBMRegressor (un par horizon)
+                  Froid : nov–mai (fonte des neiges, crue printanière)
+                  Chaud : juin–oct (pluie, étiage)
                   Évalué sur 2024–2026, déployé sur l'ensemble 1978–2026
      │
      ▼
 predict.py        Interface CLI de prévision 5 jours → docs/forecast.png + docs/forecast_30d.png
                   + docs/forecast.json
+                  Sélectionne automatiquement le modèle saisonnier selon la date d'ancrage
 ```
 
 ## Utilisation
@@ -119,14 +140,19 @@ python src/predict.py --date 2025-06-01
 ## Détails du modèle
 
 - **Stratégie :** multi-sortie directe — un `LGBMRegressor` par horizon (t+1…t+5),
-  séparément pour le débit et le niveau
+  séparément pour le débit et le niveau, avec deux ensembles saisonniers (froid / chaud)
+- **Sélection saisonnière :** froid = nov–mai, chaud = juin–oct ; `predict.py` choisit
+  automatiquement l'ensemble selon la date d'ancrage via `season_for()`
 - **Période d'entraînement :** à partir du 1978-01-01 (ère post-barrage)
-- **Caractéristiques :** 222 colonnes — décalages, statistiques glissantes (station 043108 +
-  3 stations CGM amont), proxy d'enneigement, encodage saisonnier, anomalie de débit,
-  prévision météo 5 jours, prévision hydrologique amont 5 jours
+- **Caractéristiques :** 254 colonnes — décalages, statistiques glissantes (stations 043108,
+  02KF005 Outaouais à Britannia, 02LA015 Outaouais à Hull, 3 stations CGM amont), proxy
+  d'enneigement, encodage saisonnier, anomalie de débit, prévision météo 5 jours,
+  prévision hydrologique amont 5 jours
 - **Hyperparamètres :** 500 arbres, lr=0,05, 63 feuilles, subsample=0,8
-- **Meilleures caractéristiques :** débit actuel, max glissant sur 3 jours, niveau actuel,
-  jour de l'année (sin), précipitations cumulées prévues sur 5 jours, température moyenne sur 30 jours
+- **Meilleures caractéristiques (froid) :** débit actuel, max glissant 3 j, niveau actuel,
+  jour de l'année (sin), précipitations cumulées prévues 5 j
+- **Meilleures caractéristiques (chaud) :** débit actuel, niveau Hull (02LA015),
+  max glissant 3 j, niveau actuel, anomalie de débit
 
 ---
 
