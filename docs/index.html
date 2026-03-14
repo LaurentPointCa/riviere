@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Rivière des Prairies — Prévisions</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: #f2f2f7;
+      color: #1c1c1e;
+      max-width: 600px;
+      margin: 0 auto;
+      padding-bottom: 80px;
+    }
+
+    section { background: #fff; margin: 0 0 12px; padding: 12px 16px; }
+
+    h2 {
+      font-size: 17px;
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+
+    img.forecast-img {
+      width: 100%;
+      display: block;
+    }
+
+    .meta {
+      font-size: 13px;
+      color: #6c6c70;
+      margin-bottom: 10px;
+    }
+
+    /* Table */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+
+    thead tr {
+      background: #f2f2f7;
+    }
+
+    thead th {
+      padding: 8px;
+      font-weight: 600;
+      color: #6c6c70;
+      text-align: right;
+    }
+
+    thead th:first-child, thead th:nth-child(2) { text-align: left; }
+
+    tbody tr { border-top: 1px solid #e5e5ea; }
+
+    tbody td {
+      padding: 8px;
+      text-align: right;
+    }
+
+    tbody td:first-child, tbody td:nth-child(2) { text-align: left; }
+
+    .danger-note {
+      font-size: 12px;
+      color: #6c6c70;
+      margin-top: 6px;
+    }
+
+    /* Buttons */
+    .btn-bar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: #fff;
+      border-top: 1px solid #e5e5ea;
+      padding: 10px 16px 20px;
+      display: flex;
+      gap: 8px;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .btn-bar a {
+      flex: 1;
+      display: block;
+      text-align: center;
+      padding: 8px 0;
+      background: #007aff;
+      color: #fff;
+      border-radius: 8px;
+      text-decoration: none;
+      font-size: 15px;
+      font-weight: 500;
+    }
+
+    .btn-bar a:hover { background: #0062cc; }
+
+    /* Error / loading */
+    .loading { color: #6c6c70; font-size: 14px; padding: 12px 0; }
+    .error   { color: #ff3b30; font-size: 14px; padding: 12px 0; }
+  </style>
+</head>
+<body>
+
+  <!-- 30-day graph -->
+  <section>
+    <h2>Données 30 derniers jours</h2>
+    <img class="forecast-img" src="forecast_30d.png" alt="Graphique 30 jours" />
+  </section>
+
+  <!-- Forecast table -->
+  <section>
+    <h2>Prévisions</h2>
+    <div class="meta" id="meta">Chargement…</div>
+    <div id="table-container"><p class="loading">Chargement des données…</p></div>
+    <p class="danger-note">Zone de danger : 22.5 m</p>
+  </section>
+
+  <!-- 1-year graph -->
+  <section>
+    <h2>Données 1 an</h2>
+    <img class="forecast-img" src="forecast.png" alt="Graphique 1 an" />
+  </section>
+
+  <!-- Bottom buttons -->
+  <div class="btn-bar">
+    <a href="https://www.cehq.gouv.qc.ca/suivihydro/graphique.asp?NoStation=043301" target="_blank" rel="noopener">CEHQ</a>
+    <a href="https://rivieredesoutaouais.ca/location/carillon-2/" target="_blank" rel="noopener">Carillon</a>
+    <a href="https://www.cruesgrandmontreal.ca/" target="_blank" rel="noopener">Crues MTL</a>
+  </div>
+
+  <script>
+    fetch('forecast.json')
+      .then(r => r.json())
+      .then(data => {
+        // Meta line
+        const generated = new Date(data.generated_at);
+        document.getElementById('meta').textContent =
+          'Généré le ' + generated.toLocaleString('fr-CA', { dateStyle: 'medium', timeStyle: 'short' });
+
+        // Build table
+        const rows = data.forecast.map(d => `
+          <tr>
+            <td>J${d.day}</td>
+            <td>${d.date}</td>
+            <td>${d.flow_m3s.toFixed(1)}</td>
+            <td>${d.level_m.toFixed(3)}</td>
+          </tr>`).join('');
+
+        document.getElementById('table-container').innerHTML = `
+          <table>
+            <thead>
+              <tr>
+                <th>Jour</th>
+                <th>Date</th>
+                <th>Débit (m³/s)</th>
+                <th>Niveau (m)</th>
+              </tr>
+            </thead>
+            <tbody>${rows}</tbody>
+          </table>`;
+      })
+      .catch(() => {
+        document.getElementById('meta').textContent = '';
+        document.getElementById('table-container').innerHTML =
+          '<p class="error">Impossible de charger les prévisions.</p>';
+      });
+  </script>
+</body>
+</html>
