@@ -1,15 +1,19 @@
 """
 LightGBM forecast model for station 043301 — Des Prairies.
 
-Strategy: one LGBMRegressor per target horizon (10 models total),
-stored in a dict keyed by target name.
+Strategy: two seasonal model sets (cold: Nov–May, warm: Jun–Oct),
+each with one LGBMRegressor per target horizon (10 models × 2 seasons = 20 total).
+The saved pickle has the structure:
+    {"cold": {target: model, ...}, "warm": {target: model, ...}}
 
 Public API:
-    train(X, y)            -> dict[str, LGBMRegressor]
-    evaluate(models, X, y) -> dict[str, dict[str, float]]
+    train(X, y)                        -> dict[str, LGBMRegressor]
+    evaluate(models, X, y)             -> dict[str, dict[str, float]]
     save_model(models, path)
-    load_model(path)       -> dict[str, LGBMRegressor]
-    feature_importances(models, feature_names, top_n) -> pd.DataFrame
+    load_model(path)                   -> dict[str, LGBMRegressor]  (single set)
+    load_seasonal_models(path)         -> dict[str, dict]           (both sets)
+    season_for(date)                   -> "cold" | "warm"
+    feature_importances(models, ...)   -> pd.DataFrame
 """
 
 import pickle
@@ -45,6 +49,22 @@ TARGET_COLS = (
     [f"flow_t{h}"  for h in range(1, 6)] +
     [f"level_t{h}" for h in range(1, 6)]
 )
+
+# Nov 1 – May 31: snowpack accumulation + spring freshet
+# Jun 1 – Oct 31: post-freshet low-flow, rain-dominated
+COLD_MONTHS = {11, 12, 1, 2, 3, 4, 5}
+WARM_MONTHS = {6, 7, 8, 9, 10}
+
+
+# ── Season helpers ───────────────────────────────────────────────────────────
+
+def season_for(date: pd.Timestamp) -> str:
+    """Return 'cold' (Nov–May) or 'warm' (Jun–Oct) for a given date."""
+    return "cold" if date.month in COLD_MONTHS else "warm"
+
+
+def _season_mask(index: pd.DatetimeIndex, months: set) -> np.ndarray:
+    return np.array([d.month in months for d in index])
 
 
 # ── Public API ───────────────────────────────────────────────────────────────
@@ -94,7 +114,7 @@ def evaluate(models: dict, X_test: pd.DataFrame, y_test: pd.DataFrame) -> dict:
 
 
 def save_model(models: dict, path: str | Path) -> None:
-    """Serialize the models dict to disk with pickle."""
+    """Serialize a models dict (single or seasonal) to disk with pickle."""
     path = Path(path)
     path.parent.mkdir(parents=True, exist_ok=True)
     with open(path, "wb") as f:
@@ -106,6 +126,17 @@ def load_model(path: str | Path) -> dict:
     """Load a models dict previously saved with save_model."""
     with open(Path(path), "rb") as f:
         return pickle.load(f)
+
+
+def load_seasonal_models(path: str | Path) -> dict:
+    """
+    Load the seasonal model file and return {"cold": {...}, "warm": {...}}.
+    Raises KeyError if the file does not contain seasonal models.
+    """
+    data = load_model(path)
+    if "cold" not in data or "warm" not in data:
+        raise KeyError(f"{path} does not contain seasonal models ('cold'/'warm' keys).")
+    return data
 
 
 def feature_importances(
@@ -152,7 +183,8 @@ def time_split(
 
 # ── Display helpers ──────────────────────────────────────────────────────────
 
-def _print_metrics(metrics: dict, y_test: pd.DataFrame, X_test: pd.DataFrame) -> None:
+def _print_metrics(metrics: dict, y_test: pd.DataFrame, X_test: pd.DataFrame,
+                   label: str = "") -> None:
     """Print RMSE / MAE table with persistence-model skill score."""
     flow_today  = X_test["flow_m3s"].values
     level_today = X_test["level_m"].values
@@ -170,20 +202,23 @@ def _print_metrics(metrics: dict, y_test: pd.DataFrame, X_test: pd.DataFrame) ->
         })
 
     df = pd.DataFrame(rows).set_index("target")
+    header = f" [{label}]" if label else ""
 
-    print("\n── Flow targets (m³/s) ──────────────────────────────────────────")
+    print(f"\n── Flow targets (m³/s){header} ──────────────────────────────────")
     flow_rows = [t for t in df.index if t.startswith("flow")]
     print(df.loc[flow_rows].round({"RMSE": 1, "MAE": 1, "naive_RMSE": 1, "skill": 3}).to_string())
 
-    print("\n── Level targets (m) ────────────────────────────────────────────")
+    print(f"\n── Level targets (m){header} ────────────────────────────────────")
     level_rows = [t for t in df.index if t.startswith("level")]
     print(df.loc[level_rows].round({"RMSE": 4, "MAE": 4, "naive_RMSE": 4, "skill": 3}).to_string())
 
 
-def _print_importances(models: dict, feature_names: list[str], top_n: int = 15) -> None:
+def _print_importances(models: dict, feature_names: list[str], top_n: int = 15,
+                       label: str = "") -> None:
     imp_df = feature_importances(models, feature_names, top_n=top_n)
     display_cols = [c for c in ["mean_gain", "flow_t1", "level_t1"] if c in imp_df.columns]
-    print(f"\n── Top {top_n} features by average gain ─────────────────────────")
+    header = f" [{label}]" if label else ""
+    print(f"\n── Top {top_n} features by average gain{header} ─────────────────")
     print(imp_df[display_cols].round(1).to_string())
 
 
@@ -201,17 +236,29 @@ if __name__ == "__main__":
     print(f"\nTrain: {len(X_train):,} rows  ({X_train.index[0].date()} → {X_train.index[-1].date()})")
     print(f"Test:  {len(X_test):,} rows  ({X_test.index[0].date()} → {X_test.index[-1].date()})")
 
-    # 3. Train
-    print("\nTraining 10 LGBMRegressor models...")
-    models = train(X_train, y_train)
+    seasonal_models = {}
+    for season, months in [("cold", COLD_MONTHS), ("warm", WARM_MONTHS)]:
+        label = "Nov–May" if season == "cold" else "Jun–Oct"
+        train_mask = _season_mask(X_train.index, months)
+        test_mask  = _season_mask(X_test.index,  months)
 
-    # 4. Evaluate
-    print("\nEvaluating on test set...")
-    metrics = evaluate(models, X_test, y_test)
-    _print_metrics(metrics, y_test, X_test)
+        X_tr, y_tr = X_train[train_mask], y_train[train_mask]
+        X_te, y_te = X_test[test_mask],   y_test[test_mask]
 
-    # 5. Save
-    save_model(models, "models/lgbm_forecast.pkl")
+        print(f"\n{'═'*60}")
+        print(f"  Season: {season.upper()} ({label})")
+        print(f"  Train rows: {len(X_tr):,}  |  Test rows: {len(X_te):,}")
+        print(f"{'═'*60}")
 
-    # 6. Feature importances
-    _print_importances(models, list(X.columns), top_n=15)
+        print(f"\nTraining 10 LGBMRegressor models ({season})...")
+        models = train(X_tr, y_tr)
+
+        print(f"\nEvaluating on {season} test set...")
+        metrics = evaluate(models, X_te, y_te)
+        _print_metrics(metrics, y_te, X_te, label=label)
+        _print_importances(models, list(X.columns), top_n=10, label=label)
+
+        seasonal_models[season] = models
+
+    # Save both season model sets in one file
+    save_model(seasonal_models, "models/lgbm_forecast.pkl")

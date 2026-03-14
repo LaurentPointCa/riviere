@@ -16,7 +16,7 @@ import pandas as pd
 
 sys.path.insert(0, str(Path(__file__).parent))
 from features import build_dataset
-from model import load_model
+from model import load_model, season_for
 from load_forecast import load_weather_forecast
 from load_cgm import load_cgm_forecast, CGM_COLS
 
@@ -80,7 +80,14 @@ def forecast(anchor_date: pd.Timestamp, X: pd.DataFrame) -> pd.DataFrame:
     -------
     pd.DataFrame with columns date, flow_m3s, level_m; indexed 1..5 (horizon)
     """
-    models = load_model(MODEL_PATH)
+    all_models = load_model(MODEL_PATH)
+    # Support both seasonal ({"cold": ..., "warm": ...}) and legacy flat dicts
+    if "cold" in all_models and "warm" in all_models:
+        season = season_for(anchor_date)
+        models = all_models[season]
+        print(f"Using {season} season model ({anchor_date.strftime('%b %d')}).")
+    else:
+        models = all_models
     row = X.loc[[anchor_date]]
 
     # For the latest available date, inject real weather forecast.
