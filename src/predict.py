@@ -252,13 +252,23 @@ def plot_forecast(
         ax.grid(True, alpha=0.25)
         ax.margins(x=0.01)
 
+    # French month abbreviations
+    _FR_MONTHS = ["jan", "fév", "mar", "avr", "mai", "jun",
+                  "jul", "aoû", "sep", "oct", "nov", "déc"]
+
+    def _fr_month_fmt(x, pos=None):
+        dt = mdates.num2date(x)
+        m = _FR_MONTHS[dt.month - 1]
+        if days_back <= 60:
+            return f"{m} {dt.day:02d}"
+        return f"{m}\n{dt.year}"
+
     # Tick density depends on window length
     if days_back <= 60:
         ax_l.xaxis.set_major_locator(mdates.WeekdayLocator(byweekday=0))
-        ax_l.xaxis.set_major_formatter(mdates.DateFormatter("%b %d"))
     else:
         ax_l.xaxis.set_major_locator(mdates.MonthLocator())
-        ax_l.xaxis.set_major_formatter(mdates.DateFormatter("%b\n%Y"))
+    ax_l.xaxis.set_major_formatter(plt.FuncFormatter(_fr_month_fmt))
 
     fig.autofmt_xdate(rotation=0, ha="center")
     plt.tight_layout()
