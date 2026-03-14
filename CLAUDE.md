@@ -33,7 +33,8 @@ Personal experiment built entirely with Claude Code. No outputs are validated or
 
 ## Backlog
 
-- Add historical data for the Carillon dam (Ottawa River, upstream inflow control)
+- [WAITING] Add historical data for the Carillon dam (Ottawa River, upstream inflow control) — data requested
+- [WAITING] Add historical data for Crues Grand Montréal stations (39_RDP09, 01_RDP11, 11_LDM01) — data requested
 - ~~More upstream CEHQ stations~~ (added 02KF005 + 02LA015 ECCC stations)
 - ~~Seasonal/regime-specific models~~ (done: cold Nov–May / warm Jun–Oct)
 - Recursive multi-step forecasting
