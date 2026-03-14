@@ -22,6 +22,7 @@ Variables (daily):
 """
 
 import json
+import time
 import requests
 import numpy as np
 import pandas as pd
@@ -171,8 +172,15 @@ def fetch_snow_depth_daily(
         ("models",     "era5_land"),
     ]
 
-    response = requests.get(OPEN_METEO_URL, params=params, timeout=300)
-    response.raise_for_status()
+    for attempt in range(5):
+        response = requests.get(OPEN_METEO_URL, params=params, timeout=300)
+        if response.status_code == 429:
+            wait = 30 * (2 ** attempt)
+            print(f"  Rate limited; retrying in {wait}s...")
+            time.sleep(wait)
+            continue
+        response.raise_for_status()
+        break
 
     data = response.json()
     if isinstance(data, dict):
@@ -228,6 +236,7 @@ def load_snow_depth(cache: bool = True) -> pd.Series:
             chunk_end = today if y_end == end_year else f"{y_end}-12-31"
             print(f"  Fetching {y}–{y_end}...")
             parts.append(fetch_snow_depth_daily(points, f"{y}-01-01", chunk_end))
+            time.sleep(2)  # avoid rate limiting between batches
         result = pd.concat(parts)
         result = result[~result.index.duplicated(keep="last")].sort_index()
 
