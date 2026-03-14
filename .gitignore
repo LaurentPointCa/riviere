@@ -1,5 +1,5 @@
 .venv/
-data/*.parquet
+data/cgm_daily.parquet
 models/
 .claude/
 __pycache__/
