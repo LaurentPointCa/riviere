@@ -218,6 +218,12 @@ def plot_forecast(
         fontsize=13,
     )
 
+    # RMSE per horizon (test set 2024-03-04 → 2026-03-03)
+    _RMSE = {
+        "flow_m3s": [38.2, 64.0, 85.5, 100.5, 109.6],
+        "level_m":  [0.057, 0.091, 0.114, 0.133, 0.145],
+    }
+
     for ax, var, unit, color in [
         (ax_f, "flow_m3s",  "Débit (m³/s)", "steelblue"),
         (ax_l, "level_m",   "Niveau (m)",   "teal"),
@@ -238,6 +244,20 @@ def plot_forecast(
         bridge_values = [obs[var].iloc[-1]] + result[var].tolist()
         ax.plot(bridge_dates, bridge_values, color="crimson", lw=2,
                 linestyle="--", marker="o", markersize=5, zorder=5, label="Prévision")
+
+        # Confidence bands (±1 RMSE per horizon)
+        fc_dates  = result["date"].tolist()
+        fc_values = result[var].tolist()
+        rmse      = _RMSE[var]
+        band_lo   = [v - r for v, r in zip(fc_values, rmse)]
+        band_hi   = [v + r for v, r in zip(fc_values, rmse)]
+        # Extend band from anchor (zero uncertainty) to first forecast point
+        ax.fill_between(
+            [anchor_date] + fc_dates,
+            [obs[var].iloc[-1]] + band_lo,
+            [obs[var].iloc[-1]] + band_hi,
+            color="crimson", alpha=0.15, zorder=4, label="±1 RMSE",
+        )
 
         # Danger zone line (level panel only)
         if var == "level_m":
