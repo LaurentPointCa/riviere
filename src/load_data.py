@@ -28,6 +28,12 @@ SOURCES = {
     "upstream_live":  "https://www.cehq.gouv.qc.ca/suivihydro/fichier_donnees.asp?NoStation=043108",
 }
 
+# MSC GeoMet API — daily hydrometric data for station 02KF005
+ECCC_DAILY_URL = (
+    "https://api.weather.gc.ca/collections/hydrometric-daily-mean/items"
+    "?STATION_NUMBER=02KF005&datetime={start}/{end}&limit=500&f=json&sortby=DATE"
+)
+
 DATA_DIR = Path(__file__).parent.parent / "data"
 
 
@@ -221,6 +227,74 @@ def load_upstream_level(cache: bool = True) -> pd.DataFrame:
     if not new_rows.empty:
         hist = pd.concat([hist, new_rows])
         print(f"Extended with {len(new_rows)} days from upstream live feed (up to {new_rows.index.max().date()})")
+    return hist
+
+
+def _parse_eccc_csv(path: Path, param: int, col_name: str) -> pd.DataFrame:
+    """
+    Parse an ECCC Water Office CSV file (02KF005.csv format).
+
+    Columns: ID, PARAM, Date, Valeur, SYM
+    PARAM=1 → flow (m³/s), PARAM=2 → level (m)
+    Date format: YYYY/MM/DD
+    First line is a description preamble; second line is the header.
+    """
+    df = pd.read_csv(path, skiprows=1, encoding="utf-8-sig")
+    df.columns = df.columns.str.strip()
+    df = df[df["PARAM"] == param].copy()
+    df["date"] = pd.to_datetime(df["Date"].str.strip(), format="%Y/%m/%d")
+    df = df.rename(columns={"Valeur": col_name})[["date", col_name]]
+    df = df.set_index("date").sort_index()
+    df[col_name] = pd.to_numeric(df[col_name], errors="coerce")
+    return df
+
+
+def _fetch_eccc_recent(start: str, end: str) -> pd.DataFrame:
+    """
+    Fetch recent daily flow data for 02KF005 from the MSC GeoMet API.
+    Returns a DataFrame indexed by date with column 'ottawa_flow_m3s',
+    or an empty DataFrame if the fetch fails or no new data exists.
+    """
+    url = ECCC_DAILY_URL.format(start=start, end=end)
+    try:
+        resp = requests.get(url, timeout=30)
+        resp.raise_for_status()
+        features = resp.json().get("features", [])
+        if not features:
+            return pd.DataFrame(columns=["ottawa_flow_m3s"]).rename_axis("date")
+        rows = [
+            {"date": pd.to_datetime(f["properties"]["DATE"]),
+             "ottawa_flow_m3s": f["properties"]["DISCHARGE"]}
+            for f in features
+            if f["properties"].get("DISCHARGE") is not None
+        ]
+        df = pd.DataFrame(rows).set_index("date").sort_index()
+        return df
+    except Exception as e:
+        print(f"Warning: could not fetch ECCC recent data ({e})")
+        return pd.DataFrame(columns=["ottawa_flow_m3s"]).rename_axis("date")
+
+
+def load_ottawa_flow(cache: bool = True) -> pd.DataFrame:
+    """
+    Load daily flow (m³/s) for ECCC station 02KF005 (Ottawa River near Bells Corners).
+
+    Reads from the cached CSV file data/02KF005.csv, then extends with the
+    ECCC real-time API for dates beyond the file's coverage.
+    """
+    cache_path = DATA_DIR / "02KF005.csv"
+    hist = _parse_eccc_csv(cache_path, param=1, col_name="ottawa_flow_m3s")
+    print(f"Loaded {len(hist):,} rows of Ottawa flow from {hist.index.min().date()} to {hist.index.max().date()}")
+
+    # Extend with recent data from ECCC real-time API
+    start = (hist.index.max() + pd.Timedelta(days=1)).strftime("%Y-%m-%d")
+    end   = pd.Timestamp.today().strftime("%Y-%m-%d")
+    if start <= end:
+        recent = _fetch_eccc_recent(start, end)
+        if not recent.empty:
+            hist = pd.concat([hist, recent])
+            print(f"Extended with {len(recent)} days from ECCC API (up to {recent.index.max().date()})")
+
     return hist
 
 

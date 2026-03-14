@@ -18,7 +18,7 @@ import pandas as pd
 # Allow running as a script from the project root
 sys.path.insert(0, str(Path(__file__).parent))
 
-from load_data import load_flow, load_level, load_upstream_level
+from load_data import load_flow, load_level, load_upstream_level, load_ottawa_flow
 from load_climate import load_climate
 from load_cgm import load_cgm_history, CGM_COLS
 
@@ -29,7 +29,7 @@ LAG_DAYS = [1, 2, 3, 4, 5, 7, 14, 30]
 
 # Variables to lag
 LAG_VARS_HYDRO = [
-    "flow_m3s", "level_m", "upstream_level_m",
+    "flow_m3s", "level_m", "upstream_level_m", "ottawa_flow_m3s",
     "temperature_2m_mean", "precipitation_sum", "rain_sum",
 ] + CGM_COLS
 
@@ -65,6 +65,13 @@ def _add_rolling_features(df: pd.DataFrame) -> pd.DataFrame:
         new_cols[f"upstream_level_roll_mean_{suffix}"] = df["upstream_level_m"].rolling(window, min_periods=1).mean()
     for window, suffix in [(3, "3d"), (7, "7d"), (14, "14d")]:
         new_cols[f"upstream_level_roll_max_{suffix}"] = df["upstream_level_m"].rolling(window, min_periods=1).max()
+
+    # Ottawa River (02KF005) rolling features
+    if "ottawa_flow_m3s" in df.columns:
+        for window, suffix in [(3, "3d"), (7, "7d"), (14, "14d"), (30, "30d")]:
+            new_cols[f"ottawa_flow_roll_mean_{suffix}"] = df["ottawa_flow_m3s"].rolling(window, min_periods=1).mean()
+        for window, suffix in [(3, "3d"), (7, "7d"), (14, "14d")]:
+            new_cols[f"ottawa_flow_roll_max_{suffix}"] = df["ottawa_flow_m3s"].rolling(window, min_periods=1).max()
 
     # CGM upstream station rolling features
     for col in CGM_COLS:
@@ -212,10 +219,12 @@ def build_dataset(drop_incomplete: bool = True) -> tuple[pd.DataFrame, pd.DataFr
     upstream = load_upstream_level()[["upstream_level_m"]]
     climate = load_climate()
     cgm = load_cgm_history()
+    ottawa = load_ottawa_flow()[["ottawa_flow_m3s"]]
 
     df = (flow
           .join(level,    how="outer")
           .join(upstream, how="outer")
+          .join(ottawa,   how="outer")
           .join(climate,  how="outer")
           .join(cgm,      how="outer"))
     df.index.name = "date"
