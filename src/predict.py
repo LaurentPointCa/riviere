@@ -225,10 +225,11 @@ def plot_forecast(
         fontsize=13,
     )
 
-    # RMSE per horizon (test set 2024-03-04 → 2026-03-03)
+    # RMSE per horizon — cold season used as conservative upper bound
+    # (test set 2024-03-10 → 2026-03-09, with ERA5-Land snow_depth)
     _RMSE = {
-        "flow_m3s": [38.2, 64.0, 85.5, 100.5, 109.6],
-        "level_m":  [0.057, 0.091, 0.114, 0.133, 0.145],
+        "flow_m3s": [36.8, 56.7, 77.2, 97.4, 107.0],
+        "level_m":  [0.055, 0.082, 0.102, 0.121, 0.138],
     }
 
     for ax, var, unit, color in [
