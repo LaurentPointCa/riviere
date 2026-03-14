@@ -275,6 +275,31 @@ def _fetch_eccc_recent(start: str, end: str) -> pd.DataFrame:
         return pd.DataFrame(columns=["ottawa_flow_m3s"]).rename_axis("date")
 
 
+def _parse_eccc_xml(path: Path, col_name: str) -> pd.DataFrame:
+    """
+    Parse an ECCC real-time XML export (02KF005_QRD_*.xml or *_HGD_*.xml).
+
+    Each <record> contains <datestamp> and <value>.
+    Returns a DataFrame indexed by date (daily, UTC-naive) with one column.
+    """
+    import xml.etree.ElementTree as ET
+    tree = ET.parse(path)
+    rows = []
+    for record in tree.getroot().findall(".//record"):
+        ds  = record.findtext("datestamp", "").strip()
+        val = record.findtext("value", "").strip()
+        if ds and val:
+            rows.append({
+                "date":    pd.to_datetime(ds[:10]),   # keep date part only
+                col_name:  float(val),
+            })
+    if not rows:
+        return pd.DataFrame(columns=[col_name]).rename_axis("date")
+    df = pd.DataFrame(rows).set_index("date").sort_index()
+    # Daily mean in case of duplicates
+    return df[col_name].resample("D").mean().to_frame()
+
+
 def load_ottawa_flow(cache: bool = True) -> pd.DataFrame:
     """
     Load daily flow (m³/s) for ECCC station 02KF005 (Ottawa River near Bells Corners).
@@ -286,7 +311,17 @@ def load_ottawa_flow(cache: bool = True) -> pd.DataFrame:
     hist = _parse_eccc_csv(cache_path, param=1, col_name="ottawa_flow_m3s")
     print(f"Loaded {len(hist):,} rows of Ottawa flow from {hist.index.min().date()} to {hist.index.max().date()}")
 
-    # Extend with recent data from ECCC real-time API
+    # Extend with any XML exports found in data/ (e.g. 02KF005_QRD_*.xml)
+    xml_files = sorted(DATA_DIR.glob("02KF005_QRD_*.xml"))
+    if xml_files:
+        frames = [_parse_eccc_xml(f, "ottawa_flow_m3s") for f in xml_files]
+        xml_df = pd.concat(frames).groupby(level=0).mean()  # deduplicate overlapping dates
+        new_rows = xml_df[xml_df.index > hist.index.max()]
+        if not new_rows.empty:
+            hist = pd.concat([hist, new_rows])
+            print(f"Extended with {len(new_rows)} days from XML export(s) (up to {new_rows.index.max().date()})")
+
+    # Try ECCC API for anything still missing
     start = (hist.index.max() + pd.Timedelta(days=1)).strftime("%Y-%m-%d")
     end   = pd.Timestamp.today().strftime("%Y-%m-%d")
     if start <= end:
