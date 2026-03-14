@@ -17,7 +17,6 @@
     }
 
     section { background: #fff; margin: 12px 0 0; padding: 12px 16px; }
-    section + section { margin-top: 12px; }
 
     h2 {
       font-size: 17px;
@@ -43,9 +42,7 @@
       font-size: 13px;
     }
 
-    thead tr {
-      background: #f2f2f7;
-    }
+    thead tr { background: #f2f2f7; }
 
     thead th {
       padding: 8px;
@@ -107,15 +104,59 @@
       border: 1px solid #f0c040;
       border-radius: 10px;
       margin: 12px 12px 0;
-      padding: 12px 14px;
       font-size: 14px;
       line-height: 1.5;
+      overflow: hidden;
     }
 
-    .disclaimer p { margin-bottom: 8px; }
-    .disclaimer p:last-child { margin-bottom: 0; }
+    /* Collapsed state: just the header bar */
+    .disclaimer.collapsed .disclaimer-header {
+      border-bottom: none;
+    }
 
-    .disclaimer .signature {
+    .disclaimer.collapsed .disclaimer-body {
+      display: none;
+    }
+
+    .disclaimer-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 14px;
+      border-bottom: 1px solid #f0c040;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .disclaimer.collapsed .disclaimer-header {
+      border-bottom: none;
+    }
+
+    .disclaimer-header-text {
+      font-size: 13px;
+      font-weight: 600;
+      color: #7a5c00;
+    }
+
+    .disclaimer-toggle {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 18px;
+      color: #7a5c00;
+      line-height: 1;
+      padding: 0 0 0 8px;
+      flex-shrink: 0;
+    }
+
+    .disclaimer-body {
+      padding: 12px 14px;
+    }
+
+    .disclaimer-body p { margin-bottom: 8px; }
+    .disclaimer-body p:last-child { margin-bottom: 0; }
+
+    .disclaimer-body .signature {
       font-style: italic;
       color: #6c6c70;
     }
@@ -137,6 +178,28 @@
 
     .disclaimer .gh-links a:hover { text-decoration: underline; }
 
+    /* Intro section */
+    .intro {
+      background: #fff;
+      border-radius: 0;
+      margin: 12px 0 0;
+      padding: 16px 16px 14px;
+    }
+
+    .intro h1 {
+      font-size: 20px;
+      font-weight: 700;
+      line-height: 1.3;
+      margin-bottom: 10px;
+      color: #1c1c1e;
+    }
+
+    .intro p {
+      font-size: 14px;
+      line-height: 1.6;
+      color: #3a3a3c;
+    }
+
     /* Error / loading */
     .loading { color: #6c6c70; font-size: 14px; padding: 12px 0; }
     .error   { color: #ff3b30; font-size: 14px; padding: 12px 0; }
@@ -145,21 +208,38 @@
 <body>
 
   <!-- Disclaimer -->
-  <div class="disclaimer">
-    <p>Ce projet est une simple expérimentation que j'ai créé afin de me familiariser
-    avec Claude Code. Aucune donnée ni méthode utilisée ici n'est réputée être valide,
-    fonctionnelle ni exacte.</p>
-    <p>Les données de ce dépôt GitHub ainsi que celles produites par les outils ne
-    peuvent pas être utilisées pour aucune fin de planification ou de décision
-    par rapport au niveau de la rivière.</p>
-    <p>L'auteur se dégage de toute responsabilité face à l'utilisation par quiconque
-    des données ou outils sur ce site. Le tout n'est qu'une exploration et ne sert
-    qu'à discuter des outils et techniques explorés ici.</p>
-    <p class="signature">—Laurent</p>
-    <div class="gh-links">
-      <a href="https://github.com/LaurentPointCa/riviere" target="_blank" rel="noopener">⌥ GitHub — Modèle &amp; prévisions</a>
-      <a href="https://github.com/LaurentPointCa/RiviereApp" target="_blank" rel="noopener">⌥ GitHub — App iOS</a>
+  <div class="disclaimer" id="disclaimer">
+    <div class="disclaimer-header" onclick="toggleDisclaimer()">
+      <span class="disclaimer-header-text" id="disclaimer-header-text">Avertissement</span>
+      <button class="disclaimer-toggle" id="disclaimer-toggle" aria-label="Fermer">✕</button>
     </div>
+    <div class="disclaimer-body">
+      <p>Ce projet est une simple expérimentation que j'ai créé afin de me familiariser
+      avec Claude Code. Aucune donnée ni méthode utilisée ici n'est réputée être valide,
+      fonctionnelle ni exacte.</p>
+      <p>Les données de ce dépôt GitHub ainsi que celles produites par les outils ne
+      peuvent pas être utilisées pour aucune fin de planification ou de décision
+      par rapport au niveau de la rivière.</p>
+      <p>L'auteur se dégage de toute responsabilité face à l'utilisation par quiconque
+      des données ou outils sur ce site. Le tout n'est qu'une exploration et ne sert
+      qu'à discuter des outils et techniques explorés ici.</p>
+      <p class="signature">—Laurent</p>
+      <div class="gh-links">
+        <a href="https://github.com/LaurentPointCa/riviere" target="_blank" rel="noopener">⌥ GitHub — Modèle &amp; prévisions</a>
+        <a href="https://github.com/LaurentPointCa/RiviereApp" target="_blank" rel="noopener">⌥ GitHub — App iOS</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Intro -->
+  <div class="intro">
+    <h1>Prévisions sur 5 jours du flux et niveau de la Rivière-des-Prairies à la station 043301</h1>
+    <p>Ce site présente les prévisions hydrologiques générées deux fois par jour par un modèle
+    d'apprentissage automatique (LightGBM). En haut de page, le graphique des <strong>30 derniers
+    jours</strong> met en contexte les conditions récentes et la prévision sur 5 jours. Suit un
+    <strong>tableau des prévisions</strong> quotidiennes de débit (m³/s) et de niveau (m) pour
+    les cinq prochains jours. Enfin, le graphique <strong>1 an</strong> replace ces données dans
+    leur contexte saisonnier historique.</p>
   </div>
 
   <!-- 30-day graph -->
@@ -190,15 +270,55 @@
   </div>
 
   <script>
+    // ── Disclaimer collapse ───────────────────────────────────────────────────
+    const COOKIE = 'disclaimer_collapsed';
+
+    function getCookie(name) {
+      return document.cookie.split('; ').reduce((val, part) => {
+        const [k, v] = part.split('=');
+        return k === name ? v : val;
+      }, null);
+    }
+
+    function setCookie(name, value, days) {
+      const expires = new Date(Date.now() + days * 864e5).toUTCString();
+      document.cookie = `${name}=${value}; expires=${expires}; path=/; SameSite=Lax`;
+    }
+
+    function applyState(collapsed) {
+      const box    = document.getElementById('disclaimer');
+      const label  = document.getElementById('disclaimer-header-text');
+      const btn    = document.getElementById('disclaimer-toggle');
+      if (collapsed) {
+        box.classList.add('collapsed');
+        label.textContent = 'Informations importantes concernant les données sur ce site.';
+        btn.textContent   = '＋';
+        btn.setAttribute('aria-label', 'Ouvrir');
+      } else {
+        box.classList.remove('collapsed');
+        label.textContent = 'Avertissement';
+        btn.textContent   = '✕';
+        btn.setAttribute('aria-label', 'Fermer');
+      }
+    }
+
+    function toggleDisclaimer() {
+      const collapsed = !document.getElementById('disclaimer').classList.contains('collapsed');
+      applyState(collapsed);
+      setCookie(COOKIE, collapsed ? '1' : '0', 365);
+    }
+
+    // Apply saved preference on load
+    applyState(getCookie(COOKIE) === '1');
+
+    // ── Forecast table ────────────────────────────────────────────────────────
     fetch('forecast.json')
       .then(r => r.json())
       .then(data => {
-        // Meta line
         const generated = new Date(data.generated_at);
         document.getElementById('meta').textContent =
           'Généré le ' + generated.toLocaleString('fr-CA', { dateStyle: 'medium', timeStyle: 'short' });
 
-        // Build table
         const rows = data.forecast.map(d => `
           <tr>
             <td>J${d.day}</td>
