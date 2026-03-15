@@ -16,7 +16,6 @@
       --border-2:    rgba(255,255,255,0.12);
       --accent:      #0ee7c5;
       --accent-dim:  rgba(14, 231, 197, 0.10);
-      --accent-glow: rgba(14, 231, 197, 0.18);
       --text:        #dbe8f5;
       --text-2:      #8ba4be;
       --muted:       #4a6280;
@@ -29,25 +28,33 @@
     body {
       font-family: 'Lexend', sans-serif;
       background-color: var(--bg);
-      background-image: radial-gradient(rgba(14, 231, 197, 0.025) 1px, transparent 1px);
-      background-size: 22px 22px;
+      background-image:
+        radial-gradient(rgba(14, 231, 197, 0.025) 1px, transparent 1px),
+        linear-gradient(rgba(7,16,31,0.94), rgba(7,16,31,0.94)),
+        url('basin_map.png');
+      background-size: 22px 22px, 100% 100%, cover;
+      background-position: 0 0, 0 0, center center;
+      background-repeat: repeat, no-repeat, no-repeat;
+      background-attachment: scroll, fixed, fixed;
       color: var(--text);
-      max-width: 520px;
-      margin: 0 auto;
-      padding-bottom: 88px;
       min-height: 100vh;
     }
 
-    /* ── Header ─────────────────────────────────────────────────────────────── */
-    .site-header {
-      padding: 0 20px 22px;
-    }
-
+    /* ── Top accent line ─────────────────────────────────────────────────────── */
     .header-rule {
       height: 3px;
       background: linear-gradient(90deg, var(--accent) 0%, rgba(14,231,197,0.15) 55%, transparent 100%);
-      margin-bottom: 22px;
     }
+
+    /* ── Layout ──────────────────────────────────────────────────────────────── */
+    .site-wrap {
+      max-width: 520px;
+      margin: 0 auto;
+      padding-bottom: 88px;
+    }
+
+    /* ── Header ──────────────────────────────────────────────────────────────── */
+    .site-header { padding: 20px 20px 22px; }
 
     .station-badge {
       display: inline-flex;
@@ -65,47 +72,41 @@
       text-transform: uppercase;
       margin-bottom: 14px;
     }
-
     .station-badge::before {
       content: '';
-      width: 6px;
-      height: 6px;
+      width: 6px; height: 6px;
       border-radius: 50%;
       background: var(--accent);
       flex-shrink: 0;
       animation: blink 2.4s ease-in-out infinite;
     }
-
     @keyframes blink {
       0%, 100% { opacity: 1; }
       50%       { opacity: 0.25; }
     }
 
     .site-title {
-      font-size: 28px;
+      font-size: 30px;
       font-weight: 700;
       letter-spacing: -0.025em;
       line-height: 1.1;
-      color: var(--text);
-      margin-bottom: 6px;
+      margin-bottom: 7px;
     }
-
     .site-subtitle {
-      font-size: 13px;
+      font-size: 14px;
       font-weight: 300;
       color: var(--text-2);
       letter-spacing: 0.01em;
     }
-
     .generated-time {
       font-family: 'Fira Mono', monospace;
-      font-size: 10px;
+      font-size: 11px;
       color: var(--muted);
-      margin-top: 6px;
+      margin-top: 7px;
       letter-spacing: 0.03em;
     }
 
-    /* ── Cards ──────────────────────────────────────────────────────────────── */
+    /* ── Cards ───────────────────────────────────────────────────────────────── */
     .card {
       margin: 10px 12px 0;
       background: var(--surface);
@@ -113,7 +114,6 @@
       border-radius: 14px;
       overflow: hidden;
     }
-
     .card-header {
       display: flex;
       align-items: center;
@@ -121,44 +121,41 @@
       padding: 13px 16px 11px;
       border-bottom: 1px solid var(--border);
     }
-
     .card-title {
-      font-size: 10px;
+      font-size: 11px;
       font-weight: 600;
-      letter-spacing: 0.1em;
+      letter-spacing: 0.10em;
       text-transform: uppercase;
       color: var(--muted);
     }
 
-    /* ── Graphs ─────────────────────────────────────────────────────────────── */
+    /* ── Graphs ──────────────────────────────────────────────────────────────── */
     .forecast-img {
       width: 100%;
       display: block;
       cursor: zoom-in;
     }
-
     .zoom-hint {
       font-family: 'Fira Mono', monospace;
-      font-size: 10px;
+      font-size: 11px;
       color: var(--muted);
       text-align: right;
       padding: 7px 14px 10px;
       letter-spacing: 0.04em;
     }
 
-    /* ── Forecast table ─────────────────────────────────────────────────────── */
+    /* ── Forecast table ──────────────────────────────────────────────────────── */
     .forecast-col-headers {
       display: grid;
-      grid-template-columns: 44px 1fr 88px 84px;
+      grid-template-columns: 44px 1fr 88px 72px;
       padding: 9px 16px 7px;
       gap: 8px;
       border-bottom: 1px solid var(--border);
     }
-
     .col-label {
-      font-size: 9px;
+      font-size: 10px;
       font-weight: 600;
-      letter-spacing: 0.1em;
+      letter-spacing: 0.10em;
       text-transform: uppercase;
       color: var(--muted);
     }
@@ -168,9 +165,9 @@
 
     .f-row {
       display: grid;
-      grid-template-columns: 44px 1fr 88px 84px;
+      grid-template-columns: 44px 1fr 88px 72px;
       align-items: center;
-      padding: 11px 16px;
+      padding: 12px 16px;
       gap: 8px;
       border-top: 1px solid var(--border);
     }
@@ -183,66 +180,56 @@
       color: var(--accent);
       letter-spacing: 0.06em;
     }
-
-    .f-date { font-size: 13px; font-weight: 400; color: var(--text); line-height: 1.2; }
-    .f-date .dow { display: block; font-size: 10px; color: var(--muted); font-weight: 300; margin-top: 2px; }
+    .f-date { font-size: 14px; font-weight: 400; color: var(--text); line-height: 1.2; }
+    .f-date .dow {
+      display: block;
+      font-size: 11px;
+      color: var(--text-2);
+      font-weight: 300;
+      margin-top: 3px;
+    }
 
     .f-flow { text-align: right; }
     .flow-val {
       font-family: 'Fira Mono', monospace;
-      font-size: 15px;
+      font-size: 16px;
       font-weight: 500;
       color: var(--text);
     }
     .flow-unit {
       display: block;
       font-family: 'Fira Mono', monospace;
-      font-size: 9px;
+      font-size: 10px;
       color: var(--muted);
-      margin-top: 2px;
+      margin-top: 3px;
       letter-spacing: 0.03em;
     }
 
     .f-level { text-align: right; }
     .level-val {
       font-family: 'Fira Mono', monospace;
-      font-size: 15px;
+      font-size: 16px;
       font-weight: 500;
     }
     .level-val.ok      { color: var(--text); }
     .level-val.warning { color: var(--warning); }
     .level-val.danger  { color: var(--danger); }
 
-    .level-bar-track {
-      height: 3px;
-      background: rgba(255,255,255,0.05);
-      border-radius: 2px;
-      margin-top: 6px;
-      overflow: hidden;
-    }
-    .level-bar-fill {
-      height: 100%;
-      border-radius: 2px;
-    }
-    .level-bar-fill.ok      { background: var(--accent); opacity: 0.55; }
-    .level-bar-fill.warning { background: var(--warning); }
-    .level-bar-fill.danger  { background: var(--danger); }
-
     .danger-note {
       padding: 9px 16px 13px;
       font-family: 'Fira Mono', monospace;
-      font-size: 10px;
+      font-size: 11px;
       color: var(--muted);
       border-top: 1px solid var(--border);
       letter-spacing: 0.03em;
     }
     .danger-note span { color: var(--danger); }
 
-    /* ── Loading / error ────────────────────────────────────────────────────── */
-    .loading { color: var(--muted); font-size: 13px; padding: 20px 16px; text-align: center; }
-    .error   { color: var(--danger); font-size: 13px; padding: 20px 16px; text-align: center; }
+    /* ── Loading / error ─────────────────────────────────────────────────────── */
+    .loading { color: var(--muted); font-size: 14px; padding: 22px 16px; text-align: center; }
+    .error   { color: var(--danger); font-size: 14px; padding: 22px 16px; text-align: center; }
 
-    /* ── Disclaimer ─────────────────────────────────────────────────────────── */
+    /* ── Disclaimer ──────────────────────────────────────────────────────────── */
     .disclaimer {
       margin: 10px 12px 0;
       background: rgba(255, 170, 68, 0.05);
@@ -250,7 +237,6 @@
       border-radius: 12px;
       overflow: hidden;
     }
-
     .disclaimer-header {
       display: flex;
       align-items: center;
@@ -260,18 +246,15 @@
       user-select: none;
       border-bottom: 1px solid rgba(255, 170, 68, 0.12);
     }
-
     .disclaimer.collapsed .disclaimer-header { border-bottom: none; }
     .disclaimer.collapsed .disclaimer-body   { display: none; }
-
     .disclaimer-header-text {
-      font-size: 10px;
+      font-size: 11px;
       font-weight: 600;
       letter-spacing: 0.08em;
       text-transform: uppercase;
       color: rgba(255, 170, 68, 0.8);
     }
-
     .disclaimer-toggle {
       background: none;
       border: none;
@@ -282,18 +265,14 @@
       flex-shrink: 0;
       line-height: 1;
     }
-
     .disclaimer-body { padding: 0 14px 14px; }
-
     .disclaimer-body p {
-      font-size: 12px;
+      font-size: 13px;
       line-height: 1.65;
       color: rgba(255,255,255,0.42);
       margin-top: 10px;
     }
-
     .disclaimer-body .signature { font-style: italic; color: rgba(255,255,255,0.25); }
-
     .disclaimer .gh-links {
       margin-top: 12px;
       padding-top: 10px;
@@ -302,16 +281,15 @@
       gap: 14px;
       flex-wrap: wrap;
     }
-
     .disclaimer .gh-links a {
-      font-size: 11px;
+      font-size: 12px;
       color: var(--accent);
       text-decoration: none;
       opacity: 0.75;
     }
     .disclaimer .gh-links a:hover { opacity: 1; }
 
-    /* ── Bottom nav ─────────────────────────────────────────────────────────── */
+    /* ── Mobile bottom nav ───────────────────────────────────────────────────── */
     .btn-bar {
       position: fixed;
       bottom: 0; left: 0; right: 0;
@@ -325,30 +303,31 @@
       max-width: 520px;
       margin: 0 auto;
     }
-
     .btn-bar a {
       flex: 1;
       display: block;
       text-align: center;
-      padding: 9px 0;
+      padding: 10px 0;
       background: var(--surface-2);
       border: 1px solid var(--border-2);
       color: var(--text-2);
       border-radius: 10px;
       text-decoration: none;
-      font-size: 12px;
+      font-size: 13px;
       font-weight: 500;
       letter-spacing: 0.02em;
       transition: color 0.15s, border-color 0.15s, background 0.15s;
     }
-
     .btn-bar a:hover {
       color: var(--accent);
       border-color: rgba(14, 231, 197, 0.3);
       background: var(--accent-dim);
     }
 
-    /* ── Lightbox ───────────────────────────────────────────────────────────── */
+    /* ── Desktop links (hidden on mobile) ────────────────────────────────────── */
+    .desktop-links { display: none; }
+
+    /* ── Lightbox ────────────────────────────────────────────────────────────── */
     #lb {
       display: none;
       position: fixed;
@@ -360,7 +339,6 @@
       touch-action: none;
     }
     #lb.open { display: flex; }
-
     #lb img {
       max-width: 100vw;
       max-height: 100vh;
@@ -372,7 +350,6 @@
       display: block;
     }
     #lb img.dragging { cursor: grabbing; }
-
     #lb-close {
       position: fixed;
       top: 14px; right: 14px;
@@ -390,68 +367,154 @@
       z-index: 10000;
     }
     #lb-close:hover { background: rgba(255,255,255,0.22); }
+
+    /* ── Desktop layout ──────────────────────────────────────────────────────── */
+    @media (min-width: 800px) {
+      body { padding-bottom: 0; }
+
+      .site-wrap {
+        max-width: 1100px;
+        display: grid;
+        grid-template-columns: 400px 1fr;
+        grid-template-rows: auto;
+        column-gap: 16px;
+        padding: 0 24px 48px;
+        align-items: start;
+      }
+
+      /* Full-width top rule */
+      .header-rule {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 0 24px;
+        background: none;
+        position: relative;
+      }
+      .header-rule::after {
+        content: '';
+        display: block;
+        height: 3px;
+        background: linear-gradient(90deg, var(--accent) 0%, rgba(14,231,197,0.15) 55%, transparent 100%);
+      }
+
+      .col-left  { grid-column: 1; }
+      .col-right { grid-column: 2; padding-top: 10px; }
+
+      /* Remove side margins — columns provide structure */
+      .site-header { padding: 20px 0 22px; }
+
+      .card,
+      .disclaimer { margin-left: 0; margin-right: 0; }
+
+      /* Desktop links instead of fixed nav */
+      .btn-bar { display: none; }
+      .desktop-links {
+        display: flex;
+        gap: 8px;
+        margin: 10px 0 0;
+      }
+      .desktop-links a {
+        flex: 1;
+        display: block;
+        text-align: center;
+        padding: 10px 0;
+        background: var(--surface-2);
+        border: 1px solid var(--border-2);
+        color: var(--text-2);
+        border-radius: 10px;
+        text-decoration: none;
+        font-size: 13px;
+        font-weight: 500;
+        letter-spacing: 0.02em;
+        transition: color 0.15s, border-color 0.15s, background 0.15s;
+      }
+      .desktop-links a:hover {
+        color: var(--accent);
+        border-color: rgba(14, 231, 197, 0.3);
+        background: var(--accent-dim);
+      }
+    }
   </style>
 </head>
 <body>
 
-  <!-- Header -->
-  <header class="site-header">
-    <div class="header-rule"></div>
-    <div class="station-badge">CEHQ · 043301 · LightGBM</div>
-    <h1 class="site-title">Rivière des Prairies</h1>
-    <p class="site-subtitle">Prévisions hydrologiques sur 5 jours</p>
-    <p class="generated-time" id="generated-time">—</p>
-  </header>
+  <div class="header-rule"></div>
 
-  <!-- Disclaimer -->
-  <div class="disclaimer" id="disclaimer">
-    <div class="disclaimer-header" onclick="toggleDisclaimer()">
-      <span class="disclaimer-header-text" id="disclaimer-header-text">Avertissement</span>
-      <button class="disclaimer-toggle" id="disclaimer-toggle" aria-label="Fermer">✕</button>
-    </div>
-    <div class="disclaimer-body">
-      <p>Ce projet est une simple expérimentation créée afin de me familiariser avec Claude Code.
-      Aucune donnée ni méthode utilisée ici n'est réputée être valide, fonctionnelle ni exacte.</p>
-      <p>Les données de ce dépôt ainsi que celles produites par les outils ne peuvent pas être
-      utilisées pour aucune fin de planification ou de décision par rapport au niveau de la rivière.
-      L'auteur se dégage de toute responsabilité face à l'utilisation de ces données.</p>
-      <p class="signature">—Laurent</p>
-      <div class="gh-links">
-        <a href="https://github.com/LaurentPointCa/riviere" target="_blank" rel="noopener">⌥ GitHub — Modèle &amp; prévisions</a>
-        <a href="https://github.com/LaurentPointCa/RiviereApp" target="_blank" rel="noopener">⌥ GitHub — App iOS</a>
+  <div class="site-wrap">
+
+    <!-- Left column -->
+    <div class="col-left">
+
+      <header class="site-header">
+        <div class="station-badge">CEHQ · 043301 · LightGBM</div>
+        <h1 class="site-title">Rivière des Prairies</h1>
+        <p class="site-subtitle">Prévisions hydrologiques sur 5 jours</p>
+        <p class="generated-time" id="generated-time">—</p>
+      </header>
+
+      <!-- Disclaimer -->
+      <div class="disclaimer" id="disclaimer">
+        <div class="disclaimer-header" onclick="toggleDisclaimer()">
+          <span class="disclaimer-header-text" id="disclaimer-header-text">Avertissement</span>
+          <button class="disclaimer-toggle" id="disclaimer-toggle" aria-label="Fermer">✕</button>
+        </div>
+        <div class="disclaimer-body">
+          <p>Ce projet est une simple expérimentation créée afin de me familiariser avec Claude Code.
+          Aucune donnée ni méthode utilisée ici n'est réputée être valide, fonctionnelle ni exacte.</p>
+          <p>Les données de ce dépôt ainsi que celles produites par les outils ne peuvent pas être
+          utilisées pour aucune fin de planification ou de décision par rapport au niveau de la rivière.
+          L'auteur se dégage de toute responsabilité face à l'utilisation de ces données.</p>
+          <p class="signature">—Laurent</p>
+          <div class="gh-links">
+            <a href="https://github.com/LaurentPointCa/riviere" target="_blank" rel="noopener">⌥ GitHub — Modèle &amp; prévisions</a>
+            <a href="https://github.com/LaurentPointCa/RiviereApp" target="_blank" rel="noopener">⌥ GitHub — App iOS</a>
+          </div>
+        </div>
       </div>
-    </div>
-  </div>
 
-  <!-- 30-day graph -->
-  <div class="card">
-    <div class="card-header">
-      <span class="card-title">30 derniers jours</span>
-    </div>
-    <img class="forecast-img" src="forecast_30d.png" alt="Graphique 30 jours" />
-    <p class="zoom-hint">↗ cliquer pour zoomer</p>
-  </div>
+      <!-- Forecast table -->
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">Prévisions 5 jours</span>
+        </div>
+        <div id="table-container"><p class="loading">Chargement…</p></div>
+      </div>
 
-  <!-- Forecast table -->
-  <div class="card">
-    <div class="card-header">
-      <span class="card-title">Prévisions 5 jours</span>
-    </div>
-    <div id="table-container"><p class="loading">Chargement…</p></div>
-  </div>
+      <!-- Desktop nav links -->
+      <div class="desktop-links">
+        <a href="https://www.cehq.gouv.qc.ca/prevision/previsions.asp?secteur=Archipel" target="_blank" rel="noopener">CEHQ</a>
+        <a href="https://rivieredesoutaouais.ca/location/carillon-2/" target="_blank" rel="noopener">Carillon</a>
+        <a href="https://www.cruesgrandmontreal.ca/" target="_blank" rel="noopener">Crues MTL</a>
+      </div>
 
-  <!-- 1-year graph -->
-  <div class="card">
-    <div class="card-header">
-      <span class="card-title">Contexte annuel</span>
-    </div>
-    <img class="forecast-img" src="forecast.png" alt="Graphique 1 an" />
-    <p class="zoom-hint">↗ cliquer pour zoomer</p>
-  </div>
+    </div><!-- /col-left -->
 
-  <div style="height: 10px;"></div>
+    <!-- Right column -->
+    <div class="col-right">
 
-  <!-- Bottom nav -->
+      <!-- 30-day graph -->
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">30 derniers jours</span>
+        </div>
+        <img class="forecast-img" src="forecast_30d.png" alt="Graphique 30 jours" />
+        <p class="zoom-hint">↗ cliquer pour zoomer</p>
+      </div>
+
+      <!-- 1-year graph -->
+      <div class="card" style="margin-top:10px;">
+        <div class="card-header">
+          <span class="card-title">Contexte annuel</span>
+        </div>
+        <img class="forecast-img" src="forecast.png" alt="Graphique 1 an" />
+        <p class="zoom-hint">↗ cliquer pour zoomer</p>
+      </div>
+
+    </div><!-- /col-right -->
+
+  </div><!-- /site-wrap -->
+
+  <!-- Mobile bottom nav (hidden on desktop) -->
   <nav class="btn-bar">
     <a href="https://www.cehq.gouv.qc.ca/prevision/previsions.asp?secteur=Archipel" target="_blank" rel="noopener">CEHQ</a>
     <a href="https://rivieredesoutaouais.ca/location/carillon-2/" target="_blank" rel="noopener">Carillon</a>
@@ -573,7 +636,6 @@
 
     // ── Disclaimer ────────────────────────────────────────────────────────────
     const COOKIE = 'disclaimer_collapsed';
-
     function getCookie(name) {
       return document.cookie.split('; ').reduce((v, p) => {
         const [k, val] = p.split('='); return k === name ? val : v;
@@ -605,18 +667,13 @@
     applyState(getCookie(COOKIE) === '1');
 
     // ── Forecast table ────────────────────────────────────────────────────────
-    const FR_DAYS     = ['Dim.','Lun.','Mar.','Mer.','Jeu.','Ven.','Sam.'];
-    const DANGER      = 22.5;
-    const LEVEL_MIN   = 19.0;
-    const LEVEL_RANGE = 4.5;   // 19 → 23.5
+    const FR_DAYS = ['Dimanche','Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi'];
+    const DANGER  = 22.5;
 
     function levelCls(l) {
       if (l >= DANGER)       return 'danger';
       if (l >= DANGER - 1.0) return 'warning';
       return 'ok';
-    }
-    function levelPct(l) {
-      return Math.min(100, Math.max(0, (l - LEVEL_MIN) / LEVEL_RANGE * 100)).toFixed(1);
     }
 
     fetch('forecast.json')
@@ -639,9 +696,6 @@
             </div>
             <div class="f-level">
               <span class="level-val ${cls}">${d.level_m.toFixed(3)}</span>
-              <div class="level-bar-track">
-                <div class="level-bar-fill ${cls}" style="width:${levelPct(d.level_m)}%"></div>
-              </div>
             </div>
           </div>`;
         }).join('');
