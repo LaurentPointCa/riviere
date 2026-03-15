@@ -38,6 +38,6 @@ Personal experiment built entirely with Claude Code. No outputs are validated or
 - ~~More upstream CEHQ stations~~ (added 02KF005 + 02LA015 ECCC stations)
 - ~~Seasonal/regime-specific models~~ (done: cold Nov–May / warm Jun–Oct)
 - Recursive multi-step forecasting
-- Ice flag features (CEHQ marks ice-corrected values with `*`)
+- ~~Ice flag features~~ (won't do: CEHQ historical files have no ice flags — remark codes are quality/method codes, not ice indicators. CEHQ applies corrections before publishing. Temperature lags and snow depth already encode ice season implicitly.)
 - Proper walk-forward cross-validation
 - Prediction intervals
