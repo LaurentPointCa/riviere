@@ -20,7 +20,6 @@ sys.path.insert(0, str(Path(__file__).parent))
 
 from load_data import load_flow, load_level, load_upstream_level, load_ottawa_flow, load_hull_level
 from load_climate import load_climate
-from load_cgm import load_cgm_history, CGM_COLS
 
 DAM_ERA_START = "1978-01-01"
 
@@ -31,7 +30,7 @@ LAG_DAYS = [1, 2, 3, 4, 5, 7, 14, 30]
 LAG_VARS_HYDRO = [
     "flow_m3s", "level_m", "upstream_level_m", "ottawa_flow_m3s", "hull_level_m",
     "temperature_2m_mean", "precipitation_sum", "rain_sum", "snow_depth",
-] + CGM_COLS
+]
 
 
 def _add_lag_features(df: pd.DataFrame) -> pd.DataFrame:
@@ -79,13 +78,6 @@ def _add_rolling_features(df: pd.DataFrame) -> pd.DataFrame:
             new_cols[f"hull_level_roll_mean_{suffix}"] = df["hull_level_m"].rolling(window, min_periods=1).mean()
         for window, suffix in [(3, "3d"), (7, "7d"), (14, "14d")]:
             new_cols[f"hull_level_roll_max_{suffix}"] = df["hull_level_m"].rolling(window, min_periods=1).max()
-
-    # CGM upstream station rolling features
-    for col in CGM_COLS:
-        if col not in df.columns:
-            continue
-        for window, suffix in [(3, "3d"), (7, "7d"), (14, "14d")]:
-            new_cols[f"{col}_roll_mean_{suffix}"] = df[col].rolling(window, min_periods=1).mean()
 
     # Climate rolling features
     for window, suffix in [(7, "7d"), (14, "14d"), (30, "30d")]:
@@ -191,26 +183,6 @@ def _add_forecast_features(df: pd.DataFrame) -> pd.DataFrame:
     return pd.concat([df, pd.DataFrame(new_cols, index=df.index)], axis=1)
 
 
-def _add_cgm_forecast_features(df: pd.DataFrame) -> pd.DataFrame:
-    """
-    Add 5-day CGM upstream forecast features.
-
-    During training, observed future values serve as a perfect-forecast proxy
-    (e.g. rdp09_level_m_forecast_t1 = tomorrow's actual rdp09 level).
-    At inference time, predict.py replaces these with real CGM forecast values.
-
-    Most training rows will be NaN (CGM cache only covers recent days);
-    LightGBM handles missing values natively.
-    """
-    new_cols = {}
-    for col in CGM_COLS:
-        if col not in df.columns:
-            continue
-        for h in range(1, 6):
-            new_cols[f"{col}_forecast_t{h}"] = df[col].shift(-h)
-    return pd.concat([df, pd.DataFrame(new_cols, index=df.index)], axis=1)
-
-
 def _add_targets(df: pd.DataFrame) -> pd.DataFrame:
     new_cols = {}
     for h in range(1, 6):
@@ -235,7 +207,6 @@ def build_dataset(drop_incomplete: bool = True) -> tuple[pd.DataFrame, pd.DataFr
     level = load_level()[["level_m"]]
     upstream = load_upstream_level()[["upstream_level_m"]]
     climate = load_climate()
-    cgm = load_cgm_history()
     ottawa = load_ottawa_flow()[["ottawa_flow_m3s"]]
     hull   = load_hull_level()[["hull_level_m"]]
 
@@ -244,8 +215,7 @@ def build_dataset(drop_incomplete: bool = True) -> tuple[pd.DataFrame, pd.DataFr
           .join(upstream, how="outer")
           .join(ottawa,   how="outer")
           .join(hull,     how="outer")
-          .join(climate,  how="outer")
-          .join(cgm,      how="outer"))
+          .join(climate,  how="outer"))
     df.index.name = "date"
     df = df.sort_index()
 
@@ -262,7 +232,6 @@ def build_dataset(drop_incomplete: bool = True) -> tuple[pd.DataFrame, pd.DataFr
     df = _add_seasonal_features(df)
     df = _add_flow_anomaly(df)
     df = _add_forecast_features(df)
-    df = _add_cgm_forecast_features(df)
 
     # ── 3. Build targets ────────────────────────────────────────────────────
     df = _add_targets(df)

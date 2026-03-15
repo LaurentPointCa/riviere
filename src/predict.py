@@ -18,7 +18,6 @@ sys.path.insert(0, str(Path(__file__).parent))
 from features import build_dataset
 from model import load_model, season_for
 from load_forecast import load_weather_forecast
-from load_cgm import load_cgm_forecast, CGM_COLS
 
 MODEL_PATH = Path("models/lgbm_forecast.pkl")
 
@@ -50,20 +49,6 @@ def _inject_weather_forecast(row: pd.DataFrame, wf: pd.DataFrame) -> pd.DataFram
     row["precip_forecast_sum_5d"] = sum(float(row[f"precip_forecast_t{h}"].iloc[0]) for h in range(1, 6))
     row["temp_forecast_mean_5d"]  = sum(float(row[f"temp_forecast_t{h}"].iloc[0])   for h in range(1, 6)) / 5
 
-    return row
-
-
-def _inject_cgm_forecast(row: pd.DataFrame, cgm_fc: pd.DataFrame) -> pd.DataFrame:
-    """Replace CGM perfect-forecast proxy columns with real CGM forecast values."""
-    row = row.copy()
-    for h in range(1, 6):
-        if h > len(cgm_fc):
-            break
-        fc = cgm_fc.iloc[h - 1]
-        for col in CGM_COLS:
-            feat = f"{col}_forecast_t{h}"
-            if feat in row.columns and col in fc.index:
-                row[feat] = fc[col]
     return row
 
 
@@ -104,18 +89,6 @@ def forecast(anchor_date: pd.Timestamp, X: pd.DataFrame) -> pd.DataFrame:
                 print("Weather forecast injected.")
         except Exception as e:
             print(f"Warning: could not load weather forecast ({e}); using ERA5 proxy.")
-
-        try:
-            cgm_fc = load_cgm_forecast(n_days=5)
-            future_cgm = cgm_fc[cgm_fc.index > anchor_date].head(5)
-            if not future_cgm.empty:
-                if len(future_cgm) < 5:
-                    print(f"Warning: only {len(future_cgm)}/5 CGM forecast days available; "
-                          f"t+{len(future_cgm)+1}..t+5 will use observed proxy.")
-                row = _inject_cgm_forecast(row, future_cgm)
-                print("CGM upstream forecast injected.")
-        except Exception as e:
-            print(f"Warning: could not load CGM forecast ({e}); using proxy.")
 
     preds = {target: float(model.predict(row)[0]) for target, model in models.items()}
 
