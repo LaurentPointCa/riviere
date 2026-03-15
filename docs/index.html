@@ -4,118 +4,251 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Rivière des Prairies — Prévisions</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&family=Fira+Mono:wght@400;500;700&display=swap" rel="stylesheet">
   <style>
+    :root {
+      --bg:          #07101f;
+      --surface:     #0c1829;
+      --surface-2:   #111f33;
+      --border:      rgba(255,255,255,0.07);
+      --border-2:    rgba(255,255,255,0.12);
+      --accent:      #0ee7c5;
+      --accent-dim:  rgba(14, 231, 197, 0.10);
+      --accent-glow: rgba(14, 231, 197, 0.18);
+      --text:        #dbe8f5;
+      --text-2:      #8ba4be;
+      --muted:       #4a6280;
+      --danger:      #ff5c7a;
+      --warning:     #ffaa44;
+    }
+
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      background: #f2f2f7;
-      color: #1c1c1e;
-      max-width: 600px;
+      font-family: 'Lexend', sans-serif;
+      background-color: var(--bg);
+      background-image: radial-gradient(rgba(14, 231, 197, 0.025) 1px, transparent 1px);
+      background-size: 22px 22px;
+      color: var(--text);
+      max-width: 520px;
       margin: 0 auto;
-      padding-bottom: 80px;
+      padding-bottom: 88px;
+      min-height: 100vh;
     }
 
-    section { background: #fff; margin: 12px 0 0; padding: 12px 16px; }
-
-    h2 {
-      font-size: 17px;
-      font-weight: 600;
-      margin-bottom: 10px;
+    /* ── Header ─────────────────────────────────────────────────────────────── */
+    .site-header {
+      padding: 0 20px 22px;
     }
 
-    img.forecast-img {
-      width: 100%;
-      display: block;
+    .header-rule {
+      height: 3px;
+      background: linear-gradient(90deg, var(--accent) 0%, rgba(14,231,197,0.15) 55%, transparent 100%);
+      margin-bottom: 22px;
     }
 
-    .meta {
-      font-size: 13px;
-      color: #6c6c70;
-      margin-bottom: 10px;
-    }
-
-    /* Table */
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 13px;
-    }
-
-    thead tr { background: #f2f2f7; }
-
-    thead th {
-      padding: 8px;
-      font-weight: 600;
-      color: #6c6c70;
-      text-align: right;
-    }
-
-    thead th:first-child, thead th:nth-child(2) { text-align: left; }
-
-    tbody tr { border-top: 1px solid #e5e5ea; }
-
-    tbody td {
-      padding: 8px;
-      text-align: right;
-    }
-
-    tbody td:first-child, tbody td:nth-child(2) { text-align: left; }
-
-    .danger-note {
-      font-size: 12px;
-      color: #6c6c70;
-      margin-top: 6px;
-    }
-
-    /* Buttons */
-    .btn-bar {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      background: #fff;
-      border-top: 1px solid #e5e5ea;
-      padding: 10px 16px 20px;
-      display: flex;
-      gap: 8px;
-      max-width: 600px;
-      margin: 0 auto;
-    }
-
-    .btn-bar a {
-      flex: 1;
-      display: block;
-      text-align: center;
-      padding: 8px 0;
-      background: #007aff;
-      color: #fff;
-      border-radius: 8px;
-      text-decoration: none;
-      font-size: 15px;
+    .station-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      font-family: 'Fira Mono', monospace;
+      font-size: 10px;
       font-weight: 500;
+      color: var(--accent);
+      background: var(--accent-dim);
+      border: 1px solid rgba(14, 231, 197, 0.22);
+      padding: 4px 11px 4px 9px;
+      border-radius: 20px;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      margin-bottom: 14px;
     }
 
-    .btn-bar a:hover { background: #0062cc; }
+    .station-badge::before {
+      content: '';
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--accent);
+      flex-shrink: 0;
+      animation: blink 2.4s ease-in-out infinite;
+    }
 
-    /* Disclaimer box */
-    .disclaimer {
-      background: #fff9e6;
-      border: 1px solid #f0c040;
-      border-radius: 10px;
-      margin: 12px 12px 0;
-      font-size: 14px;
-      line-height: 1.5;
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50%       { opacity: 0.25; }
+    }
+
+    .site-title {
+      font-size: 28px;
+      font-weight: 700;
+      letter-spacing: -0.025em;
+      line-height: 1.1;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+
+    .site-subtitle {
+      font-size: 13px;
+      font-weight: 300;
+      color: var(--text-2);
+      letter-spacing: 0.01em;
+    }
+
+    .generated-time {
+      font-family: 'Fira Mono', monospace;
+      font-size: 10px;
+      color: var(--muted);
+      margin-top: 6px;
+      letter-spacing: 0.03em;
+    }
+
+    /* ── Cards ──────────────────────────────────────────────────────────────── */
+    .card {
+      margin: 10px 12px 0;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
       overflow: hidden;
     }
 
-    /* Collapsed state: just the header bar */
-    .disclaimer.collapsed .disclaimer-header {
-      border-bottom: none;
+    .card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 13px 16px 11px;
+      border-bottom: 1px solid var(--border);
     }
 
-    .disclaimer.collapsed .disclaimer-body {
-      display: none;
+    .card-title {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    /* ── Graphs ─────────────────────────────────────────────────────────────── */
+    .forecast-img {
+      width: 100%;
+      display: block;
+      cursor: zoom-in;
+    }
+
+    .zoom-hint {
+      font-family: 'Fira Mono', monospace;
+      font-size: 10px;
+      color: var(--muted);
+      text-align: right;
+      padding: 7px 14px 10px;
+      letter-spacing: 0.04em;
+    }
+
+    /* ── Forecast table ─────────────────────────────────────────────────────── */
+    .forecast-col-headers {
+      display: grid;
+      grid-template-columns: 44px 1fr 88px 84px;
+      padding: 9px 16px 7px;
+      gap: 8px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .col-label {
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .col-label.r { text-align: right; }
+
+    .forecast-rows { padding: 2px 0 4px; }
+
+    .f-row {
+      display: grid;
+      grid-template-columns: 44px 1fr 88px 84px;
+      align-items: center;
+      padding: 11px 16px;
+      gap: 8px;
+      border-top: 1px solid var(--border);
+    }
+    .f-row:first-child { border-top: none; }
+
+    .f-day {
+      font-family: 'Fira Mono', monospace;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--accent);
+      letter-spacing: 0.06em;
+    }
+
+    .f-date { font-size: 13px; font-weight: 400; color: var(--text); line-height: 1.2; }
+    .f-date .dow { display: block; font-size: 10px; color: var(--muted); font-weight: 300; margin-top: 2px; }
+
+    .f-flow { text-align: right; }
+    .flow-val {
+      font-family: 'Fira Mono', monospace;
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--text);
+    }
+    .flow-unit {
+      display: block;
+      font-family: 'Fira Mono', monospace;
+      font-size: 9px;
+      color: var(--muted);
+      margin-top: 2px;
+      letter-spacing: 0.03em;
+    }
+
+    .f-level { text-align: right; }
+    .level-val {
+      font-family: 'Fira Mono', monospace;
+      font-size: 15px;
+      font-weight: 500;
+    }
+    .level-val.ok      { color: var(--text); }
+    .level-val.warning { color: var(--warning); }
+    .level-val.danger  { color: var(--danger); }
+
+    .level-bar-track {
+      height: 3px;
+      background: rgba(255,255,255,0.05);
+      border-radius: 2px;
+      margin-top: 6px;
+      overflow: hidden;
+    }
+    .level-bar-fill {
+      height: 100%;
+      border-radius: 2px;
+    }
+    .level-bar-fill.ok      { background: var(--accent); opacity: 0.55; }
+    .level-bar-fill.warning { background: var(--warning); }
+    .level-bar-fill.danger  { background: var(--danger); }
+
+    .danger-note {
+      padding: 9px 16px 13px;
+      font-family: 'Fira Mono', monospace;
+      font-size: 10px;
+      color: var(--muted);
+      border-top: 1px solid var(--border);
+      letter-spacing: 0.03em;
+    }
+    .danger-note span { color: var(--danger); }
+
+    /* ── Loading / error ────────────────────────────────────────────────────── */
+    .loading { color: var(--muted); font-size: 13px; padding: 20px 16px; text-align: center; }
+    .error   { color: var(--danger); font-size: 13px; padding: 20px 16px; text-align: center; }
+
+    /* ── Disclaimer ─────────────────────────────────────────────────────────── */
+    .disclaimer {
+      margin: 10px 12px 0;
+      background: rgba(255, 170, 68, 0.05);
+      border: 1px solid rgba(255, 170, 68, 0.18);
+      border-radius: 12px;
+      overflow: hidden;
     }
 
     .disclaimer-header {
@@ -123,104 +256,111 @@
       align-items: center;
       justify-content: space-between;
       padding: 10px 14px;
-      border-bottom: 1px solid #f0c040;
       cursor: pointer;
       user-select: none;
+      border-bottom: 1px solid rgba(255, 170, 68, 0.12);
     }
 
-    .disclaimer.collapsed .disclaimer-header {
-      border-bottom: none;
-    }
+    .disclaimer.collapsed .disclaimer-header { border-bottom: none; }
+    .disclaimer.collapsed .disclaimer-body   { display: none; }
 
     .disclaimer-header-text {
-      font-size: 13px;
+      font-size: 10px;
       font-weight: 600;
-      color: #7a5c00;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: rgba(255, 170, 68, 0.8);
     }
 
     .disclaimer-toggle {
       background: none;
       border: none;
       cursor: pointer;
-      font-size: 18px;
-      color: #7a5c00;
-      line-height: 1;
-      padding: 0 0 0 8px;
+      font-size: 14px;
+      color: rgba(255, 170, 68, 0.6);
+      padding: 0;
       flex-shrink: 0;
+      line-height: 1;
     }
 
-    .disclaimer-body {
-      padding: 12px 14px;
+    .disclaimer-body { padding: 0 14px 14px; }
+
+    .disclaimer-body p {
+      font-size: 12px;
+      line-height: 1.65;
+      color: rgba(255,255,255,0.42);
+      margin-top: 10px;
     }
 
-    .disclaimer-body p { margin-bottom: 8px; }
-    .disclaimer-body p:last-child { margin-bottom: 0; }
-
-    .disclaimer-body .signature {
-      font-style: italic;
-      color: #6c6c70;
-    }
+    .disclaimer-body .signature { font-style: italic; color: rgba(255,255,255,0.25); }
 
     .disclaimer .gh-links {
-      margin-top: 10px;
+      margin-top: 12px;
       padding-top: 10px;
-      border-top: 1px solid #f0c040;
-      font-size: 13px;
+      border-top: 1px solid rgba(255, 170, 68, 0.1);
       display: flex;
-      gap: 12px;
+      gap: 14px;
       flex-wrap: wrap;
     }
 
     .disclaimer .gh-links a {
-      color: #007aff;
+      font-size: 11px;
+      color: var(--accent);
       text-decoration: none;
+      opacity: 0.75;
+    }
+    .disclaimer .gh-links a:hover { opacity: 1; }
+
+    /* ── Bottom nav ─────────────────────────────────────────────────────────── */
+    .btn-bar {
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      background: rgba(7, 16, 31, 0.82);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-top: 1px solid var(--border);
+      padding: 10px 12px 24px;
+      display: flex;
+      gap: 8px;
+      max-width: 520px;
+      margin: 0 auto;
     }
 
-    .disclaimer .gh-links a:hover { text-decoration: underline; }
-
-    /* Intro section */
-    .intro {
-      background: #fff;
-      border-radius: 0;
-      margin: 12px 0 0;
-      padding: 16px 16px 14px;
+    .btn-bar a {
+      flex: 1;
+      display: block;
+      text-align: center;
+      padding: 9px 0;
+      background: var(--surface-2);
+      border: 1px solid var(--border-2);
+      color: var(--text-2);
+      border-radius: 10px;
+      text-decoration: none;
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.02em;
+      transition: color 0.15s, border-color 0.15s, background 0.15s;
     }
 
-    .intro h1 {
-      font-size: 20px;
-      font-weight: 700;
-      line-height: 1.3;
-      margin-bottom: 10px;
-      color: #1c1c1e;
+    .btn-bar a:hover {
+      color: var(--accent);
+      border-color: rgba(14, 231, 197, 0.3);
+      background: var(--accent-dim);
     }
 
-    .intro p {
-      font-size: 14px;
-      line-height: 1.6;
-      color: #3a3a3c;
-    }
-
-    /* Error / loading */
-    .loading { color: #6c6c70; font-size: 14px; padding: 12px 0; }
-    .error   { color: #ff3b30; font-size: 14px; padding: 12px 0; }
-
-    .img-hint { font-size: 11px; color: #aeaeb2; text-align: right; margin-top: 5px; }
-
-    /* Forecast images — clickable */
-    img.forecast-img { cursor: zoom-in; }
-
-    /* Lightbox */
+    /* ── Lightbox ───────────────────────────────────────────────────────────── */
     #lb {
       display: none;
       position: fixed;
       inset: 0;
-      background: rgba(0,0,0,0.92);
+      background: rgba(0,0,0,0.95);
       z-index: 9999;
       align-items: center;
       justify-content: center;
       touch-action: none;
     }
     #lb.open { display: flex; }
+
     #lb img {
       max-width: 100vw;
       max-height: 100vh;
@@ -232,28 +372,36 @@
       display: block;
     }
     #lb img.dragging { cursor: grabbing; }
+
     #lb-close {
       position: fixed;
-      top: 14px;
-      right: 14px;
-      background: rgba(255,255,255,0.18);
-      border: none;
+      top: 14px; right: 14px;
+      background: rgba(255,255,255,0.1);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255,255,255,0.15);
       color: #fff;
-      font-size: 18px;
-      width: 36px;
-      height: 36px;
+      font-size: 16px;
+      width: 36px; height: 36px;
       border-radius: 50%;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
       z-index: 10000;
-      line-height: 1;
     }
-    #lb-close:hover { background: rgba(255,255,255,0.32); }
+    #lb-close:hover { background: rgba(255,255,255,0.22); }
   </style>
 </head>
 <body>
+
+  <!-- Header -->
+  <header class="site-header">
+    <div class="header-rule"></div>
+    <div class="station-badge">CEHQ · 043301 · LightGBM</div>
+    <h1 class="site-title">Rivière des Prairies</h1>
+    <p class="site-subtitle">Prévisions hydrologiques sur 5 jours</p>
+    <p class="generated-time" id="generated-time">—</p>
+  </header>
 
   <!-- Disclaimer -->
   <div class="disclaimer" id="disclaimer">
@@ -262,15 +410,11 @@
       <button class="disclaimer-toggle" id="disclaimer-toggle" aria-label="Fermer">✕</button>
     </div>
     <div class="disclaimer-body">
-      <p>Ce projet est une simple expérimentation que j'ai créé afin de me familiariser
-      avec Claude Code. Aucune donnée ni méthode utilisée ici n'est réputée être valide,
-      fonctionnelle ni exacte.</p>
-      <p>Les données de ce dépôt GitHub ainsi que celles produites par les outils ne
-      peuvent pas être utilisées pour aucune fin de planification ou de décision
-      par rapport au niveau de la rivière.</p>
-      <p>L'auteur se dégage de toute responsabilité face à l'utilisation par quiconque
-      des données ou outils sur ce site. Le tout n'est qu'une exploration et ne sert
-      qu'à discuter des outils et techniques explorés ici.</p>
+      <p>Ce projet est une simple expérimentation créée afin de me familiariser avec Claude Code.
+      Aucune donnée ni méthode utilisée ici n'est réputée être valide, fonctionnelle ni exacte.</p>
+      <p>Les données de ce dépôt ainsi que celles produites par les outils ne peuvent pas être
+      utilisées pour aucune fin de planification ou de décision par rapport au niveau de la rivière.
+      L'auteur se dégage de toute responsabilité face à l'utilisation de ces données.</p>
       <p class="signature">—Laurent</p>
       <div class="gh-links">
         <a href="https://github.com/LaurentPointCa/riviere" target="_blank" rel="noopener">⌥ GitHub — Modèle &amp; prévisions</a>
@@ -279,45 +423,40 @@
     </div>
   </div>
 
-  <!-- Intro -->
-  <div class="intro">
-    <h1>Prévisions sur 5 jours du débit et niveau de la Rivière-des-Prairies à la station 043301</h1>
-    <p>Ce site présente les prévisions hydrologiques générées deux fois par jour par un modèle
-    d'apprentissage automatique (LightGBM). En haut de page, le graphique des <strong>30 derniers
-    jours</strong> met en contexte les conditions récentes et la prévision sur 5 jours. Suit un
-    <strong>tableau des prévisions</strong> quotidiennes de débit (m³/s) et de niveau (m) pour
-    les cinq prochains jours. Enfin, le graphique <strong>1 an</strong> replace ces données dans
-    leur contexte saisonnier historique.</p>
+  <!-- 30-day graph -->
+  <div class="card">
+    <div class="card-header">
+      <span class="card-title">30 derniers jours</span>
+    </div>
+    <img class="forecast-img" src="forecast_30d.png" alt="Graphique 30 jours" />
+    <p class="zoom-hint">↗ cliquer pour zoomer</p>
   </div>
 
-  <!-- 30-day graph -->
-  <section>
-    <h2>Données 30 derniers jours</h2>
-    <img class="forecast-img" src="forecast_30d.png" alt="Graphique 30 jours" />
-    <p class="img-hint">Cliquer pour agrandir et zoomer</p>
-  </section>
-
   <!-- Forecast table -->
-  <section>
-    <h2>Prévisions</h2>
-    <div class="meta" id="meta">Chargement…</div>
-    <div id="table-container"><p class="loading">Chargement des données…</p></div>
-    <p class="danger-note">Zone de danger : 22.5 m</p>
-  </section>
+  <div class="card">
+    <div class="card-header">
+      <span class="card-title">Prévisions 5 jours</span>
+    </div>
+    <div id="table-container"><p class="loading">Chargement…</p></div>
+  </div>
 
   <!-- 1-year graph -->
-  <section>
-    <h2>Données 1 an</h2>
+  <div class="card">
+    <div class="card-header">
+      <span class="card-title">Contexte annuel</span>
+    </div>
     <img class="forecast-img" src="forecast.png" alt="Graphique 1 an" />
-    <p class="img-hint">Cliquer pour agrandir et zoomer</p>
-  </section>
+    <p class="zoom-hint">↗ cliquer pour zoomer</p>
+  </div>
 
-  <!-- Bottom buttons -->
-  <div class="btn-bar">
+  <div style="height: 10px;"></div>
+
+  <!-- Bottom nav -->
+  <nav class="btn-bar">
     <a href="https://www.cehq.gouv.qc.ca/prevision/previsions.asp?secteur=Archipel" target="_blank" rel="noopener">CEHQ</a>
     <a href="https://rivieredesoutaouais.ca/location/carillon-2/" target="_blank" rel="noopener">Carillon</a>
     <a href="https://www.cruesgrandmontreal.ca/" target="_blank" rel="noopener">Crues MTL</a>
-  </div>
+  </nav>
 
   <!-- Lightbox -->
   <div id="lb"><img id="lb-img" draggable="false" alt="Graphique agrandi"><button id="lb-close" aria-label="Fermer">✕</button></div>
@@ -328,127 +467,96 @@
       const overlay  = document.getElementById('lb');
       const lbImg    = document.getElementById('lb-img');
       const closeBtn = document.getElementById('lb-close');
-
       let scale = 1, tx = 0, ty = 0;
 
       function applyTransform() {
         lbImg.style.transform = `translate(${tx}px,${ty}px) scale(${scale})`;
       }
-
       function open(src) {
-        lbImg.src = src;
-        scale = 1; tx = 0; ty = 0;
+        lbImg.src = src; scale = 1; tx = 0; ty = 0;
         applyTransform();
         overlay.classList.add('open');
         document.body.style.overflow = 'hidden';
       }
-
       function close() {
         overlay.classList.remove('open');
         document.body.style.overflow = '';
       }
 
-      // Open on image click
       document.querySelectorAll('.forecast-img').forEach(el => {
         el.addEventListener('click', () => open(el.src));
       });
-
-      // Close button + backdrop click
       closeBtn.addEventListener('click', close);
       overlay.addEventListener('click', e => { if (e.target === overlay) close(); });
       document.addEventListener('keydown', e => { if (e.key === 'Escape') close(); });
 
-      // ── Mouse wheel zoom ──────────────────────────────────────────────────
       overlay.addEventListener('wheel', e => {
         e.preventDefault();
-        const r  = overlay.getBoundingClientRect();
+        const r = overlay.getBoundingClientRect();
         const cx = e.clientX - r.left - r.width  / 2;
         const cy = e.clientY - r.top  - r.height / 2;
         const f  = e.deltaY < 0 ? 1.15 : 1 / 1.15;
         const ns = Math.min(Math.max(scale * f, 0.5), 10);
         tx = cx - (cx - tx) * ns / scale;
         ty = cy - (cy - ty) * ns / scale;
-        scale = ns;
-        applyTransform();
+        scale = ns; applyTransform();
       }, { passive: false });
 
-      // ── Mouse drag + click-to-close ───────────────────────────────────────
       let mouseDown = null, moved = false;
-
       lbImg.addEventListener('mousedown', e => {
         e.preventDefault();
         mouseDown = { x: e.clientX, y: e.clientY, tx, ty };
-        moved = false;
-        lbImg.classList.add('dragging');
+        moved = false; lbImg.classList.add('dragging');
       });
       document.addEventListener('mousemove', e => {
         if (!mouseDown) return;
-        const dx = e.clientX - mouseDown.x;
-        const dy = e.clientY - mouseDown.y;
+        const dx = e.clientX - mouseDown.x, dy = e.clientY - mouseDown.y;
         if (Math.abs(dx) > 4 || Math.abs(dy) > 4) moved = true;
-        tx = mouseDown.tx + dx;
-        ty = mouseDown.ty + dy;
-        applyTransform();
+        tx = mouseDown.tx + dx; ty = mouseDown.ty + dy; applyTransform();
       });
       document.addEventListener('mouseup', () => {
         if (!mouseDown) return;
-        lbImg.classList.remove('dragging');
-        mouseDown = null;
+        lbImg.classList.remove('dragging'); mouseDown = null;
       });
       lbImg.addEventListener('click', () => { if (!moved) close(); });
 
-      // ── Touch: pinch-zoom + pan + tap-to-close ────────────────────────────
-      let touches = {};
-      let pinchLast = null;    // { dist, mx, my }
-      let panStart  = null;    // { x, y, tx, ty }
-      let touchMoved = false;
-
+      let touches = {}, pinchLast = null, panStart = null, touchMoved = false;
       overlay.addEventListener('touchstart', e => {
         e.preventDefault();
         for (const t of e.changedTouches) touches[t.identifier] = { x: t.clientX, y: t.clientY };
-        const ids = Object.keys(touches);
-        touchMoved = false;
+        const ids = Object.keys(touches); touchMoved = false;
         if (ids.length === 1) {
           const p = touches[ids[0]];
-          panStart = { x: p.x, y: p.y, tx, ty };
-          pinchLast = null;
+          panStart = { x: p.x, y: p.y, tx, ty }; pinchLast = null;
         } else if (ids.length === 2) {
           const [a, b] = ids.map(id => touches[id]);
           pinchLast = { dist: Math.hypot(b.x-a.x, b.y-a.y), mx: (a.x+b.x)/2, my: (a.y+b.y)/2 };
           panStart = null;
         }
       }, { passive: false });
-
       overlay.addEventListener('touchmove', e => {
         e.preventDefault();
         for (const t of e.changedTouches) touches[t.identifier] = { x: t.clientX, y: t.clientY };
-        const ids = Object.keys(touches);
-        touchMoved = true;
-
+        const ids = Object.keys(touches); touchMoved = true;
         if (ids.length === 1 && panStart) {
           const p = touches[ids[0]];
           tx = panStart.tx + (p.x - panStart.x);
-          ty = panStart.ty + (p.y - panStart.y);
-          applyTransform();
+          ty = panStart.ty + (p.y - panStart.y); applyTransform();
         } else if (ids.length === 2 && pinchLast) {
           const [a, b] = ids.map(id => touches[id]);
           const dist = Math.hypot(b.x-a.x, b.y-a.y);
-          const mx   = (a.x+b.x)/2, my = (a.y+b.y)/2;
-          const r    = overlay.getBoundingClientRect();
-          const cx0  = pinchLast.mx - r.left - r.width  / 2;
-          const cy0  = pinchLast.my - r.top  - r.height / 2;
-          const cx1  = mx           - r.left - r.width  / 2;
-          const cy1  = my           - r.top  - r.height / 2;
-          const ns   = Math.min(Math.max(scale * dist / pinchLast.dist, 0.5), 10);
-          // zoom around old midpoint, then pan to new midpoint
+          const mx = (a.x+b.x)/2, my = (a.y+b.y)/2;
+          const r = overlay.getBoundingClientRect();
+          const cx0 = pinchLast.mx - r.left - r.width  / 2;
+          const cy0 = pinchLast.my - r.top  - r.height / 2;
+          const cx1 = mx           - r.left - r.width  / 2;
+          const cy1 = my           - r.top  - r.height / 2;
+          const ns = Math.min(Math.max(scale * dist / pinchLast.dist, 0.5), 10);
           tx = cx1 - (cx0 - tx) * ns / scale;
           ty = cy1 - (cy0 - ty) * ns / scale;
-          scale = ns;
-          pinchLast = { dist, mx, my };
-          applyTransform();
+          scale = ns; pinchLast = { dist, mx, my }; applyTransform();
         }
       }, { passive: false });
-
       overlay.addEventListener('touchend', e => {
         for (const t of e.changedTouches) delete touches[t.identifier];
         const ids = Object.keys(touches);
@@ -456,87 +564,100 @@
           if (!touchMoved) close();
           panStart = null; pinchLast = null;
         } else if (ids.length === 1) {
-          // finger lifted during pinch — resume pan
           pinchLast = null;
           const p = touches[ids[0]];
-          panStart = { x: p.x, y: p.y, tx, ty };
-          touchMoved = true; // don't close on next touchend
+          panStart = { x: p.x, y: p.y, tx, ty }; touchMoved = true;
         }
       }, { passive: false });
     })();
 
-    // ── Disclaimer collapse ───────────────────────────────────────────────────
+    // ── Disclaimer ────────────────────────────────────────────────────────────
     const COOKIE = 'disclaimer_collapsed';
 
     function getCookie(name) {
-      return document.cookie.split('; ').reduce((val, part) => {
-        const [k, v] = part.split('=');
-        return k === name ? v : val;
+      return document.cookie.split('; ').reduce((v, p) => {
+        const [k, val] = p.split('='); return k === name ? val : v;
       }, null);
     }
-
     function setCookie(name, value, days) {
       const expires = new Date(Date.now() + days * 864e5).toUTCString();
       document.cookie = `${name}=${value}; expires=${expires}; path=/; SameSite=Lax`;
     }
-
     function applyState(collapsed) {
-      const box    = document.getElementById('disclaimer');
-      const label  = document.getElementById('disclaimer-header-text');
-      const btn    = document.getElementById('disclaimer-toggle');
+      const box   = document.getElementById('disclaimer');
+      const label = document.getElementById('disclaimer-header-text');
+      const btn   = document.getElementById('disclaimer-toggle');
       if (collapsed) {
         box.classList.add('collapsed');
-        label.textContent = 'Informations importantes concernant les données sur ce site.';
-        btn.textContent   = '＋';
-        btn.setAttribute('aria-label', 'Ouvrir');
+        label.textContent = 'Informations importantes concernant les données.';
+        btn.textContent = '+'; btn.setAttribute('aria-label', 'Ouvrir');
       } else {
         box.classList.remove('collapsed');
         label.textContent = 'Avertissement';
-        btn.textContent   = '✕';
-        btn.setAttribute('aria-label', 'Fermer');
+        btn.textContent = '✕'; btn.setAttribute('aria-label', 'Fermer');
       }
     }
-
     function toggleDisclaimer() {
       const collapsed = !document.getElementById('disclaimer').classList.contains('collapsed');
       applyState(collapsed);
       setCookie(COOKIE, collapsed ? '1' : '0', 365);
     }
-
-    // Apply saved preference on load
     applyState(getCookie(COOKIE) === '1');
 
     // ── Forecast table ────────────────────────────────────────────────────────
+    const FR_DAYS     = ['Dim.','Lun.','Mar.','Mer.','Jeu.','Ven.','Sam.'];
+    const DANGER      = 22.5;
+    const LEVEL_MIN   = 19.0;
+    const LEVEL_RANGE = 4.5;   // 19 → 23.5
+
+    function levelCls(l) {
+      if (l >= DANGER)       return 'danger';
+      if (l >= DANGER - 1.0) return 'warning';
+      return 'ok';
+    }
+    function levelPct(l) {
+      return Math.min(100, Math.max(0, (l - LEVEL_MIN) / LEVEL_RANGE * 100)).toFixed(1);
+    }
+
     fetch('forecast.json')
       .then(r => r.json())
       .then(data => {
-        const generated = new Date(data.generated_at);
-        document.getElementById('meta').textContent =
-          'Généré le ' + generated.toLocaleString('fr-CA', { dateStyle: 'medium', timeStyle: 'short' });
+        const gen = new Date(data.generated_at);
+        document.getElementById('generated-time').textContent =
+          'Généré le ' + gen.toLocaleString('fr-CA', { dateStyle: 'medium', timeStyle: 'short' });
 
-        const rows = data.forecast.map(d => `
-          <tr>
-            <td>J${d.day}</td>
-            <td>${d.date}</td>
-            <td>${d.flow_m3s.toFixed(1)}</td>
-            <td>${d.level_m.toFixed(3)}</td>
-          </tr>`).join('');
+        const rows = data.forecast.map(d => {
+          const dt  = new Date(d.date + 'T12:00:00');
+          const dow = FR_DAYS[dt.getDay()];
+          const cls = levelCls(d.level_m);
+          return `<div class="f-row">
+            <div class="f-day">J+${d.day}</div>
+            <div class="f-date">${d.date}<span class="dow">${dow}</span></div>
+            <div class="f-flow">
+              <span class="flow-val">${d.flow_m3s.toFixed(0)}</span>
+              <span class="flow-unit">m³/s</span>
+            </div>
+            <div class="f-level">
+              <span class="level-val ${cls}">${d.level_m.toFixed(3)}</span>
+              <div class="level-bar-track">
+                <div class="level-bar-fill ${cls}" style="width:${levelPct(d.level_m)}%"></div>
+              </div>
+            </div>
+          </div>`;
+        }).join('');
 
-        document.getElementById('table-container').innerHTML = `
-          <table>
-            <thead>
-              <tr>
-                <th>Jour</th>
-                <th>Date</th>
-                <th>Débit (m³/s)</th>
-                <th>Niveau (m)</th>
-              </tr>
-            </thead>
-            <tbody>${rows}</tbody>
-          </table>`;
+        document.getElementById('table-container').innerHTML =
+          `<div class="forecast-col-headers">
+            <span class="col-label"></span>
+            <span class="col-label">Date</span>
+            <span class="col-label r">Débit</span>
+            <span class="col-label r">Niveau</span>
+          </div>
+          <div class="forecast-rows">${rows}</div>
+          <p class="danger-note">Seuil de danger&nbsp;: <span>${DANGER} m</span></p>`;
       })
       .catch(() => {
-        document.getElementById('meta').textContent = '';
+        document.getElementById('generated-time').textContent = '';
         document.getElementById('table-container').innerHTML =
           '<p class="error">Impossible de charger les prévisions.</p>';
       });
