@@ -114,6 +114,10 @@ def _add_snowpack_proxy(df: pd.DataFrame) -> pd.DataFrame:
 
     snowpack = np.zeros(len(df))
     swe = 0.0
+    # Note: swe starts at 0 regardless of season. Rows before the first Oct 1
+    # in the dataset will have underestimated snowpack (no prior-year accumulation
+    # available). This affects only the first partial snow season (~9 months for
+    # the 1978-01-01 dataset start) and is an accepted limitation.
 
     snowfall = df["snowfall_sum"].values
     temp = df["temperature_2m_mean"].values

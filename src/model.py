@@ -304,7 +304,7 @@ def _print_metrics(metrics: dict, y_test: pd.DataFrame, X_test: pd.DataFrame,
             "RMSE":       m["rmse"],
             "MAE":        m["mae"],
             "naive_RMSE": naive_rmse,
-            "skill":      round(1.0 - m["rmse"] / naive_rmse, 3),
+            "skill":      round(1.0 - m["rmse"] / naive_rmse, 3) if naive_rmse > 0 else float("nan"),
         })
 
     df = pd.DataFrame(rows).set_index("target")

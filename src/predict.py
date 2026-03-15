@@ -97,6 +97,9 @@ def forecast(anchor_date: pd.Timestamp, X: pd.DataFrame) -> pd.DataFrame:
             wf = load_weather_forecast(days=5)
             future = wf[wf.index > anchor_date].head(5)
             if not future.empty:
+                if len(future) < 5:
+                    print(f"Warning: only {len(future)}/5 weather forecast days available; "
+                          f"t+{len(future)+1}..t+5 will use ERA5 proxy.")
                 row = _inject_weather_forecast(row, future)
                 print("Weather forecast injected.")
         except Exception as e:
@@ -106,6 +109,9 @@ def forecast(anchor_date: pd.Timestamp, X: pd.DataFrame) -> pd.DataFrame:
             cgm_fc = load_cgm_forecast(n_days=5)
             future_cgm = cgm_fc[cgm_fc.index > anchor_date].head(5)
             if not future_cgm.empty:
+                if len(future_cgm) < 5:
+                    print(f"Warning: only {len(future_cgm)}/5 CGM forecast days available; "
+                          f"t+{len(future_cgm)+1}..t+5 will use observed proxy.")
                 row = _inject_cgm_forecast(row, future_cgm)
                 print("CGM upstream forecast injected.")
         except Exception as e:
