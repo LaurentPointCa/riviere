@@ -232,10 +232,10 @@ def plot_forecast(
         fontsize=13, color=_TEXT,
     )
 
-    # RMSE per horizon — cold season CV mean (7 folds, 2019–2025)
+    # RMSE per horizon — cold season CV mean (7 folds, 2019–2025, no CGM)
     # Cold season used as conservative upper bound across seasons
     _RMSE = {
-        "flow_m3s": [42.84, 63.42, 81.34, 97.01, 108.76],
+        "flow_m3s": [42.77, 63.36, 81.00, 97.20, 109.09],
         "level_m":  [0.06, 0.09, 0.11, 0.12, 0.14],
     }
 
