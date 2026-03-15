@@ -197,11 +197,39 @@ def plot_forecast(
     env = stats.loc[doys].copy()
     env.index = all_dates
 
+    # ── Theme ─────────────────────────────────────────────────────────────────
+    _BG     = "#07101f"   # page background
+    _SURF   = "#0d1a2e"   # axes background (slightly lighter than page)
+    _TEXT   = "#dbe8f5"
+    _MUTED  = "#4a6280"
+    _GRID   = "#132035"
+    _FLOW   = "#0ee7c5"   # teal — matches website accent
+    _LEVEL  = "#60a5fa"   # sky blue — second panel
+    _FC     = "#fb923c"   # orange — forecast line
+    _DANGER = "#ff5c7a"   # pink-red — danger threshold
+
+    plt.rcParams.update({
+        "figure.facecolor":   _BG,
+        "axes.facecolor":     _SURF,
+        "axes.edgecolor":     _GRID,
+        "axes.labelcolor":    _TEXT,
+        "xtick.color":        _MUTED,
+        "ytick.color":        _MUTED,
+        "text.color":         _TEXT,
+        "grid.color":         _GRID,
+        "grid.linewidth":     0.8,
+        "legend.facecolor":   _BG,
+        "legend.edgecolor":   _GRID,
+        "legend.labelcolor":  _TEXT,
+        "savefig.facecolor":  _BG,
+        "savefig.edgecolor":  _BG,
+    })
+
     # ── Plot ─────────────────────────────────────────────────────────────────
     fig, (ax_f, ax_l) = plt.subplots(2, 1, figsize=figsize, sharex=True)
     fig.suptitle(
         f"Station 043301 — Rivière des Prairies\nPrévision du {anchor_date.strftime('%Y-%m-%d')}",
-        fontsize=13,
+        fontsize=13, color=_TEXT,
     )
 
     # RMSE per horizon — cold season CV mean (7 folds, 2019–2025)
@@ -211,25 +239,25 @@ def plot_forecast(
         "level_m":  [0.06, 0.09, 0.11, 0.12, 0.14],
     }
 
-    for ax, var, unit, color in [
-        (ax_f, "flow_m3s",  "Débit (m³/s)", "steelblue"),
-        (ax_l, "level_m",   "Niveau (m)",   "teal"),
+    for ax, var, unit, obs_color in [
+        (ax_f, "flow_m3s",  "Débit (m³/s)", _FLOW),
+        (ax_l, "level_m",   "Niveau (m)",   _LEVEL),
     ]:
         lo  = env[(var, "min")]
         hi  = env[(var, "max")]
         avg = env[(var, "mean")]
 
         # Historical envelope
-        ax.fill_between(env.index, lo, hi, color=color, alpha=0.10, label="Min/max hist.")
-        ax.plot(env.index, avg, color=color, lw=1, alpha=0.5, linestyle="--", label="Moyenne hist.")
+        ax.fill_between(env.index, lo, hi, color=obs_color, alpha=0.08, label="Min/max hist.")
+        ax.plot(env.index, avg, color=obs_color, lw=1, alpha=0.40, linestyle="--", label="Moyenne hist.")
 
         # Observed history
-        ax.plot(obs.index, obs[var], color=color, lw=1.8, label="Observé")
+        ax.plot(obs.index, obs[var], color=obs_color, lw=1.8, label="Observé")
 
         # 5-day forecast — connect last observed point for continuity
         bridge_dates  = [anchor_date] + result["date"].tolist()
         bridge_values = [obs[var].iloc[-1]] + result[var].tolist()
-        ax.plot(bridge_dates, bridge_values, color="crimson", lw=2,
+        ax.plot(bridge_dates, bridge_values, color=_FC, lw=2,
                 linestyle="--", marker="o", markersize=5, zorder=5, label="Prévision")
 
         # Confidence bands (±1 RMSE per horizon)
@@ -243,21 +271,23 @@ def plot_forecast(
             [anchor_date] + fc_dates,
             [obs[var].iloc[-1]] + band_lo,
             [obs[var].iloc[-1]] + band_hi,
-            color="crimson", alpha=0.15, zorder=4, label="±1 RMSE",
+            color=_FC, alpha=0.15, zorder=4, label="±1 RMSE",
         )
 
         # Danger zone line (level panel only)
         if var == "level_m":
-            ax.axhline(22.5, color="crimson", lw=1.2, linestyle=":",
-                       alpha=0.5, label="Zone de danger (22.5 m)", zorder=4)
+            ax.axhline(22.5, color=_DANGER, lw=1.2, linestyle=":",
+                       alpha=0.7, label="Zone de danger (22.5 m)", zorder=4)
 
         # "Today" marker
-        ax.axvline(anchor_date, color="gray", lw=0.8, linestyle=":")
+        ax.axvline(anchor_date, color=_MUTED, lw=0.8, linestyle=":")
 
         ax.set_ylabel(unit, fontsize=10)
-        ax.legend(fontsize=8, loc="upper left")
-        ax.grid(True, alpha=0.25)
+        ax.legend(fontsize=8, loc="upper left", framealpha=0.6)
+        ax.grid(True)
         ax.margins(x=0.01)
+        for spine in ax.spines.values():
+            spine.set_edgecolor(_GRID)
 
     # French month abbreviations
     _FR_MONTHS = ["jan", "fév", "mar", "avr", "mai", "jun",
