@@ -21,8 +21,8 @@ The seven monitoring stations used as model inputs, from the Ottawa region to La
 
 ## Results
 
-Held-out test set (2024-03-04 → 2026-03-03, 730 days) used for evaluation.
-The deployed model is retrained on the full dataset (1978-01-01 → 2026-03-03).
+Held-out test set (2024-03-10 → 2026-03-09, 730 days) used for evaluation.
+The deployed model is retrained on the full dataset (1978-01-01 → 2026-03-09).
 
 Two separate seasonal models: **cold** (Nov–May, snowmelt/spring freshet) and **warm** (Jun–Oct, rain/baseflow).
 
@@ -30,11 +30,11 @@ Two separate seasonal models: **cold** (Nov–May, snowmelt/spring freshet) and 
 
 | Horizon | Flow RMSE (m³/s) | Level RMSE (m) | Skill vs. persistence |
 |---------|-----------------|----------------|-----------------------|
-| t+1     | 36.8            | 0.055          | +26%                  |
-| t+2     | 56.7            | 0.082          | +32%                  |
-| t+3     | 77.2            | 0.102          | +33%                  |
-| t+4     | 97.4            | 0.121          | +32%                  |
-| t+5     | 107.0           | 0.138          | +37%                  |
+| t+1     | 36.2            | 0.054          | +26%                  |
+| t+2     | 55.4            | 0.081          | +33%                  |
+| t+3     | 74.8            | 0.102          | +34%                  |
+| t+4     | 94.5            | 0.120          | +33%                  |
+| t+5     | 104.3           | 0.136          | +37%                  |
 
 ### Warm season (Jun–Oct)
 
@@ -56,8 +56,9 @@ Two separate seasonal models: **cold** (Nov–May, snowmelt/spring freshet) and 
 | [ECCC / HYDAT](https://eau.ec.gc.ca) | Level (m) — station 02LA015 (Ottawa River at Hull) | 1964–present |
 | [Open-Meteo ERA5](https://open-meteo.com) | Temperature, precipitation, snowfall, rain (observed) | 1940–present |
 | [Open-Meteo Forecast](https://open-meteo.com) | 5-day weather forecast (temperature, precipitation, rain, snow) | real-time |
-| [Crues Grand Montréal](https://www.cruesgrandmontreal.ca) | Level (m) + flow (m³/s) — upstream stations 39_RDP09, 01_RDP11, 11_LDM01 | real-time + rolling history |
 | [mghydro.com](https://mghydro.com/app/report?lat=45.454&lng=-74.106&precision=low&simplify=true) | Basin boundary polygon (GeoJSON) — ID M72047806, ~148,202 km² | static |
+
+> **Note:** [Crues Grand Montréal](https://www.cruesgrandmontreal.ca) stations (39_RDP09, 01_RDP11, 11_LDM01) are disabled pending multi-year historical data.
 
 ### Upstream hydrological stations
 
@@ -67,14 +68,6 @@ Two separate seasonal models: **cold** (Nov–May, snowmelt/spring freshet) and 
 | 02LA015 | ECCC | Ottawa River at Hull | ~50 km | Level (m) |
 | 02KF005 | ECCC | Ottawa River at Britannia | ~100 km | Flow (m³/s) |
 
-### Crues Grand Montréal upstream stations
-
-| Station | Location | Distance upstream | Variable |
-|---------|----------|-------------------|----------|
-| 39_RDP09 | Rue Marceau, Pierrefonds-Roxboro | ~0.8 km | Level + flow |
-| 01_RDP11 | Parc Terrasse-Sacré-Cœur, Île-Bizard | ~3.5 km | Level + flow |
-| 11_LDM01 | Parc Philippe-Lavallée, Oka | ~22 km (Lac des Deux Montagnes) | Level + flow |
-
 ## Pipeline
 
 ```
@@ -82,27 +75,23 @@ load_data.py      CEHQ historical (043301 + 043108) + ECCC (02KF005 + 02LA015)
                   HYDAT CSV format + real-time XML exports → loaded via glob
 load_climate.py   basin boundary (mghydro.com) → ERA5 basin-mean daily climate (Open-Meteo)
 load_forecast.py  5-day weather forecast (Open-Meteo) → injected at inference time
-load_cgm.py       hourly level + flow for 3 upstream stations (cruesgrandmontreal.ca)
-                  → daily cache (data/cgm_daily.parquet) + 5-day forecast
      │
      ▼
-features.py       build_dataset() → (X, y)   [254 columns]
+features.py       build_dataset() → (X, y)   [165 columns]
                   • Lags 1–30 days (flow, level, upstream 043108, Ottawa 02KF005 +
-                    02LA015, 3 CGM stations, climate)
+                    02LA015, climate, ERA5-Land snow depth)
                   • Rolling mean/max/std (3–30 days)
                   • Snowpack proxy (degree-day model)
                   • Seasonal encoding (sin/cos DOY)
                   • Flow anomaly vs seasonal median
                   • Weather forecast t+1…t+5 (ERA5 perfect-forecast proxy at
                     training time, real Open-Meteo forecast at inference time)
-                  • CGM upstream forecast t+1…t+5 (observed proxy at training time,
-                    real CMM forecast at inference time)
      │
      ▼
 model.py          2 seasonal sets × 10 LGBMRegressor (one per horizon)
                   Cold: Nov–May (snowmelt, spring freshet)
                   Warm: Jun–Oct (rain, baseflow)
-                  Evaluated on 2024–2026, deployed on full 1978–2026
+                  Evaluated on 2024-03-10 → 2026-03-09, deployed on full 1978–2026
      │
      ▼
 predict.py        5-day forecast CLI → docs/forecast.png + docs/forecast_30d.png
@@ -136,10 +125,9 @@ python src/predict.py --date 2025-06-01
 - **Seasonal selection:** cold = Nov–May, warm = Jun–Oct; `predict.py` automatically
   picks the right set via `season_for()`
 - **Training period:** 1978-01-01 onward (post-dam era)
-- **Features:** 254 columns — lags, rolling statistics (upstream stations 043108,
-  02KF005 Ottawa at Britannia, 02LA015 Ottawa at Hull, 3 CGM upstream stations),
-  snowpack proxy, seasonal encoding, flow anomaly, 5-day weather forecast,
-  5-day upstream hydrological forecast
+- **Features:** 165 columns — lags, rolling statistics (upstream stations 043108,
+  02KF005 Ottawa at Britannia, 02LA015 Ottawa at Hull), ERA5-Land snow depth,
+  snowpack proxy, seasonal encoding, flow anomaly, 5-day weather forecast
 - **Hyperparameters:** 500 trees, lr=0.05, 63 leaves, subsample=0.8
 - **Top features (cold):** current flow, 3-day rolling max, current level,
   day-of-year (sin), 5-day cumulative forecast precipitation

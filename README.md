@@ -37,8 +37,8 @@ Les sept stations de mesure utilisées en entrée du modèle, de la région d'Ot
 
 ## Résultats
 
-Ensemble de test retenu (2024-03-04 → 2026-03-03, 730 jours) utilisé pour l'évaluation.
-Le modèle déployé est ré-entraîné sur l'ensemble complet des données (1978-01-01 → 2026-03-03).
+Ensemble de test retenu (2024-03-10 → 2026-03-09, 730 jours) utilisé pour l'évaluation.
+Le modèle déployé est ré-entraîné sur l'ensemble complet des données (1978-01-01 → 2026-03-09).
 
 Deux modèles saisonniers distincts : **froid** (nov–mai, fonte des neiges / crue printanière) et **chaud** (juin–oct, pluie / étiage).
 
@@ -46,11 +46,11 @@ Deux modèles saisonniers distincts : **froid** (nov–mai, fonte des neiges / c
 
 | Horizon | RMSE débit (m³/s) | RMSE niveau (m) | Gain vs. persistance |
 |---------|-------------------|-----------------|----------------------|
-| t+1     | 36,8              | 0,055           | +26 %                |
-| t+2     | 56,7              | 0,082           | +32 %                |
-| t+3     | 77,2              | 0,102           | +33 %                |
-| t+4     | 97,4              | 0,121           | +32 %                |
-| t+5     | 107,0             | 0,138           | +37 %                |
+| t+1     | 36,2              | 0,054           | +26 %                |
+| t+2     | 55,4              | 0,081           | +33 %                |
+| t+3     | 74,8              | 0,102           | +34 %                |
+| t+4     | 94,5              | 0,120           | +33 %                |
+| t+5     | 104,3             | 0,136           | +37 %                |
 
 ### Saison chaude (juin–oct)
 
@@ -72,8 +72,9 @@ Deux modèles saisonniers distincts : **froid** (nov–mai, fonte des neiges / c
 | [ECCC / HYDAT](https://eau.ec.gc.ca) | Niveau (m) — station 02LA015 (rivière des Outaouais à Hull) | 1964–présent |
 | [Open-Meteo ERA5](https://open-meteo.com) | Température, précipitations, chutes de neige, pluie (observé) | 1940–présent |
 | [Open-Meteo Forecast](https://open-meteo.com) | Prévision météo sur 5 jours (température, précipitations, pluie, neige) | temps réel |
-| [Crues Grand Montréal](https://www.cruesgrandmontreal.ca) | Niveau (m) + débit (m³/s) — stations amont 39_RDP09, 01_RDP11, 11_LDM01 | temps réel + historique glissant |
 | [mghydro.com](https://mghydro.com/app/report?lat=45.454&lng=-74.106&precision=low&simplify=true) | Polygone du bassin versant (GeoJSON) — ID M72047806, ~148 202 km² | statique |
+
+> **Note :** Les données [Crues Grand Montréal](https://www.cruesgrandmontreal.ca) (stations 39_RDP09, 01_RDP11, 11_LDM01) sont désactivées en attente de l'historique pluriannuel.
 
 ### Stations hydrologiques amont
 
@@ -83,14 +84,6 @@ Deux modèles saisonniers distincts : **froid** (nov–mai, fonte des neiges / c
 | 02LA015 | ECCC | Rivière des Outaouais à Hull | ~50 km | Niveau (m) |
 | 02KF005 | ECCC | Rivière des Outaouais à Britannia | ~100 km | Débit (m³/s) |
 
-### Stations amont Crues Grand Montréal
-
-| Station | Localisation | Distance amont | Variable |
-|---------|-------------|----------------|----------|
-| 39_RDP09 | Rue Marceau, Pierrefonds-Roxboro | ~0,8 km | Niveau + débit |
-| 01_RDP11 | Parc Terrasse-Sacré-Cœur, Île-Bizard | ~3,5 km | Niveau + débit |
-| 11_LDM01 | Parc Philippe-Lavallée, Oka | ~22 km (Lac des Deux Montagnes) | Niveau + débit |
-
 ## Pipeline
 
 ```
@@ -98,27 +91,23 @@ load_data.py      Données historiques CEHQ (043301 + 043108) + ECCC (02KF005 + 
                   Format HYDAT CSV + exports XML temps réel → chargés via glob
 load_climate.py   Bassin versant (mghydro.com) → Climat journalier moyen ERA5 (Open-Meteo)
 load_forecast.py  Prévision météo 5 jours (Open-Meteo) → injectée à l'inférence
-load_cgm.py       Niveau + débit horaires des 3 stations amont (cruesgrandmontreal.ca)
-                  → cache journalier (data/cgm_daily.parquet) + prévision 5 jours
      │
      ▼
-features.py       build_dataset() → (X, y)   [254 colonnes]
+features.py       build_dataset() → (X, y)   [165 colonnes]
                   • Décalages 1–30 jours (débit, niveau, amont 043108, Outaouais 02KF005 +
-                    02LA015, 3 stations CGM, climat)
+                    02LA015, climat, profondeur de neige ERA5-Land)
                   • Moyenne/max/écart-type glissants (3–30 jours)
                   • Proxy d'enneigement (modèle degré-jour)
                   • Encodage saisonnier (sin/cos jour de l'année)
                   • Anomalie de débit vs médiane saisonnière
                   • Prévision météo t+1…t+5 (proxy ERA5 à l'entraînement,
                     prévision réelle Open-Meteo à l'inférence)
-                  • Prévision CGM t+1…t+5 (proxy observé à l'entraînement,
-                    prévision réelle CMM à l'inférence)
      │
      ▼
 model.py          2 ensembles saisonniers × 10 LGBMRegressor (un par horizon)
                   Froid : nov–mai (fonte des neiges, crue printanière)
                   Chaud : juin–oct (pluie, étiage)
-                  Évalué sur 2024–2026, déployé sur l'ensemble 1978–2026
+                  Évalué sur 2024-03-10 → 2026-03-09, déployé sur l'ensemble 1978–2026
      │
      ▼
 predict.py        Interface CLI de prévision 5 jours → docs/forecast.png + docs/forecast_30d.png
@@ -152,10 +141,9 @@ python src/predict.py --date 2025-06-01
 - **Sélection saisonnière :** froid = nov–mai, chaud = juin–oct ; `predict.py` choisit
   automatiquement l'ensemble selon la date d'ancrage via `season_for()`
 - **Période d'entraînement :** à partir du 1978-01-01 (ère post-barrage)
-- **Caractéristiques :** 254 colonnes — décalages, statistiques glissantes (stations 043108,
-  02KF005 Outaouais à Britannia, 02LA015 Outaouais à Hull, 3 stations CGM amont), proxy
-  d'enneigement, encodage saisonnier, anomalie de débit, prévision météo 5 jours,
-  prévision hydrologique amont 5 jours
+- **Caractéristiques :** 165 colonnes — décalages, statistiques glissantes (stations 043108,
+  02KF005 Outaouais à Britannia, 02LA015 Outaouais à Hull), profondeur de neige ERA5-Land,
+  proxy d'enneigement, encodage saisonnier, anomalie de débit, prévision météo 5 jours
 - **Hyperparamètres :** 500 arbres, lr=0,05, 63 feuilles, subsample=0,8
 - **Meilleures caractéristiques (froid) :** débit actuel, max glissant 3 j, niveau actuel,
   jour de l'année (sin), précipitations cumulées prévues 5 j
