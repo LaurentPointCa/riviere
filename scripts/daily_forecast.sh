@@ -16,7 +16,7 @@ EOF
 .venv/bin/python src/predict.py
 
 # Commit and push the updated chart and forecast JSON if changed
-git add docs/forecast.png docs/forecast_30d.png docs/forecast.json
+git add docs/forecast.png docs/forecast_30d.png docs/forecast.json docs/forecast_history.json
 if ! git diff --cached --quiet; then
     git commit -m "chore: daily forecast $(date +%Y-%m-%d)"
     git push

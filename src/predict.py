@@ -326,6 +326,52 @@ def plot_forecast(
     return out_path
 
 
+def append_forecast_history(result: pd.DataFrame, anchor_date: pd.Timestamp) -> Path:
+    """
+    Append (or update) today's forecast in docs/forecast_history.json.
+
+    The file is a JSON array ordered chronologically. If an entry for
+    anchor_date already exists (e.g. a second daily run), it is replaced
+    so the latest prediction is kept.
+    """
+    import json
+    from datetime import datetime, UTC
+
+    history_path = Path("docs/forecast_history.json")
+    history_path.parent.mkdir(parents=True, exist_ok=True)
+
+    if history_path.exists():
+        entries = json.loads(history_path.read_text())
+    else:
+        entries = []
+
+    entry = {
+        "generated_at": datetime.now(UTC).strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "anchor_date": anchor_date.strftime("%Y-%m-%d"),
+        "forecast": [
+            {
+                "day": int(h),
+                "date": row["date"].strftime("%Y-%m-%d"),
+                "flow_m3s": round(row["flow_m3s"], 1),
+                "level_m": round(row["level_m"], 3),
+            }
+            for h, row in result.iterrows()
+        ],
+    }
+
+    # Replace existing entry for this anchor_date, or append
+    anchor_str = entry["anchor_date"]
+    idx = next((i for i, e in enumerate(entries) if e["anchor_date"] == anchor_str), None)
+    if idx is not None:
+        entries[idx] = entry
+    else:
+        entries.append(entry)
+
+    history_path.write_text(json.dumps(entries, indent=2))
+    print(f"Forecast history updated → {history_path} ({len(entries)} entries)")
+    return history_path
+
+
 def save_forecast_json(result: pd.DataFrame, anchor_date: pd.Timestamp) -> Path:
     """Save the 5-day forecast as JSON to docs/forecast.json."""
     import json
@@ -384,6 +430,7 @@ def main() -> None:
     plot_forecast(result, anchor, X, days_back=365, docs_name="forecast.png",    figsize=(14, 8))
     plot_forecast(result, anchor, X, days_back=30,  docs_name="forecast_30d.png", figsize=(7, 8))
     save_forecast_json(result, anchor)
+    append_forecast_history(result, anchor)
 
 
 if __name__ == "__main__":
