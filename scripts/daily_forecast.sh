@@ -15,8 +15,11 @@ EOF
 # Run forecast — also updates docs/forecast_sample.png
 .venv/bin/python src/predict.py
 
+# Generate validation plot (observed vs all forecast horizons)
+.venv/bin/python scripts/plot_validation.py
+
 # Commit and push the updated chart and forecast JSON if changed
-git add docs/forecast.png docs/forecast_30d.png docs/forecast.json docs/forecast_history.json
+git add docs/forecast.png docs/forecast_30d.png docs/forecast.json docs/forecast_history.json docs/forecast_validation.png
 if ! git diff --cached --quiet; then
     git commit -m "chore: daily forecast $(date +%Y-%m-%d)"
     git push
