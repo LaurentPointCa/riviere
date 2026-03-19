@@ -374,6 +374,74 @@ def load_hull_level(cache: bool = True) -> pd.DataFrame:
     return hist
 
 
+def _parse_rdp_csv(path: Path, col_name: str, level_min: float = 5.0) -> pd.DataFrame:
+    """
+    Parse a CMM historical CSV export (semicolon-separated, JS Date.toString() format).
+
+    Expected columns: station;date;valeur
+    Date format: "Wed Oct 28 2020 15:05:00 GMT-0400 (Eastern Daylight Time)"
+
+    Drops obvious installation-period readings where level < level_min (e.g. sensor
+    not yet submerged).  Resamples 5-minute readings to daily means.
+    Returns a DataFrame indexed by date (UTC-naive) with one column named col_name.
+    """
+    df = pd.read_csv(
+        path, sep=";", header=0,
+        names=["station", "date_str", col_name],
+        dtype={"station": str, "date_str": str, col_name: float},
+    )
+
+    # Drop installation-period artifacts (sensor not yet submerged)
+    df = df[df[col_name] >= level_min].copy()
+
+    # Extract local calendar date from JS Date.toString():
+    # "Wed Oct 28 2020 15:05:00 GMT-0400 (Eastern Daylight Time)" → "Wed Oct 28 2020"
+    date_part = df["date_str"].str.extract(r"(\w{3} \w{3} \d{1,2} \d{4})")[0]
+    df["date"] = pd.to_datetime(date_part, format="%a %b %d %Y")
+
+    daily = df.groupby("date")[col_name].mean().to_frame()
+    daily.index.name = "date"
+    print(
+        f"Loaded {len(df):,} 5-min rows → {len(daily):,} daily means "
+        f"from {daily.index.min().date()} to {daily.index.max().date()}"
+    )
+    return daily
+
+
+def load_rdp09_level() -> pd.DataFrame:
+    """
+    Load daily water level (m) for CMM station 39_RDP09 (Rue Marceau, Pierrefonds-Roxboro).
+
+    Source: semicolon-separated historical CSV exports matching data/39_RDP09__*.csv.
+    Multiple files are concatenated and deduplicated.
+    Returns a DataFrame indexed by date with column 'rdp09_level_m'.
+    """
+    paths = sorted(DATA_DIR.glob("39_RDP09__*.csv"))
+    if not paths:
+        raise FileNotFoundError("No 39_RDP09__*.csv file found in data/")
+    frames = [_parse_rdp_csv(p, "rdp09_level_m") for p in paths]
+    df = pd.concat(frames).groupby(level=0).mean()
+    print(f"39_RDP09 combined: {len(df):,} daily rows ({df.index.min().date()} – {df.index.max().date()})")
+    return df
+
+
+def load_rdp11_level() -> pd.DataFrame:
+    """
+    Load daily water level (m) for CMM station 01_RDP11 (Parc Terrasse-Sacré-Cœur, Île-Bizard).
+
+    Source: semicolon-separated historical CSV exports matching data/01_RDP11__*.csv.
+    Multiple files are concatenated and deduplicated.
+    Returns a DataFrame indexed by date with column 'rdp11_level_m'.
+    """
+    paths = sorted(DATA_DIR.glob("01_RDP11__*.csv"))
+    if not paths:
+        raise FileNotFoundError("No 01_RDP11__*.csv file found in data/")
+    frames = [_parse_rdp_csv(p, "rdp11_level_m") for p in paths]
+    df = pd.concat(frames).groupby(level=0).mean()
+    print(f"01_RDP11 combined: {len(df):,} daily rows ({df.index.min().date()} – {df.index.max().date()})")
+    return df
+
+
 if __name__ == "__main__":
     flow = load_flow()
     print(flow.head(3))
