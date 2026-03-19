@@ -30,6 +30,7 @@ EOF
 git add docs/forecast.png docs/forecast_30d.png docs/forecast.json docs/forecast_history.json docs/forecast_validation.png
 if ! git diff --cached --quiet; then
     git commit -m "chore: daily forecast $(date +%Y-%m-%d)"
+    git pull --rebase origin master
     git push
     echo "Chart and forecast JSON committed and pushed."
 else
