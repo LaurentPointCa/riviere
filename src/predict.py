@@ -208,7 +208,8 @@ def plot_forecast(
     _FLOW   = "#0ee7c5"   # teal — matches website accent
     _LEVEL  = "#60a5fa"   # sky blue — second panel
     _FC     = "#fb923c"   # orange — forecast line
-    _DANGER = "#ff5c7a"   # pink-red — danger threshold
+    _WARN   = "#f59e0b"   # amber — concern threshold (2500 m³/s)
+    _DANGER = "#ff5c7a"   # pink-red — near-flood threshold (3000 m³/s)
 
     plt.rcParams.update({
         "figure.facecolor":   _BG,
@@ -276,8 +277,13 @@ def plot_forecast(
             color=_FC, alpha=0.15, zorder=4, label="±1 RMSE",
         )
 
-        # Danger zone line (level panel only)
-        if var == "level_m":
+        # Threshold lines
+        if var == "flow_m3s":
+            ax.axhline(2500, color=_WARN,   lw=1.2, linestyle=":",
+                       alpha=0.7, label="Préoccupation (2 500 m³/s)", zorder=4)
+            ax.axhline(3000, color=_DANGER, lw=1.2, linestyle=":",
+                       alpha=0.7, label="Quasi-crue (3 000 m³/s)", zorder=4)
+        elif var == "level_m":
             ax.axhline(22.5, color=_DANGER, lw=1.2, linestyle=":",
                        alpha=0.7, label="Zone de danger (22.5 m)", zorder=4)
 
@@ -382,9 +388,15 @@ def save_forecast_json(result: pd.DataFrame, anchor_date: pd.Timestamp) -> Path:
     out_path = Path("docs/forecast.json")
     out_path.parent.mkdir(parents=True, exist_ok=True)
 
+    flows = result["flow_m3s"].tolist()
     data = {
         "generated_at": datetime.now(UTC).strftime("%Y-%m-%dT%H:%M:%SZ"),
         "anchor_date": anchor_date.strftime("%Y-%m-%d"),
+        "flood_risk": {
+            "concern": bool(any(f > 2500 for f in flows)),
+            "near_flood": bool(any(f > 3000 for f in flows)),
+            "max_predicted_flow_m3s": round(max(flows), 1),
+        },
         "forecast": [
             {
                 "day": int(h),

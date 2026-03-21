@@ -43,20 +43,23 @@ analysis in memory/project_flood_detection_reorientation.md.
   - Lead time: 2017 first onset regressed (5d → 1d); 2019 onset held at 2d
 
 ### Step 4 — Evaluate and promote
-- [ ] Compare on flood years (2017, 2019, 2023):
-  - Current production model (ext10, MSE)
-  - Quantile model (untuned)
-  - Quantile model (CV-tuned, event-focused)
-- [ ] Define promotion criteria: recall on 2500+ threshold at t+3 must improve; precision
-  must not drop below X% (TBD based on results)
-- [ ] Promote winning model to production + SCP to VM
+- [x] Compare on flood years (2017, 2019, 2023):
+  - MSE (ext10):          recall t+3=0.828  t+5=0.656  precision≥0.951  lead=0d/0d
+  - Quantile α=0.85:      recall t+3=0.925  t+5=0.806  precision≥0.915  lead=5d/2d
+  - Quantile tuned CV:    recall t+3=0.946  t+5=0.839  precision≥0.876  lead=1d/2d
+- [x] Promotion criteria: recall@t+3≥0.90, precision≥0.85 at all horizons, lead>0d
+  - MSE fails recall (0.828) and lead time (0d/0d)
+  - Winner: quantile CV-tuned (all criteria met, strictly best recall)
+- [x] Promote winning model to production + SCP to VM
+  - lgbm_forecast_quantile_tuned.pkl → lgbm_forecast.pkl (+ VM)
 
 ### Step 5 — Update forecast output for residents
-- [ ] Add flood risk signal to `docs/forecast.json`:
-  - Flag when any predicted horizon exceeds 2500 m³/s
-  - Flag when any predicted horizon exceeds 3000 m³/s
-- [ ] Consider adding warning band to forecast charts (forecast.png, forecast_30d.png)
-  - Horizontal line at 2500 m³/s and 3000 m³/s on flow panel
+- [x] Add flood risk signal to `docs/forecast.json`:
+  - `flood_risk.concern` = true when any horizon > 2500 m³/s
+  - `flood_risk.near_flood` = true when any horizon > 3000 m³/s
+  - `flood_risk.max_predicted_flow_m3s` = max flow across all horizons
+- [x] Add threshold lines to forecast charts (forecast.png, forecast_30d.png)
+  - Amber line at 2500 m³/s ("Préoccupation") and red at 3000 m³/s ("Quasi-crue")
 
 ---
 
