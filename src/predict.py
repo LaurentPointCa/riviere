@@ -36,7 +36,7 @@ def _inject_weather_forecast(row: pd.DataFrame, wf: pd.DataFrame) -> pd.DataFram
     Updated row with real forecast values injected.
     """
     row = row.copy()
-    for h in range(1, 6):
+    for h in range(1, 11):
         if h > len(wf):
             break
         fc = wf.iloc[h - 1]
@@ -46,8 +46,10 @@ def _inject_weather_forecast(row: pd.DataFrame, wf: pd.DataFrame) -> pd.DataFram
         row[f"snow_forecast_t{h}"]   = fc["snowfall_sum"]
 
     # Recompute derived aggregates
-    row["precip_forecast_sum_5d"] = sum(float(row[f"precip_forecast_t{h}"].iloc[0]) for h in range(1, 6))
-    row["temp_forecast_mean_5d"]  = sum(float(row[f"temp_forecast_t{h}"].iloc[0])   for h in range(1, 6)) / 5
+    row["precip_forecast_sum_5d"]  = sum(float(row[f"precip_forecast_t{h}"].iloc[0]) for h in range(1, 6))
+    row["temp_forecast_mean_5d"]   = sum(float(row[f"temp_forecast_t{h}"].iloc[0])   for h in range(1, 6)) / 5
+    row["precip_forecast_sum_10d"] = sum(float(row[f"precip_forecast_t{h}"].iloc[0]) for h in range(1, 11))
+    row["temp_forecast_mean_10d"]  = sum(float(row[f"temp_forecast_t{h}"].iloc[0])   for h in range(1, 11)) / 10
 
     return row
 
@@ -79,12 +81,12 @@ def forecast(anchor_date: pd.Timestamp, X: pd.DataFrame) -> pd.DataFrame:
     # For past dates the ERA5 perfect-forecast proxy is already correct.
     if anchor_date == X.index[-1] and "temp_forecast_t1" in X.columns:
         try:
-            wf = load_weather_forecast(days=5)
-            future = wf[wf.index > anchor_date].head(5)
+            wf = load_weather_forecast(days=10)
+            future = wf[wf.index > anchor_date].head(10)
             if not future.empty:
-                if len(future) < 5:
-                    print(f"Warning: only {len(future)}/5 weather forecast days available; "
-                          f"t+{len(future)+1}..t+5 will use ERA5 proxy.")
+                if len(future) < 10:
+                    print(f"Warning: only {len(future)}/10 weather forecast days available; "
+                          f"t+{len(future)+1}..t+10 will use ERA5 proxy.")
                 row = _inject_weather_forecast(row, future)
                 print("Weather forecast injected.")
         except Exception as e:
@@ -232,11 +234,11 @@ def plot_forecast(
         fontsize=13, color=_TEXT,
     )
 
-    # RMSE per horizon — cold season CV mean (7 folds, 2019–2025, no CGM)
+    # RMSE per horizon — cold season test-set (2024-03-17 → 2026-03-16), ext-10 model
     # Cold season used as conservative upper bound across seasons
     _RMSE = {
-        "flow_m3s": [42.77, 63.36, 81.00, 97.20, 109.09],
-        "level_m":  [0.06, 0.09, 0.11, 0.12, 0.14],
+        "flow_m3s": [45.21, 65.09, 84.22, 96.42, 104.99],
+        "level_m":  [0.062, 0.089, 0.111, 0.131, 0.148],
     }
 
     for ax, var, unit, obs_color in [

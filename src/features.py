@@ -157,28 +157,37 @@ def _add_flow_anomaly(df: pd.DataFrame) -> pd.DataFrame:
 
 def _add_forecast_features(df: pd.DataFrame) -> pd.DataFrame:
     """
-    Add 5-day weather forecast features.
+    Add 10-day weather forecast features.
 
     During training, ERA5 future observed values serve as a perfect-forecast proxy
     (e.g. temp_forecast_t1 = tomorrow's actual temperature). At inference time,
-    predict.py replaces these columns with real Open-Meteo forecast values.
+    predict.py replaces these columns with real Open-Meteo forecast values
+    (Open-Meteo provides up to 16 days; we use 10).
 
-    LightGBM handles the NaNs in the last 5 rows of training data natively.
+    LightGBM handles the NaNs in the last 10 rows of training data natively.
     """
     new_cols = {}
-    for h in range(1, 6):
+    for h in range(1, 11):
         new_cols[f"temp_forecast_t{h}"]   = df["temperature_2m_mean"].shift(-h)
         new_cols[f"precip_forecast_t{h}"] = df["precipitation_sum"].shift(-h)
         new_cols[f"rain_forecast_t{h}"]   = df["rain_sum"].shift(-h)
         new_cols[f"snow_forecast_t{h}"]   = df["snowfall_sum"].shift(-h)
 
-    # Derived aggregates over the full 5-day window
+    # Derived aggregates — 5-day window (kept for continuity)
     new_cols["precip_forecast_sum_5d"] = sum(
         new_cols[f"precip_forecast_t{h}"] for h in range(1, 6)
     )
     new_cols["temp_forecast_mean_5d"] = sum(
         new_cols[f"temp_forecast_t{h}"] for h in range(1, 6)
     ) / 5
+
+    # Derived aggregates — extended 10-day window
+    new_cols["precip_forecast_sum_10d"] = sum(
+        new_cols[f"precip_forecast_t{h}"] for h in range(1, 11)
+    )
+    new_cols["temp_forecast_mean_10d"] = sum(
+        new_cols[f"temp_forecast_t{h}"] for h in range(1, 11)
+    ) / 10
 
     return pd.concat([df, pd.DataFrame(new_cols, index=df.index)], axis=1)
 
