@@ -19,8 +19,9 @@ from features import build_dataset
 from model import load_model, season_for
 from load_forecast import load_weather_forecast
 
-MODEL_PATH     = Path("models/lgbm_forecast.pkl")
-MSE_MODEL_PATH = Path("models/lgbm_forecast_mse.pkl")
+MODEL_PATH      = Path("models/lgbm_forecast.pkl")
+MSE_MODEL_PATH  = Path("models/lgbm_forecast_mse.pkl")
+EXT10_MODEL_PATH = Path("models/lgbm_forecast_ext10.pkl")
 
 
 def _inject_weather_forecast(row: pd.DataFrame, wf: pd.DataFrame) -> pd.DataFrame:
@@ -459,6 +460,15 @@ def main() -> None:
         plot_forecast(result_mse, anchor, X, days_back=30,  docs_name="forecast_mse_30d.png", figsize=(7, 8))
         save_forecast_json(result_mse, anchor, "forecast_mse")
         append_forecast_history(result_mse, anchor, "forecast_mse")
+
+    if EXT10_MODEL_PATH.exists():
+        print(f"\n── Ext10 model ({EXT10_MODEL_PATH.name}) ──")
+        result_ext10 = forecast(anchor, X, EXT10_MODEL_PATH)
+        print_forecast(result_ext10, anchor, X)
+        plot_forecast(result_ext10, anchor, X, days_back=365, docs_name="forecast_ext10.png",    figsize=(14, 8))
+        plot_forecast(result_ext10, anchor, X, days_back=30,  docs_name="forecast_ext10_30d.png", figsize=(7, 8))
+        save_forecast_json(result_ext10, anchor, "forecast_ext10")
+        append_forecast_history(result_ext10, anchor, "forecast_ext10")
 
 
 if __name__ == "__main__":

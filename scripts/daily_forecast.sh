@@ -29,6 +29,7 @@ EOF
 # Commit and push the updated chart and forecast JSON if changed
 git add docs/forecast.png docs/forecast_30d.png docs/forecast.json docs/forecast_history.json \
         docs/forecast_mse.png docs/forecast_mse_30d.png docs/forecast_mse.json docs/forecast_mse_history.json \
+        docs/forecast_ext10.png docs/forecast_ext10_30d.png docs/forecast_ext10.json docs/forecast_ext10_history.json \
         docs/forecast_validation.png
 if ! git diff --cached --quiet; then
     git commit -m "chore: daily forecast $(date +%Y-%m-%d)"
