@@ -70,32 +70,6 @@ Le bassin versant est délinéé par [mghydro.com](https://mghydro.com) à parti
 
 Les sept stations de mesure utilisées en entrée du modèle, de la région d'Ottawa jusqu'à Laval.
 
-## Résultats (modèle de référence MSE)
-
-RMSE sur l'ensemble de test retenu (2024-03-10 → 2026-03-09, 730 jours). Ces chiffres reflètent le modèle MSE saisonnier — pas la cible d'optimisation du modèle de production (voir résultats de détection de crue ci-dessus). Les modèles déployés sont ré-entraînés sur l'ensemble complet des données (1978-01-01 → 2026-03-09).
-
-Deux modèles saisonniers distincts : **froid** (nov–mai, fonte des neiges / crue printanière) et **chaud** (juin–oct, pluie / étiage).
-
-### Saison froide (nov–mai)
-
-| Horizon | RMSE débit (m³/s) | RMSE niveau (m) | Gain vs. persistance |
-|---------|-------------------|-----------------|----------------------|
-| t+1     | 36,2              | 0,054           | +26 %                |
-| t+2     | 55,4              | 0,081           | +33 %                |
-| t+3     | 74,8              | 0,102           | +34 %                |
-| t+4     | 94,5              | 0,120           | +33 %                |
-| t+5     | 104,3             | 0,136           | +37 %                |
-
-### Saison chaude (juin–oct)
-
-| Horizon | RMSE débit (m³/s) | RMSE niveau (m) | Gain vs. persistance |
-|---------|-------------------|-----------------|----------------------|
-| t+1     | 30,9              | 0,040           | +38 %                |
-| t+2     | 55,2              | 0,072           | +35 %                |
-| t+3     | 74,2              | 0,095           | +33 %                |
-| t+4     | 89,2              | 0,111           | +31 %                |
-| t+5     | 98,0              | 0,123           | +33 %                |
-
 ## Sources de données
 
 | Source | Variables | Période |

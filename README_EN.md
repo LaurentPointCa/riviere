@@ -54,32 +54,6 @@ The watershed is delineated by [mghydro.com](https://mghydro.com) from the outle
 
 The seven monitoring stations used as model inputs, from the Ottawa region to Laval.
 
-## Results (MSE reference model)
-
-RMSE on the held-out test set (2024-03-10 → 2026-03-09, 730 days). These numbers reflect the MSE seasonal model — not the production model's optimization target (see flood detection results above). The deployed models are retrained on the full dataset (1978-01-01 → 2026-03-09).
-
-Two separate seasonal models: **cold** (Nov–May, snowmelt/spring freshet) and **warm** (Jun–Oct, rain/baseflow).
-
-### Cold season (Nov–May)
-
-| Horizon | Flow RMSE (m³/s) | Level RMSE (m) | Skill vs. persistence |
-|---------|-----------------|----------------|-----------------------|
-| t+1     | 36.2            | 0.054          | +26%                  |
-| t+2     | 55.4            | 0.081          | +33%                  |
-| t+3     | 74.8            | 0.102          | +34%                  |
-| t+4     | 94.5            | 0.120          | +33%                  |
-| t+5     | 104.3           | 0.136          | +37%                  |
-
-### Warm season (Jun–Oct)
-
-| Horizon | Flow RMSE (m³/s) | Level RMSE (m) | Skill vs. persistence |
-|---------|-----------------|----------------|-----------------------|
-| t+1     | 30.9            | 0.040          | +38%                  |
-| t+2     | 55.2            | 0.072          | +35%                  |
-| t+3     | 74.2            | 0.095          | +33%                  |
-| t+4     | 89.2            | 0.111          | +31%                  |
-| t+5     | 98.0            | 0.123          | +33%                  |
-
 ## Data sources
 
 | Source | Variables | Period |
@@ -164,7 +138,7 @@ python src/predict.py --date 2025-06-01
   snowpack proxy, seasonal encoding, flow anomaly, 5-day weather forecast
 - **Production model:** quantile regression α=0.85, hyperparameters tuned via
   event-focused CV (pinball loss on days with flow > 1,500 m³/s, folds 2020–2023)
-- **MSE/Ext10 hyperparameters:** 500 trees, lr=0.05, 63 leaves, subsample=0.8
+- **MSE / Ext10 base hyperparameters:** 500 trees, lr=0.05, 63 leaves, subsample=0.8
 - **Top features (cold):** current flow, 3-day rolling max, current level,
   day-of-year (sin), 5-day cumulative forecast precipitation
 - **Top features (warm):** current flow, Hull level (02LA015), 3-day rolling max,
