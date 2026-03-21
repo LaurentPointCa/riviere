@@ -44,7 +44,7 @@ optuna.logging.set_verbosity(optuna.logging.WARNING)
 sys.path.insert(0, str(Path(__file__).parent))
 from features import build_dataset
 from model import (
-    train, evaluate, save_model, load_model,
+    evaluate, save_model, load_model,
     time_split, _season_mask,
     COLD_MONTHS, WARM_MONTHS, TARGET_COLS, LGBM_PARAMS,
 )
@@ -134,8 +134,6 @@ def _cv_event_pinball(target: str, X: pd.DataFrame, y: pd.DataFrame,
         preds  = m.predict(X_val)
         y_true = y_val[target].values
 
-        # Filter on current observed flow, not the target value.
-        # This applies consistently across all targets (flow and level).
         event_mask = X_val["flow_m3s"].values > event_threshold
         if event_mask.sum() == 0:
             continue  # no approaching-flood days in this fold
@@ -224,7 +222,6 @@ def tune_season(
 
 
 def retrain_with_best_params(
-    season: str,
     months: set,
     X_train: pd.DataFrame,
     y_train: pd.DataFrame,
@@ -399,7 +396,7 @@ def main(n_trials: int = 30, mode: str = "mse") -> None:
         label = "Nov–May" if season == "cold" else "Jun–Oct"
         print(f"\n── {season.upper()} ({label})...")
         tuned_seasonal[season] = retrain_with_best_params(
-            season, months, X_train, y_train, best_params[season], alpha=alpha
+            months, X_train, y_train, best_params[season], alpha=alpha
         )
         print("   done")
 

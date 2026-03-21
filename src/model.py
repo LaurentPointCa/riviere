@@ -7,7 +7,7 @@ The saved pickle has the structure:
     {"cold": {target: model, ...}, "warm": {target: model, ...}}
 
 Public API:
-    train(X, y)                        -> dict[str, LGBMRegressor]
+    train(X, y, alpha=None)            -> dict[str, LGBMRegressor]
     evaluate(models, X, y)             -> dict[str, dict[str, float]]
     save_model(models, path)
     load_model(path)                   -> dict[str, LGBMRegressor]  (single set)
@@ -70,44 +70,22 @@ def _season_mask(index: pd.DatetimeIndex, months: set) -> np.ndarray:
 
 # ── Public API ───────────────────────────────────────────────────────────────
 
-def train(X: pd.DataFrame, y: pd.DataFrame) -> dict:
+def train(X: pd.DataFrame, y: pd.DataFrame, alpha: float | None = None) -> dict:
     """
     Train one LGBMRegressor per target column.
 
-    Parameters
-    ----------
-    X : feature matrix (NaNs handled natively by LightGBM)
-    y : target matrix; must contain the 10 columns in TARGET_COLS
-
-    Returns
-    -------
-    dict[str, LGBMRegressor] keyed by target column name
+    alpha=None  → MSE / regression (default)
+    alpha=float → quantile regression at that level (biases predictions upward
+                  under uncertainty; alpha=0.85 penalises under-prediction 85% of
+                  the time, which helps catch threshold crossings)
     """
+    params = {**LGBM_PARAMS}
+    if alpha is not None:
+        params.update({"objective": "quantile", "alpha": alpha, "metric": "quantile"})
+    label_sfx = f" (quantile α={alpha})" if alpha is not None else ""
     models = {}
     for target in TARGET_COLS:
-        print(f"  Training {target}...", end=" ", flush=True)
-        model = LGBMRegressor(**LGBM_PARAMS)
-        model.fit(X, y[target])
-        models[target] = model
-        print("done")
-    return models
-
-
-def train_quantile(X: pd.DataFrame, y: pd.DataFrame, alpha: float = 0.85) -> dict:
-    """
-    Train one quantile LGBMRegressor per target column.
-
-    Uses objective='quantile' with the given alpha, biasing predictions upward
-    under uncertainty. alpha=0.85 penalises under-prediction 85% of the time,
-    which helps catch threshold crossings without generating excess false alarms.
-
-    Everything else is identical to train() (same features, same n_estimators, etc.).
-    """
-    params = {**LGBM_PARAMS, "objective": "quantile", "alpha": alpha,
-              "metric": "quantile"}
-    models = {}
-    for target in TARGET_COLS:
-        print(f"  Training {target} (quantile α={alpha})...", end=" ", flush=True)
+        print(f"  Training {target}{label_sfx}...", end=" ", flush=True)
         model = LGBMRegressor(**params)
         model.fit(X, y[target])
         models[target] = model
@@ -382,8 +360,7 @@ if __name__ == "__main__":
     print(f"\nTrain: {len(X_train):,} rows  ({X_train.index[0].date()} → {X_train.index[-1].date()})")
     print(f"Test:  {len(X_test):,} rows  ({X_test.index[0].date()} → {X_test.index[-1].date()})")
 
-    train_fn   = (lambda X, y: train_quantile(X, y, alpha=args.quantile)
-                  if args.quantile else train)
+    train_fn   = lambda X, y: train(X, y, alpha=args.quantile)
     out_path   = ("models/lgbm_forecast_quantile.pkl" if args.quantile
                   else "models/lgbm_forecast.pkl")
     label_sfx  = f" (quantile α={args.quantile})" if args.quantile else ""
