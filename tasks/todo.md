@@ -8,12 +8,18 @@ with no flood events (2024–2026 max: 2269 m³/s) does not measure what matters
 analysis in memory/project_flood_detection_reorientation.md.
 
 ### Step 1 — Build flood detection evaluation framework
-- [ ] Write `src/evaluate_flood.py`:
+- [x] Write `src/evaluate_flood.py`:
   - Load flow history back to 1978
   - For each horizon t+1..t+5, compute precision/recall on flow > 2500 m³/s threshold
   - Also report lead time: how many days before threshold crossing did we first predict it?
   - Run against the current production model on 2017, 2019, 2023 (the flood years)
   - This becomes the baseline to beat before any model gets promoted
+- [x] Baseline results (MSE walk-forward):
+  - Precision: 0.95–1.00 across all horizons (almost no false alarms)
+  - Recall: 0.935 (t+1) → 0.656 (t+5) — collapses at longer horizons
+  - 2017 worst: recall=0.552 at t+3, 0.103 at t+5
+  - Lead time: 2017 and 2019 onset events had ZERO advance warning (model only
+    detected flood once it was already happening); 2023 had 2–5 day warnings
 
 ### Step 2 — Quantile regression model (alpha=0.85)
 - [ ] In `src/model.py`, add a `train_quantile(X, y, alpha=0.85)` variant:
