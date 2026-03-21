@@ -24,7 +24,9 @@ Usage:
 
 import argparse
 import json
+import os
 import sys
+from concurrent.futures import ProcessPoolExecutor, as_completed
 from pathlib import Path
 
 import numpy as np
@@ -67,12 +69,22 @@ def _cv_rmse(target: str, X: pd.DataFrame, y: pd.DataFrame,
         if len(X_tr) < 30 or len(X_val) == 0:
             continue
 
-        m = LGBMRegressor(**{**LGBM_PARAMS, **params})
+        # n_jobs=1: caller may run many workers in parallel; avoid thread contention
+        m = LGBMRegressor(**{**LGBM_PARAMS, **params, "n_jobs": 1})
         m.fit(X_tr, y_tr[target])
         preds = m.predict(X_val)
         fold_rmses.append(float(np.sqrt(np.mean((y_val[target].values - preds) ** 2))))
 
     return float(np.mean(fold_rmses)) if fold_rmses else float("inf")
+
+
+def _tune_target_worker(args: tuple) -> tuple:
+    """Top-level worker (must be module-level for ProcessPoolExecutor pickling)."""
+    target, X, y, months, n_trials = args
+    params   = _tune_target(target, X, y, months, n_trials)
+    cv_base  = _cv_rmse(target, X, y, months, {})
+    cv_best  = _cv_rmse(target, X, y, months, params)
+    return target, params, cv_base, cv_best
 
 
 def _tune_target(
@@ -105,30 +117,29 @@ def tune_season(
     y: pd.DataFrame,
     n_trials: int,
 ) -> dict:
-    """Tune all 10 targets for one season. Returns {target: best_params}."""
+    """Tune all 10 targets for one season in parallel. Returns {target: best_params}."""
     label = "Nov–May" if season == "cold" else "Jun–Oct"
+    n_workers = min(len(TARGET_COLS), os.cpu_count() or 4)
+    print(f"\n── {season.upper()} ({label})  5-fold CV  "
+          f"({len(CV_FOLD_YEARS)} folds: {CV_FOLD_YEARS[0]}–{CV_FOLD_YEARS[-1]})  "
+          f"parallel={n_workers} workers")
 
-    n_cv = sum(
-        1 for fold_year in CV_FOLD_YEARS
-        if (_season_mask(X.index, months) & (X.index >= pd.Timestamp(f"{fold_year}-01-01"))
-            & (X.index <= pd.Timestamp(f"{fold_year}-12-31"))).sum() > 0
-    )
-    print(f"\n── {season.upper()} ({label})  {n_cv}-fold CV  ({len(CV_FOLD_YEARS)} folds: "
-          f"{CV_FOLD_YEARS[0]}–{CV_FOLD_YEARS[-1]})")
+    worker_args = [(t, X, y, months, n_trials) for t in TARGET_COLS]
+    collected = {}
 
-    best = {}
-    for target in TARGET_COLS:
-        print(f"   {target}...", end=" ", flush=True)
-        params = _tune_target(target, X, y, months, n_trials)
-        best[target] = params
-        cv_rmse_base = _cv_rmse(target, X, y, months, {})
-        cv_rmse_best = _cv_rmse(target, X, y, months, params)
-        print(f"CV RMSE {cv_rmse_base:.2f} → {cv_rmse_best:.2f}  "
-              f"({(cv_rmse_best - cv_rmse_base) / cv_rmse_base * 100:+.1f}%)  "
-              f"leaves={params['num_leaves']}  mcs={params['min_child_samples']}  "
-              f"λ={params['reg_lambda']:.2f}  α={params['reg_alpha']:.3f}")
+    with ProcessPoolExecutor(max_workers=n_workers) as executor:
+        futures = {executor.submit(_tune_target_worker, args): args[0]
+                   for args in worker_args}
+        for future in as_completed(futures):
+            target, params, cv_base, cv_best = future.result()
+            collected[target] = (params, cv_base, cv_best)
+            pct = (cv_best - cv_base) / cv_base * 100
+            print(f"   {target:<12} CV RMSE {cv_base:.2f} → {cv_best:.2f}  "
+                  f"({pct:+.1f}%)  leaves={params['num_leaves']}  "
+                  f"mcs={params['min_child_samples']}  "
+                  f"λ={params['reg_lambda']:.2f}  α={params['reg_alpha']:.3f}")
 
-    return best
+    return {t: collected[t][0] for t in TARGET_COLS}
 
 
 def retrain_with_best_params(
