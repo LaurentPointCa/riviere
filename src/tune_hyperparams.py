@@ -1,11 +1,13 @@
 """
 Horizon-specific hyperparameter tuning for the Des Prairies forecast model.
 
+Tuning objective: 5-fold walk-forward CV mean RMSE (folds 2019–2023).
+  Fold Y: train on data ≤ Dec 31 of Y-1, evaluate on year Y (season-filtered)
+
 Splits:
-  tune-train : 1978-01-01 → 2022-12-31
-  tune-val   : 2023-01-01 → 2023-12-31   ← optuna objective (never seen during training)
-  final-train: 1978-01-01 → 2024-03-16   ← same as ext10 baseline, best params applied
-  test       : 2024-03-17 → 2026-03-16   ← untouched, final comparison only
+  CV folds   : 2019, 2020, 2021, 2022, 2023  ← optuna objective
+  final-train: 1978-01-01 → 2024-03-16       ← same as ext10 baseline, best params applied
+  test       : 2024-03-17 → 2026-03-16       ← untouched, final comparison only
 
 Search space per target × season:
   num_leaves        : [15, 31, 63, 127]
@@ -40,36 +42,56 @@ from model import (
 )
 from lightgbm import LGBMRegressor
 
-TUNED_PATH   = Path("models/lgbm_forecast_tuned.pkl")
-EXT10_PATH   = Path("models/lgbm_forecast_ext10.pkl")
-PARAMS_PATH  = Path("models/best_params.json")
+TUNED_PATH  = Path("models/lgbm_forecast_tuned.pkl")
+EXT10_PATH  = Path("models/lgbm_forecast_ext10.pkl")
+PARAMS_PATH = Path("models/best_params.json")
 
-TUNE_VAL_START = pd.Timestamp("2023-01-01")
-TUNE_VAL_END   = pd.Timestamp("2023-12-31")
+CV_FOLD_YEARS = [2019, 2020, 2021, 2022, 2023]
+
+
+def _cv_rmse(target: str, X: pd.DataFrame, y: pd.DataFrame,
+             months: set, params: dict) -> float:
+    """Mean RMSE across walk-forward CV folds for one target+season+params."""
+    fold_rmses = []
+    for fold_year in CV_FOLD_YEARS:
+        cutoff     = pd.Timestamp(f"{fold_year - 1}-12-31")
+        year_start = pd.Timestamp(f"{fold_year}-01-01")
+        year_end   = pd.Timestamp(f"{fold_year}-12-31")
+
+        tr_mask  = (X.index <= cutoff)     & _season_mask(X.index, months)
+        val_mask = (X.index >= year_start) & (X.index <= year_end) & _season_mask(X.index, months)
+
+        X_tr,  y_tr  = X[tr_mask],  y[tr_mask]
+        X_val, y_val = X[val_mask], y[val_mask]
+
+        if len(X_tr) < 30 or len(X_val) == 0:
+            continue
+
+        m = LGBMRegressor(**{**LGBM_PARAMS, **params})
+        m.fit(X_tr, y_tr[target])
+        preds = m.predict(X_val)
+        fold_rmses.append(float(np.sqrt(np.mean((y_val[target].values - preds) ** 2))))
+
+    return float(np.mean(fold_rmses)) if fold_rmses else float("inf")
 
 
 def _tune_target(
     target: str,
-    X_tr: pd.DataFrame,
-    y_tr: pd.DataFrame,
-    X_val: pd.DataFrame,
-    y_val: pd.DataFrame,
+    X: pd.DataFrame,
+    y: pd.DataFrame,
+    months: set,
     n_trials: int,
 ) -> dict:
-    """Run an optuna study for one target. Returns best params dict."""
+    """Run an optuna study for one target using 5-fold CV. Returns best params dict."""
 
     def objective(trial):
         params = {
-            **LGBM_PARAMS,
             "num_leaves":        trial.suggest_categorical("num_leaves", [15, 31, 63, 127]),
             "min_child_samples": trial.suggest_categorical("min_child_samples", [20, 30, 50, 100]),
             "reg_lambda":        trial.suggest_float("reg_lambda", 0.1, 10.0, log=True),
             "reg_alpha":         trial.suggest_float("reg_alpha", 0.01, 1.0,  log=True),
         }
-        model = LGBMRegressor(**params)
-        model.fit(X_tr, y_tr[target])
-        preds = model.predict(X_val)
-        return float(np.sqrt(np.mean((y_val[target].values - preds) ** 2)))
+        return _cv_rmse(target, X, y, months, params)
 
     study = optuna.create_study(direction="minimize")
     study.optimize(objective, n_trials=n_trials, show_progress_bar=False)
@@ -86,40 +108,27 @@ def tune_season(
     """Tune all 10 targets for one season. Returns {target: best_params}."""
     label = "Nov–May" if season == "cold" else "Jun–Oct"
 
-    # Tune-train / tune-val masks
-    tune_tr_mask = (X.index < TUNE_VAL_START) & _season_mask(X.index, months)
-    tune_val_mask = (
-        (X.index >= TUNE_VAL_START) &
-        (X.index <= TUNE_VAL_END) &
-        _season_mask(X.index, months)
+    n_cv = sum(
+        1 for fold_year in CV_FOLD_YEARS
+        if (_season_mask(X.index, months) & (X.index >= pd.Timestamp(f"{fold_year}-01-01"))
+            & (X.index <= pd.Timestamp(f"{fold_year}-12-31"))).sum() > 0
     )
-
-    X_tr,  y_tr  = X[tune_tr_mask],  y[tune_tr_mask]
-    X_val, y_val = X[tune_val_mask], y[tune_val_mask]
-
-    print(f"\n── {season.upper()} ({label})  "
-          f"tune-train={len(X_tr):,}  tune-val={len(X_val):,}")
+    print(f"\n── {season.upper()} ({label})  {n_cv}-fold CV  ({len(CV_FOLD_YEARS)} folds: "
+          f"{CV_FOLD_YEARS[0]}–{CV_FOLD_YEARS[-1]})")
 
     best = {}
     for target in TARGET_COLS:
         print(f"   {target}...", end=" ", flush=True)
-        params = _tune_target(target, X_tr, y_tr, X_val, y_val, n_trials)
+        params = _tune_target(target, X, y, months, n_trials)
         best[target] = params
-        val_rmse_base = _quick_rmse(target, X_tr, y_tr, X_val, y_val, LGBM_PARAMS)
-        val_rmse_best = _quick_rmse(target, X_tr, y_tr, X_val, y_val,
-                                    {**LGBM_PARAMS, **params})
-        print(f"val RMSE {val_rmse_base:.2f} → {val_rmse_best:.2f}  "
-              f"({(val_rmse_best - val_rmse_base) / val_rmse_base * 100:+.1f}%)  "
+        cv_rmse_base = _cv_rmse(target, X, y, months, {})
+        cv_rmse_best = _cv_rmse(target, X, y, months, params)
+        print(f"CV RMSE {cv_rmse_base:.2f} → {cv_rmse_best:.2f}  "
+              f"({(cv_rmse_best - cv_rmse_base) / cv_rmse_base * 100:+.1f}%)  "
               f"leaves={params['num_leaves']}  mcs={params['min_child_samples']}  "
               f"λ={params['reg_lambda']:.2f}  α={params['reg_alpha']:.3f}")
 
     return best
-
-
-def _quick_rmse(target, X_tr, y_tr, X_val, y_val, params):
-    m = LGBMRegressor(**{**LGBM_PARAMS, **params})
-    m.fit(X_tr, y_tr[target])
-    return float(np.sqrt(np.mean((y_val[target].values - m.predict(X_val)) ** 2)))
 
 
 def retrain_with_best_params(
@@ -153,7 +162,6 @@ def compare_on_test(X_test, y_test, baseline_seasonal, tuned_seasonal) -> dict:
         b_models = baseline_seasonal[season]
         t_models = tuned_seasonal[season]
 
-        # Baseline needs its original feature set
         b_features = b_models[TARGET_COLS[0]].feature_name_
         b_metrics  = evaluate(b_models, X_s[b_features], y_s)
         t_metrics  = evaluate(t_models, X_s, y_s)
@@ -197,7 +205,7 @@ def print_comparison(results: dict) -> None:
 
 def plot_comparison(results: dict, best_params: dict) -> None:
     fig, axes = plt.subplots(2, 2, figsize=(12, 8))
-    fig.suptitle("Ext-10 Baseline vs Horizon-Tuned Model\nTest set 2024–2026", fontsize=13)
+    fig.suptitle("Ext-10 Baseline vs CV-Tuned Model\nTest set 2024–2026", fontsize=13)
 
     panels = [
         ("cold", "flow",  "Flow RMSE — Cold season (m³/s)",  axes[0, 0]),
@@ -216,7 +224,7 @@ def plot_comparison(results: dict, best_params: dict) -> None:
         b = [res["baseline"][f"{var}_t{h}"]["rmse"] for h in range(1, 6)]
         t = [res["tuned"][f"{var}_t{h}"]["rmse"]    for h in range(1, 6)]
         ax.bar(x - w/2, b, w, label="Ext-10 baseline", color="#4a9fd4", alpha=0.85)
-        ax.bar(x + w/2, t, w, label="Horizon-tuned",   color="#22c55e", alpha=0.85)
+        ax.bar(x + w/2, t, w, label="CV-Tuned",        color="#22c55e", alpha=0.85)
         ax.set_title(title, fontsize=10)
         ax.set_xlabel("Horizon (days)")
         ax.set_xticks(x)
@@ -230,7 +238,6 @@ def plot_comparison(results: dict, best_params: dict) -> None:
     plt.close()
     print(f"\nComparison plot saved → {out}")
 
-    # Also print the winning params per target
     print("\n── Best params per target (cold season) ────────────────────────────")
     print(f"  {'Target':<12}  {'num_leaves':>10}  {'min_child':>10}  {'reg_λ':>8}  {'reg_α':>8}")
     print(f"  {'-'*12}  {'-'*10}  {'-'*10}  {'-'*8}  {'-'*8}")
@@ -267,7 +274,7 @@ def main(n_trials: int = 30) -> None:
     # ── Tuning phase ──────────────────────────────────────────────────────
     print(f"\n{'═'*60}")
     print(f"  Tuning phase  ({n_trials} trials per target per season)")
-    print(f"  Tune-val: {TUNE_VAL_START.date()} → {TUNE_VAL_END.date()}")
+    print(f"  CV folds: {CV_FOLD_YEARS}")
     print(f"{'═'*60}")
 
     best_params = {}
@@ -297,7 +304,7 @@ def main(n_trials: int = 30) -> None:
 
     # ── Test-set comparison ───────────────────────────────────────────────
     print(f"\n{'═'*60}")
-    print(f"  Test-set comparison (ext-10 baseline vs tuned)")
+    print(f"  Test-set comparison (ext-10 baseline vs CV-tuned)")
     print(f"{'═'*60}")
 
     baseline_seasonal = load_model(EXT10_PATH)
