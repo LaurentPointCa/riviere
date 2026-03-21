@@ -9,6 +9,41 @@ forecast injection.
 
 Latest forecast also available as machine-readable JSON: [`docs/forecast.json`](docs/forecast.json)
 
+## Deployed models
+
+Three models run on every forecast cycle, each writing its own set of output files.
+
+| Model | Output files | Purpose |
+|-------|-------------|---------|
+| **Quantile CV-tuned** (production) | `forecast.*` | Optimized for flood detection — biases predictions upward |
+| MSE seasonal | `forecast_mse.*` | Standard regression baseline — good for normal conditions |
+| Ext10 MSE | `forecast_ext10.*` | MSE variant with weather forecast features extended to t+10 |
+
+### Production model — quantile regression (α=0.85)
+
+The production model uses LightGBM quantile regression instead of standard MSE. Predictions are biased upward under uncertainty: under-prediction is penalized 85% of the time. Hyperparameters were tuned by minimizing pinball loss on days where flow exceeds 1,500 m³/s (approaching flood level), using walk-forward CV folds 2020–2023, with 2017 and 2019 held out for final evaluation.
+
+**Why not MSE?** The 2024–2026 test set contains zero flood days (max: 2,269 m³/s). RMSE on those two years says nothing about what matters most. Of the 9,490 cold-season days in the full dataset, only 145 (1.5%) exceed the 2,500 m³/s concern threshold. An MSE model learns to predict normal conditions precisely while missing flood rises.
+
+**Flood detection results** — walk-forward out-of-sample evaluation on flood years 2017, 2019, 2023 (threshold: 2,500 m³/s):
+
+| Horizon | Recall — MSE | Recall — quantile CV | Precision — quantile CV |
+|---------|-------------|---------------------|------------------------|
+| t+1 | 0.935 | 0.989 | ≥ 0.876 |
+| t+3 | 0.828 | 0.946 | ≥ 0.876 |
+| t+5 | 0.656 | 0.839 | ≥ 0.876 |
+
+The quantile CV model also gives 1–2 days of advance warning for the 2017 and 2019 flood onsets, versus zero days for the MSE model.
+
+The `forecast.json` output includes a `flood_risk` block with two boolean flags:
+- `concern`: any predicted horizon exceeds 2,500 m³/s
+- `near_flood`: any predicted horizon exceeds 3,000 m³/s
+
+### Reference models
+
+- **`forecast_mse`** — the MSE seasonal model that was in production before the quantile switch. Useful as a reference for normal-conditions accuracy. The RMSE tables below reflect this model.
+- **`forecast_ext10`** — MSE variant trained with weather forecast features extended to t+10 horizons (vs. t+5). Allows the model to capture a longer meteorological signal.
+
 ## Watershed and stations
 
 ![Basin map](docs/basin_map.png)
@@ -19,10 +54,9 @@ The watershed is delineated by [mghydro.com](https://mghydro.com) from the outle
 
 The seven monitoring stations used as model inputs, from the Ottawa region to Laval.
 
-## Results
+## Results (MSE reference model)
 
-Held-out test set (2024-03-10 → 2026-03-09, 730 days) used for evaluation.
-The deployed model is retrained on the full dataset (1978-01-01 → 2026-03-09).
+RMSE on the held-out test set (2024-03-10 → 2026-03-09, 730 days). These numbers reflect the MSE seasonal model — not the production model's optimization target (see flood detection results above). The deployed models are retrained on the full dataset (1978-01-01 → 2026-03-09).
 
 Two separate seasonal models: **cold** (Nov–May, snowmelt/spring freshet) and **warm** (Jun–Oct, rain/baseflow).
 
@@ -128,7 +162,9 @@ python src/predict.py --date 2025-06-01
 - **Features:** 165 columns — lags, rolling statistics (upstream stations 043108,
   02KF005 Ottawa at Britannia, 02LA015 Ottawa at Hull), ERA5-Land snow depth,
   snowpack proxy, seasonal encoding, flow anomaly, 5-day weather forecast
-- **Hyperparameters:** 500 trees, lr=0.05, 63 leaves, subsample=0.8
+- **Production model:** quantile regression α=0.85, hyperparameters tuned via
+  event-focused CV (pinball loss on days with flow > 1,500 m³/s, folds 2020–2023)
+- **MSE/Ext10 hyperparameters:** 500 trees, lr=0.05, 63 leaves, subsample=0.8
 - **Top features (cold):** current flow, 3-day rolling max, current level,
   day-of-year (sin), 5-day cumulative forecast precipitation
 - **Top features (warm):** current flow, Hull level (02LA015), 3-day rolling max,

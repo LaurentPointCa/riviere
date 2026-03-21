@@ -25,6 +25,41 @@ hydrologiques en amont en temps réel.
 
 La prévision la plus récente est également disponible en JSON lisible par machine : [`docs/forecast.json`](docs/forecast.json)
 
+## Modèles déployés
+
+Trois modèles tournent en parallèle à chaque cycle de prévision, chacun produisant son propre jeu de fichiers.
+
+| Modèle | Fichiers de sortie | Rôle |
+|--------|-------------------|------|
+| **Quantile CV-tuné** (production) | `forecast.*` | Optimisé pour la détection des crues — biaise les prédictions vers le haut |
+| MSE saisonnier | `forecast_mse.*` | Référence régression standard — bon pour les conditions normales |
+| Ext10 MSE | `forecast_ext10.*` | Variante MSE avec prévision météo étendue jusqu'à t+10 |
+
+### Modèle de production — régression par quantile (α=0,85)
+
+Le modèle de production utilise la régression par quantile LightGBM plutôt que la régression MSE classique. Les prédictions sont biaisées vers le haut sous l'incertitude : la sous-prédiction est pénalisée 85 % du temps. Les hyperparamètres ont été optimisés en minimisant la perte pinball sur les jours où le débit dépasse 1 500 m³/s (approche d'une crue), avec des plis CV 2020–2023 et les années 2017 et 2019 réservées pour l'évaluation finale.
+
+**Pourquoi pas le MSE ?** L'ensemble de test 2024–2026 ne contient aucun jour de crue (max : 2 269 m³/s). Le RMSE sur ces deux années ne mesure pas ce qui importe. Sur l'ensemble complet des données, seuls 145 des 9 490 jours de saison froide (1,5 %) dépassent le seuil de préoccupation de 2 500 m³/s. Un modèle MSE apprend à prédire les conditions normales avec précision mais rate les montées de crue.
+
+**Résultats détection de crue** — évaluation walk-forward hors-échantillon sur les années de crue 2017, 2019, 2023 (seuil : 2 500 m³/s) :
+
+| Horizon | Rappel — MSE | Rappel — quantile CV | Précision — quantile CV |
+|---------|-------------|---------------------|------------------------|
+| t+1 | 0,935 | 0,989 | ≥ 0,876 |
+| t+3 | 0,828 | 0,946 | ≥ 0,876 |
+| t+5 | 0,656 | 0,839 | ≥ 0,876 |
+
+Le modèle quantile CV donne également 1–2 jours d'avertissement avancé pour les premières montées de 2017 et 2019, contre zéro pour le modèle MSE.
+
+Le fichier `forecast.json` inclut un bloc `flood_risk` avec deux indicateurs booléens :
+- `concern` : au moins un horizon prédit dépasse 2 500 m³/s
+- `near_flood` : au moins un horizon prédit dépasse 3 000 m³/s
+
+### Modèles de référence
+
+- **`forecast_mse`** — le modèle MSE saisonnier qui était en production avant le passage au quantile. Utile comme référence pour la précision en conditions normales. Les tables RMSE ci-dessous reflètent ce modèle.
+- **`forecast_ext10`** — variante MSE entraînée avec la prévision météo étendue jusqu'à t+10 (contre t+5). Permet au modèle de capter un signal météorologique plus lointain.
+
 ## Bassin versant et stations
 
 ![Carte du bassin versant](docs/basin_map.png)
@@ -35,10 +70,9 @@ Le bassin versant est délinéé par [mghydro.com](https://mghydro.com) à parti
 
 Les sept stations de mesure utilisées en entrée du modèle, de la région d'Ottawa jusqu'à Laval.
 
-## Résultats
+## Résultats (modèle de référence MSE)
 
-Ensemble de test retenu (2024-03-10 → 2026-03-09, 730 jours) utilisé pour l'évaluation.
-Le modèle déployé est ré-entraîné sur l'ensemble complet des données (1978-01-01 → 2026-03-09).
+RMSE sur l'ensemble de test retenu (2024-03-10 → 2026-03-09, 730 jours). Ces chiffres reflètent le modèle MSE saisonnier — pas la cible d'optimisation du modèle de production (voir résultats de détection de crue ci-dessus). Les modèles déployés sont ré-entraînés sur l'ensemble complet des données (1978-01-01 → 2026-03-09).
 
 Deux modèles saisonniers distincts : **froid** (nov–mai, fonte des neiges / crue printanière) et **chaud** (juin–oct, pluie / étiage).
 
@@ -144,7 +178,9 @@ python src/predict.py --date 2025-06-01
 - **Caractéristiques :** 165 colonnes — décalages, statistiques glissantes (stations 043108,
   02KF005 Outaouais à Britannia, 02LA015 Outaouais à Hull), profondeur de neige ERA5-Land,
   proxy d'enneigement, encodage saisonnier, anomalie de débit, prévision météo 5 jours
-- **Hyperparamètres :** 500 arbres, lr=0,05, 63 feuilles, subsample=0,8
+- **Modèle de production :** régression par quantile α=0,85, hyperparamètres optimisés par
+  CV event-focused (perte pinball sur jours > 1 500 m³/s, plis 2020–2023)
+- **Hyperparamètres MSE/Ext10 :** 500 arbres, lr=0,05, 63 feuilles, subsample=0,8
 - **Meilleures caractéristiques (froid) :** débit actuel, max glissant 3 j, niveau actuel,
   jour de l'année (sin), précipitations cumulées prévues 5 j
 - **Meilleures caractéristiques (chaud) :** débit actuel, niveau Hull (02LA015),
