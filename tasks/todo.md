@@ -32,12 +32,15 @@ analysis in memory/project_flood_detection_reorientation.md.
   - Verdict: quantile model advances to Step 3 (event-focused tuning)
 
 ### Step 3 — Event-focused hyperparameter tuning
-- [ ] Modify `src/tune_hyperparams.py` to support event-focused CV:
-  - CV metric: pinball loss on days where flow > 1500 m³/s (approaching threshold)
-  - Use quantile pinball loss to align with quantile training objective
-  - CV folds: exclude 2017 and 2019 (held out for evaluation), use 2020–2023
-- [ ] Run tuning on the quantile model
-- [ ] Evaluate with flood detection framework
+- [x] Modify `src/tune_hyperparams.py` to support event-focused CV (`--mode quantile`)
+  - CV metric: pinball loss on days where current flow > 1500 m³/s
+  - CV folds: [2020, 2021, 2022, 2023] — 2017/2019 held out
+- [x] Run 30-trial quantile tuning → `models/lgbm_forecast_quantile_tuned.pkl`
+- [x] Evaluate with flood detection framework
+- [x] Results vs untuned quantile:
+  - Recall t+1: 0.978 → 0.989  |  t+3: 0.925 → 0.946  |  t+5: 0.806 → 0.839
+  - Precision stays ≥ 0.876 at all horizons
+  - Lead time: 2017 first onset regressed (5d → 1d); 2019 onset held at 2d
 
 ### Step 4 — Evaluate and promote
 - [ ] Compare on flood years (2017, 2019, 2023):

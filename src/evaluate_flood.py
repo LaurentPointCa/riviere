@@ -10,13 +10,16 @@ Primary threshold: 2500 m³/s (residents concerned)
 Secondary threshold: 3000 m³/s (near historical flood)
 
 Usage:
-    python src/evaluate_flood.py                   # MSE baseline, 2500 threshold
-    python src/evaluate_flood.py --alpha 0.85      # quantile model
+    python src/evaluate_flood.py                          # MSE baseline
+    python src/evaluate_flood.py --alpha 0.85             # quantile untuned
+    python src/evaluate_flood.py --alpha 0.85 \\
+        --params models/best_params_quantile.json         # quantile tuned
     python src/evaluate_flood.py --threshold 3000
     python src/evaluate_flood.py --years 2019 2023
 """
 
 import argparse
+import json
 import sys
 from pathlib import Path
 
@@ -37,19 +40,23 @@ DEFAULT_EVAL_YEARS = [2017, 2019, 2023]
 # ── Model training ───────────────────────────────────────────────────────────
 
 def _train_cold(X_tr: pd.DataFrame, y_tr: pd.DataFrame,
-                alpha: float | None = None) -> dict:
+                alpha: float | None = None,
+                best_params: dict | None = None) -> dict:
     """
     Train cold-season flow models (t+1..t+5 only).
-    alpha=None  → MSE / regression (default)
-    alpha=float → quantile regression at that quantile level
+    alpha=None        → MSE / regression (default)
+    alpha=float       → quantile regression at that quantile level
+    best_params       → per-target hyperparams from best_params_quantile.json
+                        (keyed as best_params["cold"][target])
     """
-    params = {**LGBM_PARAMS}
+    base = {**LGBM_PARAMS}
     if alpha is not None:
-        params.update({"objective": "quantile", "alpha": alpha, "metric": "quantile"})
+        base.update({"objective": "quantile", "alpha": alpha, "metric": "quantile"})
 
     models = {}
     for target in FLOW_TARGETS:
-        m = LGBMRegressor(**params)
+        overrides = (best_params or {}).get(target, {})
+        m = LGBMRegressor(**{**base, **overrides})
         m.fit(X_tr, y_tr[target])
         models[target] = m
     return models
@@ -62,6 +69,7 @@ def predict_year(
     X: pd.DataFrame,
     y: pd.DataFrame,
     alpha: float | None = None,
+    best_params: dict | None = None,
 ) -> pd.DataFrame:
     """
     Train on all cold-season data before `year`, predict cold season of `year`.
@@ -80,10 +88,12 @@ def predict_year(
     X_te, y_te = X[te_mask], y[te_mask]
 
     label = "MSE" if alpha is None else f"quantile α={alpha}"
+    if best_params:
+        label += " (tuned)"
     print(f"  [{year}] {label} | train={len(X_tr):,} cold-season rows"
           f" | test={len(X_te)} rows")
 
-    models = _train_cold(X_tr, y_tr, alpha)
+    models = _train_cold(X_tr, y_tr, alpha, best_params)
 
     df = pd.DataFrame(index=X_te.index)
     df["flow_today"] = X_te["flow_m3s"].values
@@ -260,9 +270,21 @@ def main() -> None:
         "--threshold", type=int, default=DEFAULT_THRESHOLD,
         help=f"Flow threshold in m³/s (default: {DEFAULT_THRESHOLD})",
     )
+    parser.add_argument(
+        "--params", type=str, default=None, metavar="PATH",
+        help="Path to best_params JSON (e.g. models/best_params_quantile.json). "
+             "Applies cold-season per-target overrides on top of --alpha.",
+    )
     args = parser.parse_args()
 
+    best_params = None
+    if args.params:
+        raw = json.loads(Path(args.params).read_text())
+        best_params = raw.get("cold", {})
+
     label = "MSE (regression)" if args.alpha is None else f"quantile α={args.alpha}"
+    if best_params:
+        label += " + tuned params"
     print(f"\nFlood detection evaluation  [{label}]")
     print(f"Threshold : {args.threshold:,} m³/s")
     print(f"Years     : {args.years}")
@@ -274,7 +296,7 @@ def main() -> None:
     all_metrics: dict[int, pd.DataFrame] = {}
 
     for year in args.years:
-        df      = predict_year(year, X, y, alpha=args.alpha)
+        df      = predict_year(year, X, y, alpha=args.alpha, best_params=best_params)
         metrics = threshold_metrics(df, args.threshold)
         events  = lead_time_events(df, args.threshold)
         all_metrics[year] = metrics
