@@ -164,6 +164,9 @@ def load_live() -> pd.DataFrame:
 def _live_daily() -> pd.DataFrame:
     """Fetch live 15-min feed and resample to daily means (flow_m3s, level_m)."""
     live = load_live()
+    if live.empty:
+        return pd.DataFrame(columns=["flow_m3s", "level_m"],
+                            index=pd.DatetimeIndex([], name="datetime"))
     return live[["flow_m3s", "level_m"]].resample("D").mean()
 
 
@@ -222,7 +225,11 @@ def load_upstream_level(cache: bool = True) -> pd.DataFrame:
     """Load daily level (m) for upstream station 043108 (Lac des Deux Montagnes), extended with live feed."""
     hist = _load_cehq("upstream_level", "043108_N.txt", "upstream_level_m", cache)
     live = _load_upstream_live()
-    live_daily = live[["upstream_level_m"]].resample("D").mean()
+    if live.empty:
+        live_daily = pd.DataFrame(columns=["upstream_level_m"],
+                                  index=pd.DatetimeIndex([], name="datetime"))
+    else:
+        live_daily = live[["upstream_level_m"]].resample("D").mean()
     new_rows = live_daily[live_daily.index > hist.index.max()]
     if not new_rows.empty:
         hist = pd.concat([hist, new_rows])
