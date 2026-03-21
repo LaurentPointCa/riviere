@@ -22,12 +22,14 @@ analysis in memory/project_flood_detection_reorientation.md.
     detected flood once it was already happening); 2023 had 2–5 day warnings
 
 ### Step 2 — Quantile regression model (alpha=0.85)
-- [ ] In `src/model.py`, add a `train_quantile(X, y, alpha=0.85)` variant:
-  - Uses `objective='quantile'`, `alpha=alpha` in LGBMRegressor
-  - Everything else identical (same seasonal split, same features)
-- [ ] Train and save as `models/lgbm_forecast_quantile.pkl`
-- [ ] Evaluate with the flood detection framework from Step 1
-- [ ] Compare: does quantile model catch more threshold crossings with acceptable precision?
+- [x] In `src/model.py`, add a `train_quantile(X, y, alpha=0.85)` variant
+- [x] Train and save as `models/lgbm_forecast_quantile.pkl`
+- [x] Evaluate with the flood detection framework from Step 1
+- [x] Result: clear improvement over MSE baseline
+  - Recall t+3: 0.828 → 0.925  |  t+5: 0.656 → 0.806
+  - Precision stays high: 0.915 at t+3 and t+5 (was 0.951/0.953)
+  - Lead time: 2017 onset 0 days → 5-day warning; 2019 onset 0 → 2-day warning
+  - Verdict: quantile model advances to Step 3 (event-focused tuning)
 
 ### Step 3 — Event-focused hyperparameter tuning
 - [ ] Modify `src/tune_hyperparams.py` to support event-focused CV:

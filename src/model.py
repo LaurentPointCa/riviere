@@ -93,6 +93,28 @@ def train(X: pd.DataFrame, y: pd.DataFrame) -> dict:
     return models
 
 
+def train_quantile(X: pd.DataFrame, y: pd.DataFrame, alpha: float = 0.85) -> dict:
+    """
+    Train one quantile LGBMRegressor per target column.
+
+    Uses objective='quantile' with the given alpha, biasing predictions upward
+    under uncertainty. alpha=0.85 penalises under-prediction 85% of the time,
+    which helps catch threshold crossings without generating excess false alarms.
+
+    Everything else is identical to train() (same features, same n_estimators, etc.).
+    """
+    params = {**LGBM_PARAMS, "objective": "quantile", "alpha": alpha,
+              "metric": "quantile"}
+    models = {}
+    for target in TARGET_COLS:
+        print(f"  Training {target} (quantile α={alpha})...", end=" ", flush=True)
+        model = LGBMRegressor(**params)
+        model.fit(X, y[target])
+        models[target] = model
+        print("done")
+    return models
+
+
 def evaluate(models: dict, X_test: pd.DataFrame, y_test: pd.DataFrame) -> dict:
     """
     Compute RMSE and MAE per target on a held-out set.
@@ -338,6 +360,9 @@ if __name__ == "__main__":
                         help="First test year for CV (default: 2019)")
     parser.add_argument("--last-test-year",  type=int, default=None,
                         help="Last test year for CV (default: last full year in dataset)")
+    parser.add_argument("--quantile", type=float, default=None, metavar="ALPHA",
+                        help="Train quantile model at ALPHA (e.g. 0.85) and save as "
+                             "models/lgbm_forecast_quantile.pkl")
     args = parser.parse_args()
 
     # 1. Build dataset
@@ -357,6 +382,12 @@ if __name__ == "__main__":
     print(f"\nTrain: {len(X_train):,} rows  ({X_train.index[0].date()} → {X_train.index[-1].date()})")
     print(f"Test:  {len(X_test):,} rows  ({X_test.index[0].date()} → {X_test.index[-1].date()})")
 
+    train_fn   = (lambda X, y: train_quantile(X, y, alpha=args.quantile)
+                  if args.quantile else train)
+    out_path   = ("models/lgbm_forecast_quantile.pkl" if args.quantile
+                  else "models/lgbm_forecast.pkl")
+    label_sfx  = f" (quantile α={args.quantile})" if args.quantile else ""
+
     seasonal_models = {}
     for season, months in [("cold", COLD_MONTHS), ("warm", WARM_MONTHS)]:
         label = "Nov–May" if season == "cold" else "Jun–Oct"
@@ -367,12 +398,12 @@ if __name__ == "__main__":
         X_te, y_te = X_test[test_mask],   y_test[test_mask]
 
         print(f"\n{'═'*60}")
-        print(f"  Season: {season.upper()} ({label})")
+        print(f"  Season: {season.upper()} ({label}){label_sfx}")
         print(f"  Train rows: {len(X_tr):,}  |  Test rows: {len(X_te):,}")
         print(f"{'═'*60}")
 
-        print(f"\nTraining 10 LGBMRegressor models ({season})...")
-        models = train(X_tr, y_tr)
+        print(f"\nTraining 10 LGBMRegressor models ({season}){label_sfx}...")
+        models = train_fn(X_tr, y_tr)
 
         print(f"\nEvaluating on {season} test set...")
         metrics = evaluate(models, X_te, y_te)
@@ -382,4 +413,4 @@ if __name__ == "__main__":
         seasonal_models[season] = models
 
     # Save both season model sets in one file
-    save_model(seasonal_models, "models/lgbm_forecast.pkl")
+    save_model(seasonal_models, out_path)
