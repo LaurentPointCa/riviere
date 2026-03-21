@@ -1,13 +1,18 @@
 """
 Horizon-specific hyperparameter tuning for the Des Prairies forecast model.
 
-Tuning objective: 5-fold walk-forward CV mean RMSE (folds 2019–2023).
-  Fold Y: train on data ≤ Dec 31 of Y-1, evaluate on year Y (season-filtered)
+Two modes:
 
-Splits:
-  CV folds   : 2019, 2020, 2021, 2022, 2023  ← optuna objective
-  final-train: 1978-01-01 → 2024-03-16       ← same as ext10 baseline, best params applied
-  test       : 2024-03-17 → 2026-03-16       ← untouched, final comparison only
+  --mode mse  (default)
+    Objective : 5-fold walk-forward CV mean RMSE (folds 2019–2023)
+    Output    : models/lgbm_forecast_tuned.pkl
+
+  --mode quantile
+    Objective : 4-fold walk-forward CV mean pinball loss on event days
+                (days where actual flow > 1500 m³/s, folds 2020–2023)
+                2017 and 2019 are held out — never used in CV or training
+    Training  : LightGBM quantile loss at alpha=0.85
+    Output    : models/lgbm_forecast_quantile_tuned.pkl
 
 Search space per target × season:
   num_leaves        : [15, 31, 63, 127]
@@ -18,8 +23,9 @@ Search space per target × season:
 n_estimators and learning_rate are fixed (500 / 0.05).
 
 Usage:
-    python src/tune_hyperparams.py              # tune + retrain + compare
-    python src/tune_hyperparams.py --trials 20  # fewer trials for quick test
+    python src/tune_hyperparams.py                        # MSE mode, 30 trials
+    python src/tune_hyperparams.py --mode quantile        # event-focused quantile
+    python src/tune_hyperparams.py --mode quantile --trials 20
 """
 
 import argparse
@@ -44,11 +50,20 @@ from model import (
 )
 from lightgbm import LGBMRegressor
 
-TUNED_PATH  = Path("models/lgbm_forecast_tuned.pkl")
-EXT10_PATH  = Path("models/lgbm_forecast_ext10.pkl")
-PARAMS_PATH = Path("models/best_params.json")
+TUNED_PATH              = Path("models/lgbm_forecast_tuned.pkl")
+QUANTILE_TUNED_PATH     = Path("models/lgbm_forecast_quantile_tuned.pkl")
+EXT10_PATH              = Path("models/lgbm_forecast_ext10.pkl")
+PARAMS_PATH             = Path("models/best_params.json")
+QUANTILE_PARAMS_PATH    = Path("models/best_params_quantile.json")
 
-CV_FOLD_YEARS = [2019, 2020, 2021, 2022, 2023]
+# MSE mode: 5 folds including flood years (objective is RMSE on all days)
+CV_FOLD_YEARS      = [2019, 2020, 2021, 2022, 2023]
+
+# Quantile mode: 4 folds, 2017 and 2019 held out for final flood evaluation
+CV_FOLD_YEARS_SAFE = [2020, 2021, 2022, 2023]
+
+QUANTILE_ALPHA   = 0.85
+EVENT_THRESHOLD  = 1500.0   # m³/s — approaching flood; CV metric filtered to these days
 
 
 def _cv_rmse(target: str, X: pd.DataFrame, y: pd.DataFrame,
@@ -78,12 +93,68 @@ def _cv_rmse(target: str, X: pd.DataFrame, y: pd.DataFrame,
     return float(np.mean(fold_rmses)) if fold_rmses else float("inf")
 
 
+def _pinball_loss(y_true: np.ndarray, y_pred: np.ndarray, alpha: float) -> float:
+    """Mean quantile/pinball loss at level alpha."""
+    err = y_true - y_pred
+    return float(np.where(err >= 0, alpha * err, (alpha - 1) * err).mean())
+
+
+def _cv_event_pinball(target: str, X: pd.DataFrame, y: pd.DataFrame,
+                      months: set, params: dict,
+                      alpha: float = QUANTILE_ALPHA,
+                      event_threshold: float = EVENT_THRESHOLD) -> float:
+    """
+    Mean pinball loss on event days across walk-forward CV folds.
+
+    'Event days' = rows where the actual future flow (y[target]) > event_threshold.
+    Trains with quantile objective so the CV metric aligns with training loss.
+    Uses CV_FOLD_YEARS_SAFE (excludes 2017/2019, kept for final flood evaluation).
+    """
+    fold_losses = []
+    qparams = {**LGBM_PARAMS, **params,
+               "objective": "quantile", "alpha": alpha, "metric": "quantile",
+               "n_jobs": 1}
+
+    for fold_year in CV_FOLD_YEARS_SAFE:
+        cutoff     = pd.Timestamp(f"{fold_year - 1}-12-31")
+        year_start = pd.Timestamp(f"{fold_year}-01-01")
+        year_end   = pd.Timestamp(f"{fold_year}-12-31")
+
+        tr_mask  = (X.index <= cutoff)     & _season_mask(X.index, months)
+        val_mask = (X.index >= year_start) & (X.index <= year_end) & _season_mask(X.index, months)
+
+        X_tr,  y_tr  = X[tr_mask],  y[tr_mask]
+        X_val, y_val = X[val_mask], y[val_mask]
+
+        if len(X_tr) < 30 or len(X_val) == 0:
+            continue
+
+        m = LGBMRegressor(**qparams)
+        m.fit(X_tr, y_tr[target])
+        preds  = m.predict(X_val)
+        y_true = y_val[target].values
+
+        # Filter on current observed flow, not the target value.
+        # This applies consistently across all targets (flow and level).
+        event_mask = X_val["flow_m3s"].values > event_threshold
+        if event_mask.sum() == 0:
+            continue  # no approaching-flood days in this fold
+
+        fold_losses.append(_pinball_loss(y_true[event_mask], preds[event_mask], alpha))
+
+    return float(np.mean(fold_losses)) if fold_losses else float("inf")
+
+
 def _tune_target_worker(args: tuple) -> tuple:
     """Top-level worker (must be module-level for ProcessPoolExecutor pickling)."""
-    target, X, y, months, n_trials = args
-    params   = _tune_target(target, X, y, months, n_trials)
-    cv_base  = _cv_rmse(target, X, y, months, {})
-    cv_best  = _cv_rmse(target, X, y, months, params)
+    target, X, y, months, n_trials, alpha = args
+    params   = _tune_target(target, X, y, months, n_trials, alpha)
+    if alpha is None:
+        cv_base = _cv_rmse(target, X, y, months, {})
+        cv_best = _cv_rmse(target, X, y, months, params)
+    else:
+        cv_base = _cv_event_pinball(target, X, y, months, {}, alpha)
+        cv_best = _cv_event_pinball(target, X, y, months, params, alpha)
     return target, params, cv_base, cv_best
 
 
@@ -93,8 +164,9 @@ def _tune_target(
     y: pd.DataFrame,
     months: set,
     n_trials: int,
+    alpha: float | None = None,
 ) -> dict:
-    """Run an optuna study for one target using 5-fold CV. Returns best params dict."""
+    """Run an optuna study for one target. alpha=None → RMSE; float → event pinball."""
 
     def objective(trial):
         params = {
@@ -103,7 +175,9 @@ def _tune_target(
             "reg_lambda":        trial.suggest_float("reg_lambda", 0.1, 10.0, log=True),
             "reg_alpha":         trial.suggest_float("reg_alpha", 0.01, 1.0,  log=True),
         }
-        return _cv_rmse(target, X, y, months, params)
+        if alpha is None:
+            return _cv_rmse(target, X, y, months, params)
+        return _cv_event_pinball(target, X, y, months, params, alpha)
 
     study = optuna.create_study(direction="minimize")
     study.optimize(objective, n_trials=n_trials, show_progress_bar=False)
@@ -116,15 +190,21 @@ def tune_season(
     X: pd.DataFrame,
     y: pd.DataFrame,
     n_trials: int,
+    alpha: float | None = None,
 ) -> dict:
     """Tune all 10 targets for one season in parallel. Returns {target: best_params}."""
-    label = "Nov–May" if season == "cold" else "Jun–Oct"
+    label     = "Nov–May" if season == "cold" else "Jun–Oct"
     n_workers = min(len(TARGET_COLS), os.cpu_count() or 4)
-    print(f"\n── {season.upper()} ({label})  5-fold CV  "
-          f"({len(CV_FOLD_YEARS)} folds: {CV_FOLD_YEARS[0]}–{CV_FOLD_YEARS[-1]})  "
-          f"parallel={n_workers} workers")
+    if alpha is None:
+        cv_desc = (f"{len(CV_FOLD_YEARS)}-fold CV RMSE  "
+                   f"(folds {CV_FOLD_YEARS[0]}–{CV_FOLD_YEARS[-1]})")
+    else:
+        cv_desc = (f"{len(CV_FOLD_YEARS_SAFE)}-fold event-pinball  "
+                   f"(folds {CV_FOLD_YEARS_SAFE[0]}–{CV_FOLD_YEARS_SAFE[-1]}, "
+                   f"α={alpha}, threshold>{EVENT_THRESHOLD:.0f} m³/s)")
+    print(f"\n── {season.upper()} ({label})  {cv_desc}  parallel={n_workers} workers")
 
-    worker_args = [(t, X, y, months, n_trials) for t in TARGET_COLS]
+    worker_args = [(t, X, y, months, n_trials, alpha) for t in TARGET_COLS]
     collected = {}
 
     with ProcessPoolExecutor(max_workers=n_workers) as executor:
@@ -133,8 +213,9 @@ def tune_season(
         for future in as_completed(futures):
             target, params, cv_base, cv_best = future.result()
             collected[target] = (params, cv_base, cv_best)
-            pct = (cv_best - cv_base) / cv_base * 100
-            print(f"   {target:<12} CV RMSE {cv_base:.2f} → {cv_best:.2f}  "
+            metric = "RMSE" if alpha is None else "pinball"
+            pct    = (cv_best - cv_base) / cv_base * 100 if cv_base > 0 else 0.0
+            print(f"   {target:<12} CV {metric} {cv_base:.4f} → {cv_best:.4f}  "
                   f"({pct:+.1f}%)  leaves={params['num_leaves']}  "
                   f"mcs={params['min_child_samples']}  "
                   f"λ={params['reg_lambda']:.2f}  α={params['reg_alpha']:.3f}")
@@ -148,13 +229,17 @@ def retrain_with_best_params(
     X_train: pd.DataFrame,
     y_train: pd.DataFrame,
     best_params: dict,
+    alpha: float | None = None,
 ) -> dict:
-    """Retrain all 10 targets on the full training set using best params."""
+    """Retrain all 10 targets on the full training set using best params.
+    alpha=None → MSE; float → quantile at that alpha level."""
     mask = _season_mask(X_train.index, months)
     X_s, y_s = X_train[mask], y_train[mask]
+    extra = ({} if alpha is None
+             else {"objective": "quantile", "alpha": alpha, "metric": "quantile"})
     models = {}
     for target in TARGET_COLS:
-        params = {**LGBM_PARAMS, **best_params[target]}
+        params = {**LGBM_PARAMS, **extra, **best_params[target]}
         m = LGBMRegressor(**params)
         m.fit(X_s, y_s[target])
         models[target] = m
@@ -270,8 +355,12 @@ def plot_comparison(results: dict, best_params: dict) -> None:
               f"{p.get('reg_alpha', 0):>8.3f}")
 
 
-def main(n_trials: int = 30) -> None:
-    print("Loading dataset...")
+def main(n_trials: int = 30, mode: str = "mse") -> None:
+    alpha      = QUANTILE_ALPHA if mode == "quantile" else None
+    out_path   = QUANTILE_TUNED_PATH if mode == "quantile" else TUNED_PATH
+    save_path  = QUANTILE_PARAMS_PATH if mode == "quantile" else PARAMS_PATH
+
+    print(f"Loading dataset...")
     X, y = build_dataset()
     print(f"  X: {X.shape}  |  {X.index[0].date()} → {X.index[-1].date()}")
 
@@ -283,19 +372,22 @@ def main(n_trials: int = 30) -> None:
           f"  ({len(X_test):,} rows)")
 
     # ── Tuning phase ──────────────────────────────────────────────────────
+    mode_label = ("event-focused quantile pinball" if mode == "quantile"
+                  else "MSE RMSE")
     print(f"\n{'═'*60}")
     print(f"  Tuning phase  ({n_trials} trials per target per season)")
-    print(f"  CV folds: {CV_FOLD_YEARS}")
+    print(f"  Mode: {mode_label}")
     print(f"{'═'*60}")
 
     best_params = {}
     for season, months in [("cold", COLD_MONTHS), ("warm", WARM_MONTHS)]:
-        best_params[season] = tune_season(season, months, X_train, y_train, n_trials)
+        best_params[season] = tune_season(season, months, X_train, y_train,
+                                          n_trials, alpha=alpha)
 
     # Save best params
-    PARAMS_PATH.parent.mkdir(parents=True, exist_ok=True)
-    PARAMS_PATH.write_text(json.dumps(best_params, indent=2))
-    print(f"\nBest params saved → {PARAMS_PATH}")
+    save_path.parent.mkdir(parents=True, exist_ok=True)
+    save_path.write_text(json.dumps(best_params, indent=2))
+    print(f"\nBest params saved → {save_path}")
 
     # ── Retrain with best params on full train set ────────────────────────
     print(f"\n{'═'*60}")
@@ -307,26 +399,32 @@ def main(n_trials: int = 30) -> None:
         label = "Nov–May" if season == "cold" else "Jun–Oct"
         print(f"\n── {season.upper()} ({label})...")
         tuned_seasonal[season] = retrain_with_best_params(
-            season, months, X_train, y_train, best_params[season]
+            season, months, X_train, y_train, best_params[season], alpha=alpha
         )
         print("   done")
 
-    save_model(tuned_seasonal, TUNED_PATH)
+    save_model(tuned_seasonal, out_path)
 
-    # ── Test-set comparison ───────────────────────────────────────────────
-    print(f"\n{'═'*60}")
-    print(f"  Test-set comparison (ext-10 baseline vs CV-tuned)")
-    print(f"{'═'*60}")
+    # ── Test-set comparison (RMSE, informational only) ────────────────────
+    if EXT10_PATH.exists():
+        print(f"\n{'═'*60}")
+        print(f"  Test-set RMSE comparison (informational — not the flood metric)")
+        print(f"{'═'*60}")
+        baseline_seasonal = load_model(EXT10_PATH)
+        results = compare_on_test(X_test, y_test, baseline_seasonal, tuned_seasonal)
+        print_comparison(results)
+        plot_comparison(results, best_params)
 
-    baseline_seasonal = load_model(EXT10_PATH)
-    results = compare_on_test(X_test, y_test, baseline_seasonal, tuned_seasonal)
-    print_comparison(results)
-    plot_comparison(results, best_params)
+    print(f"\nDone. Run evaluate_flood.py to compare flood detection performance.")
+    if mode == "quantile":
+        print(f"  python src/evaluate_flood.py --alpha {QUANTILE_ALPHA}")
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--trials", type=int, default=30,
                         help="Optuna trials per target per season (default: 30)")
+    parser.add_argument("--mode", choices=["mse", "quantile"], default="mse",
+                        help="mse: RMSE CV (default); quantile: event-focused pinball CV")
     args = parser.parse_args()
-    main(n_trials=args.trials)
+    main(n_trials=args.trials, mode=args.mode)
