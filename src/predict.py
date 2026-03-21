@@ -19,7 +19,8 @@ from features import build_dataset
 from model import load_model, season_for
 from load_forecast import load_weather_forecast
 
-MODEL_PATH = Path("models/lgbm_forecast.pkl")
+MODEL_PATH     = Path("models/lgbm_forecast.pkl")
+MSE_MODEL_PATH = Path("models/lgbm_forecast_mse.pkl")
 
 
 def _inject_weather_forecast(row: pd.DataFrame, wf: pd.DataFrame) -> pd.DataFrame:
@@ -54,7 +55,8 @@ def _inject_weather_forecast(row: pd.DataFrame, wf: pd.DataFrame) -> pd.DataFram
     return row
 
 
-def forecast(anchor_date: pd.Timestamp, X: pd.DataFrame) -> pd.DataFrame:
+def forecast(anchor_date: pd.Timestamp, X: pd.DataFrame,
+             model_path: Path = MODEL_PATH) -> pd.DataFrame:
     """
     Generate a 5-day forecast of flow and level from the given anchor date.
 
@@ -62,12 +64,13 @@ def forecast(anchor_date: pd.Timestamp, X: pd.DataFrame) -> pd.DataFrame:
     ----------
     anchor_date : the "today" date to forecast from; must be in X.index
     X           : feature matrix from build_dataset()
+    model_path  : path to the model pkl (default: MODEL_PATH)
 
     Returns
     -------
     pd.DataFrame with columns date, flow_m3s, level_m; indexed 1..5 (horizon)
     """
-    all_models = load_model(MODEL_PATH)
+    all_models = load_model(model_path)
     # Support both seasonal ({"cold": ..., "warm": ...}) and legacy flat dicts
     if "cold" in all_models and "warm" in all_models:
         season = season_for(anchor_date)
@@ -318,7 +321,7 @@ def plot_forecast(
     fig.autofmt_xdate(rotation=0, ha="center")
     plt.tight_layout()
 
-    out_path = Path(f"forecast_{anchor_date.date()}.png")
+    out_path = Path(f"{Path(docs_name).stem}_{anchor_date.date()}.png")
     sample_path = Path("docs") / docs_name
     plt.savefig(out_path, dpi=150, bbox_inches="tight")
     sample_path.parent.mkdir(parents=True, exist_ok=True)
@@ -334,9 +337,10 @@ def plot_forecast(
     return out_path
 
 
-def append_forecast_history(result: pd.DataFrame, anchor_date: pd.Timestamp) -> Path:
+def append_forecast_history(result: pd.DataFrame, anchor_date: pd.Timestamp,
+                            out_name: str = "forecast") -> Path:
     """
-    Append (or update) today's forecast in docs/forecast_history.json.
+    Append (or update) today's forecast in docs/{out_name}_history.json.
 
     The file is a JSON array ordered chronologically. If an entry for
     anchor_date already exists (e.g. a second daily run), it is replaced
@@ -345,7 +349,7 @@ def append_forecast_history(result: pd.DataFrame, anchor_date: pd.Timestamp) -> 
     import json
     from datetime import datetime, UTC
 
-    history_path = Path("docs/forecast_history.json")
+    history_path = Path(f"docs/{out_name}_history.json")
     history_path.parent.mkdir(parents=True, exist_ok=True)
 
     if history_path.exists():
@@ -380,12 +384,13 @@ def append_forecast_history(result: pd.DataFrame, anchor_date: pd.Timestamp) -> 
     return history_path
 
 
-def save_forecast_json(result: pd.DataFrame, anchor_date: pd.Timestamp) -> Path:
-    """Save the 5-day forecast as JSON to docs/forecast.json."""
+def save_forecast_json(result: pd.DataFrame, anchor_date: pd.Timestamp,
+                       out_name: str = "forecast") -> Path:
+    """Save the 5-day forecast as JSON to docs/{out_name}.json."""
     import json
     from datetime import datetime, UTC
 
-    out_path = Path("docs/forecast.json")
+    out_path = Path(f"docs/{out_name}.json")
     out_path.parent.mkdir(parents=True, exist_ok=True)
 
     flows = result["flow_m3s"].tolist()
@@ -445,6 +450,15 @@ def main() -> None:
     plot_forecast(result, anchor, X, days_back=30,  docs_name="forecast_30d.png", figsize=(7, 8))
     save_forecast_json(result, anchor)
     append_forecast_history(result, anchor)
+
+    if MSE_MODEL_PATH.exists():
+        print(f"\n── MSE model ({MSE_MODEL_PATH.name}) ──")
+        result_mse = forecast(anchor, X, MSE_MODEL_PATH)
+        print_forecast(result_mse, anchor, X)
+        plot_forecast(result_mse, anchor, X, days_back=365, docs_name="forecast_mse.png",    figsize=(14, 8))
+        plot_forecast(result_mse, anchor, X, days_back=30,  docs_name="forecast_mse_30d.png", figsize=(7, 8))
+        save_forecast_json(result_mse, anchor, "forecast_mse")
+        append_forecast_history(result_mse, anchor, "forecast_mse")
 
 
 if __name__ == "__main__":
