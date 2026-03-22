@@ -26,17 +26,19 @@ EOF
 # Generate validation plot (observed vs all forecast horizons)
 .venv/bin/python scripts/plot_validation.py
 
-# Commit and push the updated chart and forecast JSON if changed
-git add docs/forecast.png docs/forecast_30d.png docs/forecast.json docs/forecast_history.json \
-        docs/forecast_mse.png docs/forecast_mse_30d.png docs/forecast_mse.json docs/forecast_mse_history.json \
-        docs/forecast_ext10.png docs/forecast_ext10_30d.png docs/forecast_ext10.json docs/forecast_ext10_history.json \
-        docs/forecast_validation.png
-if ! git diff --cached --quiet; then
-    git commit -m "chore: daily forecast $(date +%Y-%m-%d)"
-    # Force-push only docs/ — the VM always owns these machine-generated files.
-    # git pull --rebase caused conflicts when Mac commits touched docs/ concurrently.
-    git push --force-with-lease
-    echo "Chart and forecast JSON committed and pushed."
+# Commit and push only from the VM — on Mac, forecasts are for local validation only.
+if [[ "$(hostname -s)" == "riviere" ]]; then
+    git add docs/forecast.png docs/forecast_30d.png docs/forecast.json docs/forecast_history.json \
+            docs/forecast_mse.png docs/forecast_mse_30d.png docs/forecast_mse.json docs/forecast_mse_history.json \
+            docs/forecast_ext10.png docs/forecast_ext10_30d.png docs/forecast_ext10.json docs/forecast_ext10_history.json \
+            docs/forecast_validation.png
+    if ! git diff --cached --quiet; then
+        git commit -m "chore: daily forecast $(date +%Y-%m-%d)"
+        git push --force-with-lease
+        echo "Chart and forecast JSON committed and pushed."
+    else
+        echo "Forecast unchanged, nothing to push."
+    fi
 else
-    echo "Forecast unchanged, nothing to push."
+    echo "Mac: forecast complete (local only, not committed)."
 fi
