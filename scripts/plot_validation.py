@@ -13,9 +13,10 @@ import matplotlib.dates as mdates
 import pandas as pd
 from load_data import load_flow, load_level
 
-MODEL_START = "2026-03-14"   # first day of current model
-HISTORY_PATH = Path(__file__).parent.parent / "docs" / "forecast_history.json"
-OUT_PATH     = Path(__file__).parent.parent / "docs" / "forecast_validation.png"
+MODEL_START    = "2026-03-14"   # first day of current model
+MODEL_SWITCH   = "2026-03-22"   # date quantile production model replaced MSE
+HISTORY_PATH   = Path(__file__).parent.parent / "docs" / "forecast_history.json"
+OUT_PATH       = Path(__file__).parent.parent / "docs" / "forecast_validation.png"
 
 # ── Load forecast history ─────────────────────────────────────────────────────
 with open(HISTORY_PATH) as f:
@@ -74,6 +75,16 @@ for ax, obs, col, ylabel in [
     ax.set_ylabel(ylabel, fontsize=11)
     ax.grid(True, alpha=0.25)
     ax.legend(loc="upper left", fontsize=9, ncol=3, framealpha=0.9)
+
+    # Model switch annotation
+    switch_ts = pd.Timestamp(MODEL_SWITCH)
+    ax.axvline(switch_ts, color="#555", lw=1.2, ls="--", zorder=4, alpha=0.7)
+    ymin, ymax = ax.get_ylim()
+    ymid = ymin + (ymax - ymin) * 0.97
+    ax.text(switch_ts - pd.Timedelta(hours=12), ymid, "MSE",
+            ha="right", va="top", fontsize=8, color="#555", style="italic")
+    ax.text(switch_ts + pd.Timedelta(hours=12), ymid, "Quantile (prod)",
+            ha="left",  va="top", fontsize=8, color="#555", style="italic")
 
 ax2.xaxis.set_major_formatter(mdates.DateFormatter("%b %d"))
 ax2.xaxis.set_major_locator(mdates.DayLocator())
