@@ -33,8 +33,9 @@ git add docs/forecast.png docs/forecast_30d.png docs/forecast.json docs/forecast
         docs/forecast_validation.png
 if ! git diff --cached --quiet; then
     git commit -m "chore: daily forecast $(date +%Y-%m-%d)"
-    git pull --rebase origin master
-    git push
+    # Force-push only docs/ — the VM always owns these machine-generated files.
+    # git pull --rebase caused conflicts when Mac commits touched docs/ concurrently.
+    git push --force-with-lease
     echo "Chart and forecast JSON committed and pushed."
 else
     echo "Forecast unchanged, nothing to push."
