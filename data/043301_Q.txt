@@ -4,7 +4,7 @@ Station:        043301         Des Prairies - à la tête du rapide du Cheval Blan
 Bassin versant: 146920 km²     Régime: Influencé                                         
 Coordonnées:    (NAD83) 45° 31' 18" // -73° 50' 44"
 
-Date de création du fichier: 2026-02-27 16:56
+Date de création du fichier: 2026-03-17 18:26
 Particularité(s):
 - Le 31 mai 2018, les données historiques de cette station ont été mises à jour pour uniformiser les données en considérant la courbe de tarage la plus récente. L'impact majeur de cette mise à jour est que les débits de crues des années antérieures à 1997 sont diminués. L'effet se fait particulièrement sentir pour les débits supérieurs à 2000 m³/s.
 - 
@@ -37790,3 +37790,21 @@ Station        Date                Débit (m³/s)   Remarque
 043301         2026/02/24          911.0          P
 043301         2026/02/25          939.0          P
 043301         2026/02/26          927.2          P
+043301         2026/02/27          895.2          P
+043301         2026/02/28          857.6          P
+043301         2026/03/01          849.9          P
+043301         2026/03/02          873.9          P
+043301         2026/03/03          862.4          P
+043301         2026/03/04          831.7          P
+043301         2026/03/05          842.3          P
+043301         2026/03/06          919.2          P
+043301         2026/03/07          943.5          P
+043301         2026/03/08          1045           P
+043301         2026/03/09          1160           P
+043301         2026/03/10          1300           P
+043301         2026/03/11          1478           P
+043301         2026/03/12          1568           P
+043301         2026/03/13          1573           P
+043301         2026/03/14          1531           P
+043301         2026/03/15          1475           P
+043301         2026/03/16          1348           P

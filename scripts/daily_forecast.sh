@@ -4,6 +4,16 @@ cd ~/riviere
 
 echo "=== $(date) ==="
 
+# Refresh CEHQ historical files (043301 flow/level, 043108 upstream level)
+echo "Refreshing CEHQ historical cache..."
+.venv/bin/python - <<'EOF'
+import sys; sys.path.insert(0, "src")
+from load_data import load_flow, load_level, load_upstream_level
+load_flow(cache=False)
+load_level(cache=False)
+load_upstream_level(cache=False)
+EOF
+
 # Refresh climate cache; flow/level extend automatically from live feed
 echo "Refreshing climate cache..."
 .venv/bin/python - <<'EOF'
