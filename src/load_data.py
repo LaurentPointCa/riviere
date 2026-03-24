@@ -120,7 +120,11 @@ def load_live() -> pd.DataFrame:
       flow_m3s      - flow in m³/s
       ice_corrected - True when the original value had an asterisk
     """
-    text = fetch_raw(SOURCES["live"], encoding="utf-8")
+    try:
+        text = fetch_raw(SOURCES["live"], encoding="utf-8")
+    except requests.exceptions.RequestException as e:
+        print(f"Warning: live feed fetch failed ({e}) — skipping.")
+        return pd.DataFrame(columns=["level_m", "flow_m3s", "ice_corrected"]).rename_axis("datetime")
     rows = []
 
     for line in text.splitlines():
@@ -195,7 +199,11 @@ def load_level(cache: bool = True) -> pd.DataFrame:
 
 def _load_upstream_live() -> pd.DataFrame:
     """Fetch live 15-min level feed for upstream station 043108 (Lac des Deux Montagnes)."""
-    text = fetch_raw(SOURCES["upstream_live"], encoding="utf-8")
+    try:
+        text = fetch_raw(SOURCES["upstream_live"], encoding="utf-8")
+    except requests.exceptions.RequestException as e:
+        print(f"Warning: upstream live feed fetch failed ({e}) — skipping.")
+        return pd.DataFrame(columns=["upstream_level_m"]).rename_axis("datetime")
     rows = []
     for line in text.splitlines():
         line = line.strip()
