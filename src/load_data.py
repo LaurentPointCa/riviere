@@ -14,6 +14,8 @@ Live feed (tab-separated):
   - Comma as decimal separator; asterisk suffix on Débit = ice-corrected
 """
 
+import time
+
 import pandas as pd
 import requests
 from io import StringIO
@@ -37,10 +39,18 @@ ECCC_DAILY_URL = (
 DATA_DIR = Path(__file__).parent.parent / "data"
 
 
-def fetch_raw(url: str, encoding: str = "latin-1") -> str:
-    response = requests.get(url, timeout=30)
-    response.encoding = encoding
-    return response.text
+def fetch_raw(url: str, encoding: str = "latin-1", retries: int = 3, retry_delay: int = 10) -> str:
+    for attempt in range(1, retries + 1):
+        try:
+            response = requests.get(url, timeout=30)
+            response.encoding = encoding
+            return response.text
+        except requests.exceptions.RequestException as e:
+            if attempt < retries:
+                print(f"Fetch attempt {attempt}/{retries} failed ({e}), retrying in {retry_delay}s...")
+                time.sleep(retry_delay)
+            else:
+                raise
 
 
 def parse_cehq_file(text: str, value_col_name: str) -> pd.DataFrame:
