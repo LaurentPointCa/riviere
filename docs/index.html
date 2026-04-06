@@ -229,6 +229,157 @@
     .loading { color: var(--muted); font-size: 14px; padding: 22px 16px; text-align: center; }
     .error   { color: var(--danger); font-size: 14px; padding: 22px 16px; text-align: center; }
 
+    /* ── Unofficial banner ────────────────────────────────────────────────────── */
+    .unofficial-banner {
+      margin: 10px 12px 0;
+      padding: 8px 14px;
+      background: rgba(255, 92, 122, 0.08);
+      border: 1px solid rgba(255, 92, 122, 0.25);
+      border-radius: 10px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.10em;
+      text-transform: uppercase;
+      color: var(--danger);
+      text-align: center;
+    }
+
+    /* ── Info links ──────────────────────────────────────────────────────────── */
+    .info-links {
+      display: flex;
+      gap: 8px;
+      margin: 10px 12px 0;
+    }
+    .info-links a {
+      flex: 1;
+      display: block;
+      text-align: center;
+      padding: 9px 0;
+      background: var(--surface-2);
+      border: 1px solid var(--border-2);
+      color: var(--text-2);
+      border-radius: 10px;
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 0.02em;
+      transition: color 0.15s, border-color 0.15s, background 0.15s;
+    }
+    .info-links a:hover {
+      color: var(--accent);
+      border-color: rgba(14, 231, 197, 0.3);
+      background: var(--accent-dim);
+    }
+
+    /* ── About panel ─────────────────────────────────────────────────────────── */
+    .about-panel {
+      margin: 10px 12px 0;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    .about-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 14px;
+      cursor: pointer;
+      user-select: none;
+      border-bottom: 1px solid var(--border);
+    }
+    .about-panel.collapsed .about-header { border-bottom: none; }
+    .about-panel.collapsed .about-body   { display: none; }
+    .about-header-text {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .about-toggle {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 14px;
+      color: var(--muted);
+      padding: 0;
+      flex-shrink: 0;
+      line-height: 1;
+    }
+    .about-body { padding: 0 14px 14px; }
+    .about-body p {
+      font-size: 13px;
+      line-height: 1.65;
+      color: var(--text-2);
+      margin-top: 10px;
+    }
+    .about-subtitle {
+      font-size: 11px !important;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--muted) !important;
+      margin-top: 14px !important;
+    }
+    .about-body ul {
+      list-style: none;
+      margin-top: 8px;
+      padding: 0;
+    }
+    .about-body li {
+      font-size: 12px;
+      line-height: 1.55;
+      color: var(--text-2);
+      padding: 4px 0;
+      border-top: 1px solid var(--border);
+    }
+    .about-body li:first-child { border-top: none; }
+    .about-body li strong {
+      color: var(--text);
+      font-weight: 500;
+    }
+
+    /* ── External links panel ────────────────────────────────────────────────── */
+    .ext-links {
+      display: flex;
+      flex-direction: column;
+    }
+    .ext-links a {
+      display: block;
+      padding: 10px 16px;
+      text-decoration: none;
+      border-top: 1px solid var(--border);
+      transition: background 0.15s;
+    }
+    .ext-links a:first-child,
+    .ext-category + a { border-top: none; }
+    .ext-category {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.10em;
+      text-transform: uppercase;
+      color: var(--muted);
+      padding: 10px 16px 4px;
+      border-top: 1px solid var(--border);
+    }
+    .ext-category:first-child { border-top: none; }
+    .ext-links a:hover { background: var(--accent-dim); }
+    .ext-label {
+      display: block;
+      font-family: 'Fira Mono', monospace;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--accent);
+      letter-spacing: 0.03em;
+    }
+    .ext-desc {
+      display: block;
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
     /* ── Disclaimer ──────────────────────────────────────────────────────────── */
     .disclaimer {
       margin: 10px 12px 0;
@@ -273,21 +424,217 @@
       margin-top: 10px;
     }
     .disclaimer-body .signature { font-style: italic; color: rgba(255,255,255,0.25); }
-    .disclaimer .gh-links {
-      margin-top: 12px;
-      padding-top: 10px;
-      border-top: 1px solid rgba(255, 170, 68, 0.1);
+
+
+    /* ── Legend swatches ────────────────────────────────────────────────────── */
+    .legend-swatch {
+      display: inline-block;
+      width: 28px;
+      height: 12px;
+      vertical-align: middle;
+      margin-right: 6px;
+      flex-shrink: 0;
+      border-radius: 2px;
+    }
+    .about-body li {
       display: flex;
-      gap: 14px;
-      flex-wrap: wrap;
+      align-items: flex-start;
+      gap: 2px;
     }
-    .disclaimer .gh-links a {
+    .about-body li .legend-swatch { margin-top: 4px; }
+    .about-body li span.legend-text { flex: 1; }
+    .about-body li span.legend-text strong { display: block; }
+    .about-body li span.legend-text .legend-desc {
+      display: block;
+      font-weight: 300;
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.4;
+      margin-top: 1px;
+    }
+    .swatch-observed {
+      background: none;
+      position: relative;
+    }
+    .swatch-observed::after {
+      content: '';
+      position: absolute;
+      top: 5px; left: 0; right: 0;
+      height: 2.5px;
+      background: #1f77b4;
+      border-radius: 1px;
+    }
+    .swatch-forecast {
+      background: none;
+      position: relative;
+    }
+    .swatch-forecast::after {
+      content: '';
+      position: absolute;
+      top: 5px; left: 0; right: 0;
+      height: 2.5px;
+      background: repeating-linear-gradient(90deg, #ff7f0e 0 4px, transparent 4px 7px);
+    }
+    .swatch-forecast::before {
+      content: '';
+      position: absolute;
+      top: 2px; left: 50%;
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: #ff7f0e;
+      transform: translateX(-50%);
+      z-index: 1;
+    }
+    .swatch-rmse {
+      background: rgba(255, 127, 14, 0.22);
+      border: 1px solid rgba(255, 127, 14, 0.40);
+    }
+    .swatch-envelope {
+      background: rgba(255,255,255,0.06);
+      border: 1px dashed rgba(255,255,255,0.20);
+      position: relative;
+    }
+    .swatch-envelope::after {
+      content: '';
+      position: absolute;
+      top: 5px; left: 2px; right: 2px;
+      height: 1.5px;
+      background: rgba(255,255,255,0.30);
+      border-radius: 1px;
+    }
+    .swatch-anchor {
+      background: none;
+      position: relative;
+    }
+    .swatch-anchor::after {
+      content: '';
+      position: absolute;
+      top: 0; bottom: 0; left: 50%;
+      width: 1.5px;
+      background: repeating-linear-gradient(180deg, var(--muted) 0 3px, transparent 3px 5px);
+      transform: translateX(-50%);
+    }
+    .swatch-warn {
+      background: none;
+      position: relative;
+    }
+    .swatch-warn::after {
+      content: '';
+      position: absolute;
+      top: 5px; left: 0; right: 0;
+      height: 1.5px;
+      background: repeating-linear-gradient(90deg, #f59e0b 0 4px, transparent 4px 7px);
+    }
+    .swatch-danger {
+      background: none;
+      position: relative;
+    }
+    .swatch-danger::after {
+      content: '';
+      position: absolute;
+      top: 5px; left: 0; right: 0;
+      height: 1.5px;
+      background: repeating-linear-gradient(90deg, #ff5c7a 0 4px, transparent 4px 7px);
+    }
+
+    /* ── Legal modal ─────────────────────────────────────────────────────────── */
+    #legal-modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.80);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      z-index: 10001;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    #legal-modal.open { display: flex; }
+    .legal-box {
+      background: var(--surface);
+      border: 1px solid var(--border-2);
+      border-radius: 16px;
+      max-width: 680px;
+      width: 100%;
+      max-height: 92vh;
+      overflow-y: auto;
+      padding: 36px 32px 32px;
+    }
+    .legal-box h2 {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 20px;
+      letter-spacing: -0.01em;
+    }
+    .legal-box p {
+      font-size: 15px;
+      line-height: 1.75;
+      color: var(--text-2);
+      margin-bottom: 14px;
+    }
+    .legal-box p strong { color: var(--text); }
+    .legal-box ol {
+      padding-left: 22px;
+      margin-bottom: 18px;
+    }
+    .legal-box li {
+      font-size: 15px;
+      line-height: 1.75;
+      color: var(--text-2);
+      margin-bottom: 10px;
+    }
+    .legal-box .legal-date {
       font-size: 12px;
-      color: var(--accent);
-      text-decoration: none;
-      opacity: 0.75;
+      color: var(--muted);
+      font-family: 'Fira Mono', monospace;
+      margin-bottom: 18px;
     }
-    .disclaimer .gh-links a:hover { opacity: 1; }
+    .legal-consent {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      margin: 20px 0 16px;
+      cursor: pointer;
+      user-select: none;
+    }
+    .legal-consent input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      margin-top: 2px;
+      accent-color: var(--accent);
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+    .legal-consent label {
+      font-size: 14px;
+      line-height: 1.5;
+      color: var(--text);
+      cursor: pointer;
+    }
+    .legal-accept {
+      display: block;
+      width: 100%;
+      padding: 14px 0;
+      margin-top: 8px;
+      background: var(--accent);
+      color: var(--bg);
+      border: none;
+      border-radius: 10px;
+      font-family: 'Lexend', sans-serif;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      letter-spacing: 0.02em;
+      transition: opacity 0.15s, background 0.15s;
+    }
+    .legal-accept:hover:not(:disabled) { opacity: 0.85; }
+    .legal-accept:disabled {
+      background: var(--muted);
+      cursor: not-allowed;
+      opacity: 0.5;
+    }
 
     /* ── Mobile bottom nav ───────────────────────────────────────────────────── */
     .btn-bar {
@@ -324,8 +671,6 @@
       background: var(--accent-dim);
     }
 
-    /* ── Desktop links (hidden on mobile) ────────────────────────────────────── */
-    .desktop-links { display: none; }
 
     /* ── Lightbox ────────────────────────────────────────────────────────────── */
     #lb {
@@ -375,7 +720,7 @@
       .site-wrap {
         max-width: 1100px;
         display: grid;
-        grid-template-columns: 400px 1fr;
+        grid-template-columns: minmax(360px, 30%) 1fr;
         grid-template-rows: auto;
         column-gap: 16px;
         padding: 0 24px 48px;
@@ -397,42 +742,48 @@
         background: linear-gradient(90deg, var(--accent) 0%, rgba(14,231,197,0.15) 55%, transparent 100%);
       }
 
-      .col-left  { grid-column: 1; }
-      .col-right { grid-column: 2; padding-top: 10px; }
+      .col-left       { grid-column: 1; grid-row: 1; }
+      .col-right      { grid-column: 2; grid-row: 1 / span 4; padding-top: 10px; }
+      .legend-card    { grid-column: 1; grid-row: 2; }
+      .ext-links-card { grid-column: 1; grid-row: 3; }
+      .disclaimer     { grid-column: 1; grid-row: 4; }
 
       /* Remove side margins — columns provide structure */
       .site-header { padding: 20px 0 22px; }
 
       .card,
+      .unofficial-banner,
+      .info-links,
+      .about-panel,
       .disclaimer { margin-left: 0; margin-right: 0; }
 
-      /* Desktop links instead of fixed nav */
       .btn-bar { display: none; }
-      .desktop-links {
-        display: flex;
-        gap: 8px;
-        margin: 10px 0 0;
+    }
+
+    /* ── Wide desktop layout (3-column) ──────────────────────────────────── */
+    @media (min-width: 1920px) {
+      .site-wrap {
+        max-width: 2400px;
+        grid-template-columns: minmax(340px, 18%) 2fr 3fr;
+        column-gap: 20px;
+        padding: 0 clamp(24px, 3vw, 60px) 48px;
       }
-      .desktop-links a {
-        flex: 1;
-        display: block;
-        text-align: center;
-        padding: 10px 0;
-        background: var(--surface-2);
-        border: 1px solid var(--border-2);
-        color: var(--text-2);
-        border-radius: 10px;
-        text-decoration: none;
-        font-size: 13px;
-        font-weight: 500;
-        letter-spacing: 0.02em;
-        transition: color 0.15s, border-color 0.15s, background 0.15s;
+
+      .header-rule {
+        max-width: 2400px;
+        padding: 0 clamp(24px, 3vw, 60px);
       }
-      .desktop-links a:hover {
-        color: var(--accent);
-        border-color: rgba(14, 231, 197, 0.3);
-        background: var(--accent-dim);
+
+      .col-right {
+        grid-column: 2 / -1;
+        grid-row: 1 / span 4;
+        display: grid;
+        grid-template-columns: 2fr 3fr;
+        gap: 20px;
+        padding-top: 10px;
       }
+
+      .col-right .card { margin-top: 0; }
     }
   </style>
 </head>
@@ -452,23 +803,30 @@
         <p class="generated-time" id="generated-time">—</p>
       </header>
 
-      <!-- Disclaimer -->
-      <div class="disclaimer" id="disclaimer">
-        <div class="disclaimer-header" onclick="toggleDisclaimer()">
-          <span class="disclaimer-header-text" id="disclaimer-header-text">Avertissement</span>
-          <button class="disclaimer-toggle" id="disclaimer-toggle" aria-label="Fermer">✕</button>
+      <!-- Unofficial banner -->
+      <div class="unofficial-banner">Site non-officiel</div>
+
+      <!-- Links -->
+      <div class="info-links">
+        <a href="https://github.com/LaurentPointCa/riviere" target="_blank" rel="noopener">GitHub</a>
+        <a href="mailto:laurent@laurent.ca">Contact</a>
+        <a href="#" onclick="openLegal();return false;">Mentions l&eacute;gales</a>
+      </div>
+
+      <!-- About -->
+      <div class="about-panel" id="about-panel">
+        <div class="about-header" onclick="toggleAbout()">
+          <span class="about-header-text" id="about-header-text">Le projet</span>
+          <button class="about-toggle" id="about-toggle" aria-label="Fermer">✕</button>
         </div>
-        <div class="disclaimer-body">
-          <p>Ce projet est une simple expérimentation créée afin de me familiariser avec Claude Code.
-          Aucune donnée ni méthode utilisée ici n'est réputée être valide, fonctionnelle ni exacte.</p>
-          <p>Les données de ce dépôt ainsi que celles produites par les outils ne peuvent pas être
-          utilisées pour aucune fin de planification ou de décision par rapport au niveau de la rivière.
-          L'auteur se dégage de toute responsabilité face à l'utilisation de ces données.</p>
-          <p class="signature">—Laurent</p>
-          <div class="gh-links">
-            <a href="https://github.com/LaurentPointCa/riviere" target="_blank" rel="noopener">⌥ GitHub — Modèle &amp; prévisions</a>
-            <a href="https://github.com/LaurentPointCa/RiviereApp" target="_blank" rel="noopener">⌥ GitHub — App iOS</a>
-          </div>
+        <div class="about-body">
+          <p>Ce site affiche une prévision sur 5 jours du débit et du niveau d'eau de la Rivière des Prairies,
+          à la station hydrométrique 043301 (Laval).</p>
+          <p>Un modèle d'apprentissage automatique (LightGBM) est entraîné sur plus de 45 ans de données
+          historiques provenant de cinq stations hydrologiques au Québec et en Ontario, combinées aux
+          données climatiques (température, précipitations, neige). Au moment de la prévision, les conditions
+          météo prévues pour les 5 prochains jours sont injectées dans le modèle pour produire les valeurs affichées.</p>
+          <p>La prévision est mise à jour automatiquement deux fois par jour.</p>
         </div>
       </div>
 
@@ -478,13 +836,6 @@
           <span class="card-title">Prévisions 5 jours</span>
         </div>
         <div id="table-container"><p class="loading">Chargement…</p></div>
-      </div>
-
-      <!-- Desktop nav links -->
-      <div class="desktop-links">
-        <a href="https://www.cehq.gouv.qc.ca/prevision/previsions.asp?secteur=Archipel" target="_blank" rel="noopener">CEHQ</a>
-        <a href="https://rivieredesoutaouais.ca/location/carillon-2/" target="_blank" rel="noopener">Carillon</a>
-        <a href="https://www.cruesgrandmontreal.ca/" target="_blank" rel="noopener">Crues MTL</a>
       </div>
 
     </div><!-- /col-left -->
@@ -512,6 +863,83 @@
 
     </div><!-- /col-right -->
 
+    <!-- Legend (after charts on mobile, left column on desktop) -->
+    <div class="card legend-card">
+      <div class="card-header">
+        <span class="card-title">Lecture des graphiques</span>
+      </div>
+      <div class="about-body">
+        <ul>
+          <li><span class="legend-swatch swatch-observed"></span><span class="legend-text"><strong>Ligne continue</strong><span class="legend-desc">Valeurs observ&eacute;es (donn&eacute;es historiques de la station)</span></span></li>
+          <li><span class="legend-swatch swatch-forecast"></span><span class="legend-text"><strong>Ligne pointill&eacute;e avec cercles</strong><span class="legend-desc">Pr&eacute;vision du mod&egrave;le pour les 5 prochains jours</span></span></li>
+          <li><span class="legend-swatch swatch-rmse"></span><span class="legend-text"><strong>Bande ombr&eacute;e</strong><span class="legend-desc">Marge d'erreur typique du mod&egrave;le (&plusmn;1 RMSE)</span></span></li>
+          <li><span class="legend-swatch swatch-envelope"></span><span class="legend-text"><strong>Ligne pointill&eacute;e + bande grise</strong><span class="legend-desc">Moyenne et enveloppe min/max historiques</span></span></li>
+          <li><span class="legend-swatch swatch-anchor"></span><span class="legend-text"><strong>Ligne verticale</strong><span class="legend-desc">Date de la derni&egrave;re observation (d&eacute;but de la pr&eacute;vision)</span></span></li>
+          <li><span class="legend-swatch swatch-warn"></span><span class="legend-text"><strong>Ligne orange (2 500 m&sup3;/s)</strong><span class="legend-desc">Seuil de pr&eacute;occupation</span></span></li>
+          <li><span class="legend-swatch swatch-danger"></span><span class="legend-text"><strong>Ligne rouge (3 000 m&sup3;/s / 22.5 m)</strong><span class="legend-desc">Seuil de quasi-crue / zone de danger</span></span></li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- External links (last on mobile, left column on desktop) -->
+    <div class="card ext-links-card">
+      <div class="card-header">
+        <span class="card-title">Liens externes</span>
+      </div>
+      <div class="ext-links">
+        <div class="ext-category">Pr&eacute;visions</div>
+        <a href="https://www.cehq.gouv.qc.ca/prevision/previsions.asp?secteur=Archipel" target="_blank" rel="noopener">
+          <span class="ext-label">CEHQ Pr&eacute;visions</span>
+          <span class="ext-desc">Pr&eacute;visions officielles &mdash; Archipel</span>
+        </a>
+        <a href="https://www.cruesgrandmontreal.ca/" target="_blank" rel="noopener">
+          <span class="ext-label">Crues Grand Montr&eacute;al</span>
+          <span class="ext-desc">Surveillance des crues en temps r&eacute;el</span>
+        </a>
+        <a href="https://rivieredesoutaouais.ca/forecast/ottawa-river-a-carillon/" target="_blank" rel="noopener">
+          <span class="ext-label">CPRRO</span>
+          <span class="ext-desc">Pr&eacute;visions de la rivi&egrave;re des Outaouais &agrave; Carillon</span>
+        </a>
+        <div class="ext-category">Stations de mesure</div>
+        <a href="https://www.cehq.gouv.qc.ca/suivihydro/graphique.asp?NoStation=043301" target="_blank" rel="noopener">
+          <span class="ext-label">CEHQ 043301</span>
+          <span class="ext-desc">Rivi&egrave;re des Prairies &mdash; &agrave; la t&ecirc;te du rapide du Cheval Blanc (chenal sud)</span>
+        </a>
+        <a href="https://www.cehq.gouv.qc.ca/suivihydro/graphique.asp?NoStation=043108" target="_blank" rel="noopener">
+          <span class="ext-label">CEHQ 043108</span>
+          <span class="ext-desc">Lac des Deux Montagnes &mdash; &agrave; Pointe-Calumet</span>
+        </a>
+        <a href="https://wateroffice.ec.gc.ca/report/real_time_e.html?stn=02KF005" target="_blank" rel="noopener">
+          <span class="ext-label">ECCC 02KF005</span>
+          <span class="ext-desc">Rivi&egrave;re des Outaouais &agrave; Britannia</span>
+        </a>
+        <a href="https://wateroffice.ec.gc.ca/report/real_time_e.html?stn=02LA015" target="_blank" rel="noopener">
+          <span class="ext-label">ECCC 02LA015</span>
+          <span class="ext-desc">Rivi&egrave;re des Outaouais &agrave; Hull</span>
+        </a>
+        <a href="https://rivieredesoutaouais.ca/location/carillon-2/" target="_blank" rel="noopener">
+          <span class="ext-label">Carillon</span>
+          <span class="ext-desc">Niveaux du barrage de Carillon</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Disclaimer (last on mobile, left column on desktop) -->
+    <div class="disclaimer" id="disclaimer">
+      <div class="disclaimer-header" onclick="toggleDisclaimer()">
+        <span class="disclaimer-header-text" id="disclaimer-header-text">Avertissement</span>
+        <button class="disclaimer-toggle" id="disclaimer-toggle" aria-label="Fermer">✕</button>
+      </div>
+      <div class="disclaimer-body">
+        <p>Ce projet est une simple expérimentation créée afin de me familiariser avec Claude Code.
+        Aucune donnée ni méthode utilisée ici n'est réputée être valide, fonctionnelle ni exacte.</p>
+        <p>Les données de ce dépôt ainsi que celles produites par les outils ne peuvent pas être
+        utilisées pour aucune fin de planification ou de décision par rapport au niveau de la rivière.
+        L'auteur se dégage de toute responsabilité face à l'utilisation de ces données.</p>
+        <p class="signature">—Laurent</p>
+      </div>
+    </div>
+
   </div><!-- /site-wrap -->
 
   <!-- Mobile bottom nav (hidden on desktop) -->
@@ -520,6 +948,48 @@
     <a href="https://rivieredesoutaouais.ca/location/carillon-2/" target="_blank" rel="noopener">Carillon</a>
     <a href="https://www.cruesgrandmontreal.ca/" target="_blank" rel="noopener">Crues MTL</a>
   </nav>
+
+  <!-- Legal modal -->
+  <div id="legal-modal">
+    <div class="legal-box">
+      <h2>Mentions l&eacute;gales</h2>
+      <p class="legal-date">Derni&egrave;re mise &agrave; jour : avril 2026</p>
+      <ol>
+        <li><strong>Absence d'affiliation officielle.</strong> Ce site web est un projet personnel
+        ind&eacute;pendant. Il n'est affili&eacute;, associ&eacute; ni endoss&eacute; par aucun organisme
+        gouvernemental, municipal, paragouvernemental ou toute autre autorit&eacute; publique, y compris
+        mais sans s'y limiter le Centre d'expertise hydrique du Qu&eacute;bec (CEHQ), Environnement et
+        Changement climatique Canada (ECCC) ou Crues Grand Montr&eacute;al.</li>
+        <li><strong>Information &agrave; titre indicatif uniquement.</strong> L'ensemble des donn&eacute;es,
+        pr&eacute;visions, graphiques et informations pr&eacute;sent&eacute;s sur ce site sont fournis
+        &agrave; titre strictement informatif et exp&eacute;rimental. Ils ne constituent en aucun cas
+        un avis professionnel, une recommandation ou une source fiable d'information. Aucune d&eacute;cision
+        financi&egrave;re, patrimoniale, s&eacute;curitaire ou affectant la sant&eacute;, la s&eacute;curit&eacute;
+        ou le bien-&ecirc;tre de quiconque ne doit &ecirc;tre fond&eacute;e, en tout ou en partie, sur les
+        informations publi&eacute;es sur ce site.</li>
+        <li><strong>Aucune garantie d'exactitude.</strong> Les pr&eacute;visions sont g&eacute;n&eacute;r&eacute;es
+        par un mod&egrave;le d'apprentissage automatique exp&eacute;rimental. L'auteur ne garantit ni
+        l'exactitude, ni la fiabilit&eacute;, ni l'actualit&eacute;, ni l'exhaustivit&eacute; des
+        informations publi&eacute;es. Les donn&eacute;es peuvent contenir des erreurs, des omissions
+        ou des inexactitudes.</li>
+        <li><strong>Exclusion de responsabilit&eacute;.</strong> L'auteur de ce site d&eacute;cline toute
+        responsabilit&eacute;, quelle qu'en soit la nature, pour tout dommage direct, indirect, accessoire,
+        cons&eacute;cutif ou sp&eacute;cial d&eacute;coulant de l'utilisation ou de l'impossibilit&eacute;
+        d'utiliser les informations pr&eacute;sent&eacute;es sur ce site, y compris les pertes financi&egrave;res,
+        les dommages mat&eacute;riels ou les pr&eacute;judices corporels.</li>
+        <li><strong>Sources de donn&eacute;es tierces.</strong> Ce site utilise des donn&eacute;es provenant
+        de sources publiques tierces (CEHQ, ECCC, Open-Meteo). L'auteur n'est pas responsable de
+        l'exactitude ou de la disponibilit&eacute; de ces donn&eacute;es sources.</li>
+      </ol>
+      <div class="legal-consent" onclick="document.getElementById('legal-check').click()">
+        <input type="checkbox" id="legal-check" onclick="event.stopPropagation(); document.getElementById('legal-btn').disabled = !this.checked;">
+        <label for="legal-check" onclick="event.stopPropagation()">J'ai lu et j'accepte les mentions l&eacute;gales ci-dessus. Je comprends que les informations
+        pr&eacute;sent&eacute;es sur ce site sont exp&eacute;rimentales et ne doivent pas servir de base
+        &agrave; quelque d&eacute;cision que ce soit.</label>
+      </div>
+      <button class="legal-accept" id="legal-btn" disabled onclick="acceptLegal()">Acc&eacute;der au site</button>
+    </div>
+  </div>
 
   <!-- Lightbox -->
   <div id="lb"><img id="lb-img" draggable="false" alt="Graphique agrandi"><button id="lb-close" aria-label="Fermer">✕</button></div>
@@ -665,6 +1135,60 @@
       setCookie(COOKIE, collapsed ? '1' : '0', 365);
     }
     applyState(getCookie(COOKIE) === '1');
+
+    // ── About panel ──────────────────────────────────────────────────────────
+    const ABOUT_COOKIE = 'about_collapsed';
+    function applyAboutState(collapsed) {
+      const box   = document.getElementById('about-panel');
+      const label = document.getElementById('about-header-text');
+      const btn   = document.getElementById('about-toggle');
+      if (collapsed) {
+        box.classList.add('collapsed');
+        label.textContent = 'Le projet — cliquer pour en savoir plus';
+        btn.textContent = '+'; btn.setAttribute('aria-label', 'Ouvrir');
+      } else {
+        box.classList.remove('collapsed');
+        label.textContent = 'Le projet';
+        btn.textContent = '✕'; btn.setAttribute('aria-label', 'Fermer');
+      }
+    }
+    function toggleAbout() {
+      const collapsed = !document.getElementById('about-panel').classList.contains('collapsed');
+      applyAboutState(collapsed);
+      setCookie(ABOUT_COOKIE, collapsed ? '1' : '0', 365);
+    }
+    applyAboutState(getCookie(ABOUT_COOKIE) === '1');
+
+    // ── Legal modal ─────────────────────────────────────────────────────────
+    var legalIsFirstVisit = false;
+    function openLegal() {
+      var cb = document.getElementById('legal-check');
+      var btn = document.getElementById('legal-btn');
+      if (!legalIsFirstVisit) {
+        cb.checked = true; btn.disabled = false;
+      } else {
+        cb.checked = false; btn.disabled = true;
+      }
+      document.getElementById('legal-modal').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+    function acceptLegal() {
+      if (!document.getElementById('legal-check').checked) return;
+      document.getElementById('legal-modal').classList.remove('open');
+      document.body.style.overflow = '';
+      legalIsFirstVisit = false;
+      try { localStorage.setItem('legal_accepted', '1'); } catch(e) {}
+    }
+    document.getElementById('legal-modal').addEventListener('click', function(e) {
+      if (e.target === this && !legalIsFirstVisit) acceptLegal();
+    });
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape' && document.getElementById('legal-modal').classList.contains('open') && !legalIsFirstVisit) acceptLegal();
+    });
+    // Show on first visit
+    try {
+      if (!localStorage.getItem('legal_accepted')) { legalIsFirstVisit = true; openLegal(); }
+    } catch(e) { legalIsFirstVisit = true; openLegal(); }
 
     // ── Forecast table ────────────────────────────────────────────────────────
     const FR_DAYS = ['Dimanche','Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi'];
