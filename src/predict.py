@@ -12,6 +12,7 @@ from pathlib import Path
 
 import matplotlib.dates as mdates
 import matplotlib.pyplot as plt
+import matplotlib.ticker as mticker
 import pandas as pd
 
 sys.path.insert(0, str(Path(__file__).parent))
@@ -287,6 +288,11 @@ def plot_forecast(
                        alpha=0.7, label="Préoccupation (2 500 m³/s)", zorder=4)
             ax.axhline(3000, color=_DANGER, lw=1.2, linestyle=":",
                        alpha=0.7, label="Quasi-crue (3 000 m³/s)", zorder=4)
+            ax.set_yscale("log")
+            _FLOW_TICKS = [200, 400, 1000, 2000, 4000]
+            ax.yaxis.set_major_locator(mticker.FixedLocator(_FLOW_TICKS))
+            ax.yaxis.set_major_formatter(mticker.FuncFormatter(lambda v, _: f"{int(v)}"))
+            ax.yaxis.set_minor_locator(mticker.NullLocator())
         elif var == "level_m":
             ax.axhline(22.5, color=_DANGER, lw=1.2, linestyle=":",
                        alpha=0.7, label="Zone de danger (22.5 m)", zorder=4)
@@ -296,7 +302,11 @@ def plot_forecast(
 
         ax.set_ylabel(unit, fontsize=10)
         ax.legend(fontsize=8, loc="upper left", framealpha=0.6)
-        ax.grid(True)
+        if var == "flow_m3s":
+            ax.grid(True, which="major", alpha=0.4)
+            ax.grid(True, which="minor", alpha=0.15)
+        else:
+            ax.grid(True)
         ax.margins(x=0.01)
         for spine in ax.spines.values():
             spine.set_edgecolor(_GRID)
