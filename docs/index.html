@@ -120,6 +120,24 @@
       background: linear-gradient(90deg, var(--accent) 0%, rgba(14,231,197,0.15) 55%, transparent 100%);
     }
 
+    /* ── Language switch (top-right) ─────────────────────────────────────────── */
+    .lang-switch {
+      position: absolute;
+      top: 10px;
+      right: 16px;
+      font-size: 12px;
+      font-weight: 400;
+      color: var(--text-2);
+      text-decoration: none;
+      letter-spacing: 0.04em;
+      z-index: 10;
+      padding: 4px 6px;
+    }
+    .lang-switch:hover { color: var(--accent); }
+    @media (min-width: 800px) {
+      .lang-switch { right: 24px; top: 12px; }
+    }
+
     /* ── Layout ──────────────────────────────────────────────────────────────── */
     .site-wrap {
       max-width: 520px;
@@ -864,6 +882,7 @@
 <body>
 
   <div class="header-rule"></div>
+  <a href="en/" class="lang-switch" hreflang="en" lang="en" title="English version">English</a>
 
   <div class="site-wrap">
 
@@ -882,7 +901,6 @@
 
       <!-- Links -->
       <div class="info-links">
-        <a href="en/" hreflang="en" lang="en" title="English version">English</a>
         <a href="https://github.com/LaurentPointCa/riviere" target="_blank" rel="noopener">GitHub</a>
         <a href="mailto:laurent@laurent.ca">Contact</a>
         <a href="#" onclick="openLegal();return false;">Mentions l&eacute;gales</a>
