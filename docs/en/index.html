@@ -1,32 +1,32 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Rivière des Prairies — Prévisions de débit et de niveau d'eau (Laval)</title>
-  <meta name="description" content="Prévisions expérimentales sur 5 jours du débit et du niveau d'eau de la Rivière des Prairies à Laval (station CEHQ 043301). Projet personnel non-officiel, mis à jour deux fois par jour." />
+  <title>Rivière des Prairies — Water Flow & Level Forecast (Laval, Québec)</title>
+  <meta name="description" content="Experimental 5-day forecast of water flow and level for the Rivière des Prairies in Laval, Québec (CEHQ station 043301). Personal unofficial project, updated twice a day." />
   <meta name="author" content="Laurent Chouinard" />
   <meta name="robots" content="index, follow" />
-  <link rel="canonical" href="https://laurentpointca.github.io/riviere/" />
+  <link rel="canonical" href="https://laurentpointca.github.io/riviere/en/" />
   <link rel="alternate" hreflang="fr" href="https://laurentpointca.github.io/riviere/" />
   <link rel="alternate" hreflang="en" href="https://laurentpointca.github.io/riviere/en/" />
   <link rel="alternate" hreflang="x-default" href="https://laurentpointca.github.io/riviere/" />
 
   <!-- Open Graph -->
   <meta property="og:type" content="website" />
-  <meta property="og:locale" content="fr_CA" />
-  <meta property="og:locale:alternate" content="en_CA" />
-  <meta property="og:site_name" content="Rivière des Prairies — Prévisions" />
-  <meta property="og:title" content="Rivière des Prairies — Prévisions de débit et de niveau d'eau" />
-  <meta property="og:description" content="Prévisions expérimentales sur 5 jours pour la Rivière des Prairies à Laval (station CEHQ 043301). Mises à jour deux fois par jour." />
-  <meta property="og:url" content="https://laurentpointca.github.io/riviere/" />
+  <meta property="og:locale" content="en_CA" />
+  <meta property="og:locale:alternate" content="fr_CA" />
+  <meta property="og:site_name" content="Rivière des Prairies — Forecast" />
+  <meta property="og:title" content="Rivière des Prairies — Water Flow & Level Forecast" />
+  <meta property="og:description" content="Experimental 5-day water flow and level forecast for the Rivière des Prairies in Laval, Québec (CEHQ station 043301). Updated twice a day." />
+  <meta property="og:url" content="https://laurentpointca.github.io/riviere/en/" />
   <meta property="og:image" content="https://laurentpointca.github.io/riviere/forecast_30d.png" />
-  <meta property="og:image:alt" content="Graphique des prévisions de débit et de niveau d'eau sur 30 jours pour la Rivière des Prairies" />
+  <meta property="og:image:alt" content="30-day water flow and level forecast chart for the Rivière des Prairies" />
 
   <!-- Twitter -->
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Rivière des Prairies — Prévisions de débit et de niveau d'eau" />
-  <meta name="twitter:description" content="Prévisions expérimentales sur 5 jours pour la Rivière des Prairies à Laval (station CEHQ 043301)." />
+  <meta name="twitter:title" content="Rivière des Prairies — Water Flow & Level Forecast" />
+  <meta name="twitter:description" content="Experimental 5-day forecast for the Rivière des Prairies in Laval, Québec (CEHQ station 043301)." />
   <meta name="twitter:image" content="https://laurentpointca.github.io/riviere/forecast_30d.png" />
 
   <!-- Structured data -->
@@ -37,12 +37,12 @@
       {
         "@type": "WebApplication",
         "@id": "https://laurentpointca.github.io/riviere/#webapp",
-        "name": "Rivière des Prairies — Prévisions",
-        "url": "https://laurentpointca.github.io/riviere/",
-        "inLanguage": ["fr-CA", "en-CA"],
+        "name": "Rivière des Prairies — Forecast",
+        "url": "https://laurentpointca.github.io/riviere/en/",
+        "inLanguage": ["en-CA", "fr-CA"],
         "applicationCategory": "Weather",
         "operatingSystem": "All",
-        "description": "Prévisions expérimentales sur 5 jours du débit et du niveau d'eau de la Rivière des Prairies à Laval (station CEHQ 043301).",
+        "description": "Experimental 5-day forecast of water flow and level for the Rivière des Prairies in Laval, Québec (CEHQ station 043301).",
         "author": {
           "@type": "Person",
           "name": "Laurent Chouinard",
@@ -54,11 +54,11 @@
       {
         "@type": "Dataset",
         "@id": "https://laurentpointca.github.io/riviere/#dataset",
-        "name": "Prévisions hydrologiques — Rivière des Prairies (station CEHQ 043301)",
-        "description": "Prévisions quotidiennes sur 5 jours du débit (m³/s) et du niveau d'eau (m) de la Rivière des Prairies, produites par un modèle d'apprentissage automatique (LightGBM) entraîné sur plus de 45 ans de données historiques.",
-        "url": "https://laurentpointca.github.io/riviere/",
+        "name": "Hydrological forecast — Rivière des Prairies (CEHQ station 043301)",
+        "description": "Daily 5-day forecasts of water flow (m³/s) and level (m) for the Rivière des Prairies, produced by a LightGBM machine-learning model trained on more than 45 years of historical data.",
+        "url": "https://laurentpointca.github.io/riviere/en/",
         "license": "https://github.com/LaurentPointCa/riviere/blob/master/LICENSE",
-        "keywords": ["hydrologie", "prévision", "débit", "niveau d'eau", "Rivière des Prairies", "Laval", "Québec", "CEHQ 043301"],
+        "keywords": ["hydrology", "forecast", "water flow", "water level", "Rivière des Prairies", "Laval", "Québec", "CEHQ 043301"],
         "spatialCoverage": {
           "@type": "Place",
           "name": "Rivière des Prairies, Laval, Québec, Canada",
@@ -114,20 +114,17 @@
       min-height: 100vh;
     }
 
-    /* ── Top accent line ─────────────────────────────────────────────────────── */
     .header-rule {
       height: 3px;
       background: linear-gradient(90deg, var(--accent) 0%, rgba(14,231,197,0.15) 55%, transparent 100%);
     }
 
-    /* ── Layout ──────────────────────────────────────────────────────────────── */
     .site-wrap {
       max-width: 520px;
       margin: 0 auto;
       padding-bottom: 88px;
     }
 
-    /* ── Header ──────────────────────────────────────────────────────────────── */
     .site-header { padding: 20px 20px 22px; }
 
     .station-badge {
@@ -180,7 +177,6 @@
       letter-spacing: 0.03em;
     }
 
-    /* ── Cards ───────────────────────────────────────────────────────────────── */
     .card {
       margin: 10px 12px 0;
       background: var(--surface);
@@ -203,7 +199,6 @@
       color: var(--muted);
     }
 
-    /* ── Graphs ──────────────────────────────────────────────────────────────── */
     .forecast-img {
       width: 100%;
       display: block;
@@ -218,7 +213,6 @@
       letter-spacing: 0.04em;
     }
 
-    /* ── Forecast table ──────────────────────────────────────────────────────── */
     .forecast-col-headers {
       display: grid;
       grid-template-columns: 44px 1fr 88px 72px;
@@ -299,11 +293,9 @@
     }
     .danger-note span { color: var(--danger); }
 
-    /* ── Loading / error ─────────────────────────────────────────────────────── */
     .loading { color: var(--muted); font-size: 14px; padding: 22px 16px; text-align: center; }
     .error   { color: var(--danger); font-size: 14px; padding: 22px 16px; text-align: center; }
 
-    /* ── Unofficial banner ────────────────────────────────────────────────────── */
     .unofficial-banner {
       margin: 10px 12px 0;
       padding: 8px 14px;
@@ -318,7 +310,6 @@
       text-align: center;
     }
 
-    /* ── Info links ──────────────────────────────────────────────────────────── */
     .info-links {
       display: flex;
       gap: 8px;
@@ -345,7 +336,6 @@
       background: var(--accent-dim);
     }
 
-    /* ── About panel ─────────────────────────────────────────────────────────── */
     .about-panel {
       margin: 10px 12px 0;
       background: var(--surface);
@@ -414,7 +404,6 @@
       font-weight: 500;
     }
 
-    /* ── External links panel ────────────────────────────────────────────────── */
     .ext-links {
       display: flex;
       flex-direction: column;
@@ -454,7 +443,6 @@
       margin-top: 2px;
     }
 
-    /* ── Disclaimer ──────────────────────────────────────────────────────────── */
     .disclaimer {
       margin: 10px 12px 0;
       background: rgba(255, 170, 68, 0.05);
@@ -500,7 +488,6 @@
     .disclaimer-body .signature { font-style: italic; color: rgba(255,255,255,0.25); }
 
 
-    /* ── Legend swatches ────────────────────────────────────────────────────── */
     .legend-swatch {
       display: inline-block;
       width: 28px;
@@ -611,7 +598,6 @@
       background: repeating-linear-gradient(90deg, #ff5c7a 0 4px, transparent 4px 7px);
     }
 
-    /* ── Legal modal ─────────────────────────────────────────────────────────── */
     #legal-modal {
       display: none;
       position: fixed;
@@ -710,7 +696,6 @@
       opacity: 0.5;
     }
 
-    /* ── Mobile bottom nav ───────────────────────────────────────────────────── */
     .btn-bar {
       position: fixed;
       bottom: 0; left: 0; right: 0;
@@ -745,8 +730,6 @@
       background: var(--accent-dim);
     }
 
-
-    /* ── Lightbox ────────────────────────────────────────────────────────────── */
     #lb {
       display: none;
       position: fixed;
@@ -787,7 +770,6 @@
     }
     #lb-close:hover { background: rgba(255,255,255,0.22); }
 
-    /* ── Desktop layout ──────────────────────────────────────────────────────── */
     @media (min-width: 800px) {
       body { padding-bottom: 0; }
 
@@ -801,7 +783,6 @@
         align-items: start;
       }
 
-      /* Full-width top rule */
       .header-rule {
         max-width: 1100px;
         margin: 0 auto;
@@ -822,7 +803,6 @@
       .ext-links-card { grid-column: 1; grid-row: 3; }
       .disclaimer     { grid-column: 1; grid-row: 4; }
 
-      /* Remove side margins — columns provide structure */
       .site-header { padding: 20px 0 22px; }
 
       .card,
@@ -834,7 +814,6 @@
       .btn-bar { display: none; }
     }
 
-    /* ── Wide desktop layout (3-column) ──────────────────────────────────── */
     @media (min-width: 1920px) {
       .site-wrap {
         max-width: 2400px;
@@ -873,44 +852,44 @@
       <header class="site-header">
         <div class="station-badge">CEHQ · 043301 · LightGBM</div>
         <h1 class="site-title">Rivière des Prairies</h1>
-        <p class="site-subtitle">Prévisions hydrologiques sur 5 jours</p>
+        <p class="site-subtitle">5-day hydrological forecast</p>
         <p class="generated-time" id="generated-time">—</p>
       </header>
 
       <!-- Unofficial banner -->
-      <div class="unofficial-banner">Site non-officiel</div>
+      <div class="unofficial-banner">Unofficial site</div>
 
       <!-- Links -->
       <div class="info-links">
-        <a href="en/" hreflang="en" lang="en" title="English version">English</a>
+        <a href="../" hreflang="fr" lang="fr" title="Version française">Français</a>
         <a href="https://github.com/LaurentPointCa/riviere" target="_blank" rel="noopener">GitHub</a>
         <a href="mailto:laurent@laurent.ca">Contact</a>
-        <a href="#" onclick="openLegal();return false;">Mentions l&eacute;gales</a>
+        <a href="#" onclick="openLegal();return false;">Legal notice</a>
       </div>
 
       <!-- About -->
       <div class="about-panel" id="about-panel">
         <div class="about-header" onclick="toggleAbout()">
-          <span class="about-header-text" id="about-header-text">Le projet</span>
-          <button class="about-toggle" id="about-toggle" aria-label="Fermer">✕</button>
+          <span class="about-header-text" id="about-header-text">About the project</span>
+          <button class="about-toggle" id="about-toggle" aria-label="Close">✕</button>
         </div>
         <div class="about-body">
-          <p>Ce site affiche une prévision sur 5 jours du débit et du niveau d'eau de la Rivière des Prairies,
-          à la station hydrométrique 043301 (Laval).</p>
-          <p>Un modèle d'apprentissage automatique (LightGBM) est entraîné sur plus de 45 ans de données
-          historiques provenant de cinq stations hydrologiques au Québec et en Ontario, combinées aux
-          données climatiques (température, précipitations, neige). Au moment de la prévision, les conditions
-          météo prévues pour les 5 prochains jours sont injectées dans le modèle pour produire les valeurs affichées.</p>
-          <p>La prévision est mise à jour automatiquement deux fois par jour.</p>
+          <p>This site displays a 5-day forecast of the water flow and level of the Rivière des Prairies,
+          at hydrometric station 043301 in Laval, Québec.</p>
+          <p>A machine-learning model (LightGBM) is trained on more than 45 years of historical data
+          from five hydrological stations in Québec and Ontario, combined with climate data
+          (temperature, precipitation, snow). At forecast time, the predicted weather for the next
+          5 days is injected into the model to produce the displayed values.</p>
+          <p>The forecast is updated automatically twice a day.</p>
         </div>
       </div>
 
       <!-- Forecast table -->
       <div class="card">
         <div class="card-header">
-          <span class="card-title">Prévisions 5 jours</span>
+          <span class="card-title">5-day forecast</span>
         </div>
-        <div id="table-container"><p class="loading">Chargement…</p></div>
+        <div id="table-container"><p class="loading">Loading…</p></div>
       </div>
 
     </div><!-- /col-left -->
@@ -921,19 +900,19 @@
       <!-- 30-day graph -->
       <div class="card">
         <div class="card-header">
-          <span class="card-title">30 derniers jours</span>
+          <span class="card-title">Last 30 days</span>
         </div>
-        <img class="forecast-img" src="forecast_30d.png" alt="Débit et niveau d'eau de la Rivière des Prairies — observations des 30 derniers jours et prévisions sur 5 jours" loading="lazy" />
-        <p class="zoom-hint">↗ cliquer pour zoomer</p>
+        <img class="forecast-img" src="../forecast_30d.png" alt="Water flow and level for the Rivière des Prairies — observations from the last 30 days and 5-day forecast" loading="lazy" />
+        <p class="zoom-hint">↗ click to zoom</p>
       </div>
 
       <!-- 1-year graph -->
       <div class="card" style="margin-top:10px;">
         <div class="card-header">
-          <span class="card-title">Contexte annuel</span>
+          <span class="card-title">One-year context</span>
         </div>
-        <img class="forecast-img" src="forecast.png" alt="Débit et niveau d'eau de la Rivière des Prairies — contexte sur un an (station CEHQ 043301)" loading="lazy" />
-        <p class="zoom-hint">↗ cliquer pour zoomer</p>
+        <img class="forecast-img" src="../forecast.png" alt="Water flow and level for the Rivière des Prairies — one-year context (CEHQ station 043301)" loading="lazy" />
+        <p class="zoom-hint">↗ click to zoom</p>
       </div>
 
     </div><!-- /col-right -->
@@ -941,76 +920,76 @@
     <!-- Legend (after charts on mobile, left column on desktop) -->
     <div class="card legend-card">
       <div class="card-header">
-        <span class="card-title">Lecture des graphiques</span>
+        <span class="card-title">How to read the charts</span>
       </div>
       <div class="about-body">
         <ul>
-          <li><span class="legend-swatch swatch-observed"></span><span class="legend-text"><strong>Ligne continue</strong><span class="legend-desc">Valeurs observ&eacute;es (donn&eacute;es historiques de la station)</span></span></li>
-          <li><span class="legend-swatch swatch-forecast"></span><span class="legend-text"><strong>Ligne pointill&eacute;e avec cercles</strong><span class="legend-desc">Pr&eacute;vision du mod&egrave;le pour les 5 prochains jours</span></span></li>
-          <li><span class="legend-swatch swatch-rmse"></span><span class="legend-text"><strong>Bande ombr&eacute;e</strong><span class="legend-desc">Marge d'erreur typique du mod&egrave;le (&plusmn;1 RMSE)</span></span></li>
-          <li><span class="legend-swatch swatch-envelope"></span><span class="legend-text"><strong>Ligne pointill&eacute;e + bande grise</strong><span class="legend-desc">Moyenne et enveloppe min/max historiques</span></span></li>
-          <li><span class="legend-swatch swatch-anchor"></span><span class="legend-text"><strong>Ligne verticale</strong><span class="legend-desc">Date de la derni&egrave;re observation (d&eacute;but de la pr&eacute;vision)</span></span></li>
-          <li><span class="legend-swatch swatch-warn"></span><span class="legend-text"><strong>Ligne orange (2 500 m&sup3;/s)</strong><span class="legend-desc">Seuil de pr&eacute;occupation</span></span></li>
-          <li><span class="legend-swatch swatch-danger"></span><span class="legend-text"><strong>Ligne rouge (3 000 m&sup3;/s / 22.5 m)</strong><span class="legend-desc">Seuil de quasi-crue / zone de danger</span></span></li>
+          <li><span class="legend-swatch swatch-observed"></span><span class="legend-text"><strong>Solid line</strong><span class="legend-desc">Observed values (station historical data)</span></span></li>
+          <li><span class="legend-swatch swatch-forecast"></span><span class="legend-text"><strong>Dashed line with circles</strong><span class="legend-desc">Model forecast for the next 5 days</span></span></li>
+          <li><span class="legend-swatch swatch-rmse"></span><span class="legend-text"><strong>Shaded band</strong><span class="legend-desc">Typical model error margin (&plusmn;1 RMSE)</span></span></li>
+          <li><span class="legend-swatch swatch-envelope"></span><span class="legend-text"><strong>Dashed line + grey band</strong><span class="legend-desc">Historical mean and min/max envelope</span></span></li>
+          <li><span class="legend-swatch swatch-anchor"></span><span class="legend-text"><strong>Vertical line</strong><span class="legend-desc">Date of the last observation (start of the forecast)</span></span></li>
+          <li><span class="legend-swatch swatch-warn"></span><span class="legend-text"><strong>Orange line (2,500 m&sup3;/s)</strong><span class="legend-desc">Concern threshold</span></span></li>
+          <li><span class="legend-swatch swatch-danger"></span><span class="legend-text"><strong>Red line (3,000 m&sup3;/s / 22.5 m)</strong><span class="legend-desc">Near-flood threshold / danger zone</span></span></li>
         </ul>
       </div>
     </div>
 
-    <!-- External links (last on mobile, left column on desktop) -->
+    <!-- External links -->
     <div class="card ext-links-card">
       <div class="card-header">
-        <span class="card-title">Liens externes</span>
+        <span class="card-title">External links</span>
       </div>
       <div class="ext-links">
-        <div class="ext-category">Pr&eacute;visions</div>
+        <div class="ext-category">Forecasts</div>
         <a href="https://www.cehq.gouv.qc.ca/prevision/previsions.asp?secteur=Archipel" target="_blank" rel="noopener">
-          <span class="ext-label">CEHQ Pr&eacute;visions</span>
-          <span class="ext-desc">Pr&eacute;visions officielles &mdash; Archipel</span>
+          <span class="ext-label">CEHQ forecasts</span>
+          <span class="ext-desc">Official forecasts &mdash; Archipel sector</span>
         </a>
         <a href="https://www.cruesgrandmontreal.ca/" target="_blank" rel="noopener">
           <span class="ext-label">Crues Grand Montr&eacute;al</span>
-          <span class="ext-desc">Surveillance des crues en temps r&eacute;el</span>
+          <span class="ext-desc">Real-time flood monitoring</span>
         </a>
         <a href="https://rivieredesoutaouais.ca/forecast/ottawa-river-a-carillon/" target="_blank" rel="noopener">
-          <span class="ext-label">CPRRO</span>
-          <span class="ext-desc">Pr&eacute;visions de la rivi&egrave;re des Outaouais &agrave; Carillon</span>
+          <span class="ext-label">ORRPB</span>
+          <span class="ext-desc">Ottawa River forecasts at Carillon</span>
         </a>
-        <div class="ext-category">Stations de mesure</div>
+        <div class="ext-category">Measurement stations</div>
         <a href="https://www.cehq.gouv.qc.ca/suivihydro/graphique.asp?NoStation=043301" target="_blank" rel="noopener">
           <span class="ext-label">CEHQ 043301</span>
-          <span class="ext-desc">Rivi&egrave;re des Prairies &mdash; &agrave; la t&ecirc;te du rapide du Cheval Blanc (chenal sud)</span>
+          <span class="ext-desc">Rivi&egrave;re des Prairies &mdash; head of Cheval Blanc rapids (south channel)</span>
         </a>
         <a href="https://www.cehq.gouv.qc.ca/suivihydro/graphique.asp?NoStation=043108" target="_blank" rel="noopener">
           <span class="ext-label">CEHQ 043108</span>
-          <span class="ext-desc">Lac des Deux Montagnes &mdash; &agrave; Pointe-Calumet</span>
+          <span class="ext-desc">Lac des Deux Montagnes &mdash; at Pointe-Calumet</span>
         </a>
         <a href="https://wateroffice.ec.gc.ca/report/real_time_e.html?stn=02KF005" target="_blank" rel="noopener">
           <span class="ext-label">ECCC 02KF005</span>
-          <span class="ext-desc">Rivi&egrave;re des Outaouais &agrave; Britannia</span>
+          <span class="ext-desc">Ottawa River at Britannia</span>
         </a>
         <a href="https://wateroffice.ec.gc.ca/report/real_time_e.html?stn=02LA015" target="_blank" rel="noopener">
           <span class="ext-label">ECCC 02LA015</span>
-          <span class="ext-desc">Rivi&egrave;re des Outaouais &agrave; Hull</span>
+          <span class="ext-desc">Ottawa River at Hull</span>
         </a>
         <a href="https://rivieredesoutaouais.ca/location/carillon-2/" target="_blank" rel="noopener">
           <span class="ext-label">Carillon</span>
-          <span class="ext-desc">Niveaux du barrage de Carillon</span>
+          <span class="ext-desc">Carillon Dam water levels</span>
         </a>
       </div>
     </div>
 
-    <!-- Disclaimer (last on mobile, left column on desktop) -->
+    <!-- Disclaimer -->
     <div class="disclaimer" id="disclaimer">
       <div class="disclaimer-header" onclick="toggleDisclaimer()">
-        <span class="disclaimer-header-text" id="disclaimer-header-text">Avertissement</span>
-        <button class="disclaimer-toggle" id="disclaimer-toggle" aria-label="Fermer">✕</button>
+        <span class="disclaimer-header-text" id="disclaimer-header-text">Disclaimer</span>
+        <button class="disclaimer-toggle" id="disclaimer-toggle" aria-label="Close">✕</button>
       </div>
       <div class="disclaimer-body">
-        <p>Ce projet est une simple expérimentation créée afin de me familiariser avec Claude Code.
-        Aucune donnée ni méthode utilisée ici n'est réputée être valide, fonctionnelle ni exacte.</p>
-        <p>Les données de ce dépôt ainsi que celles produites par les outils ne peuvent pas être
-        utilisées pour aucune fin de planification ou de décision par rapport au niveau de la rivière.
-        L'auteur se dégage de toute responsabilité face à l'utilisation de ces données.</p>
+        <p>This project is a simple experiment created to familiarize myself with Claude Code.
+        No data or method used here is considered to be valid, functional, or accurate.</p>
+        <p>The data in this repository and the data produced by the tools cannot be used for any
+        planning or decision-making purpose related to the river level. The author disclaims all
+        responsibility for the use of this data.</p>
         <p class="signature">—Laurent</p>
       </div>
     </div>
@@ -1027,47 +1006,44 @@
   <!-- Legal modal -->
   <div id="legal-modal">
     <div class="legal-box">
-      <h2>Mentions l&eacute;gales</h2>
-      <p class="legal-date">Derni&egrave;re mise &agrave; jour : avril 2026</p>
+      <h2>Legal notice</h2>
+      <p class="legal-date">Last updated: April 2026</p>
       <ol>
-        <li><strong>Absence d'affiliation officielle.</strong> Ce site web est un projet personnel
-        ind&eacute;pendant. Il n'est affili&eacute;, associ&eacute; ni endoss&eacute; par aucun organisme
-        gouvernemental, municipal, paragouvernemental ou toute autre autorit&eacute; publique, y compris
-        mais sans s'y limiter le Centre d'expertise hydrique du Qu&eacute;bec (CEHQ), Environnement et
-        Changement climatique Canada (ECCC) ou Crues Grand Montr&eacute;al.</li>
-        <li><strong>Information &agrave; titre indicatif uniquement.</strong> L'ensemble des donn&eacute;es,
-        pr&eacute;visions, graphiques et informations pr&eacute;sent&eacute;s sur ce site sont fournis
-        &agrave; titre strictement informatif et exp&eacute;rimental. Ils ne constituent en aucun cas
-        un avis professionnel, une recommandation ou une source fiable d'information. Aucune d&eacute;cision
-        financi&egrave;re, patrimoniale, s&eacute;curitaire ou affectant la sant&eacute;, la s&eacute;curit&eacute;
-        ou le bien-&ecirc;tre de quiconque ne doit &ecirc;tre fond&eacute;e, en tout ou en partie, sur les
-        informations publi&eacute;es sur ce site.</li>
-        <li><strong>Aucune garantie d'exactitude.</strong> Les pr&eacute;visions sont g&eacute;n&eacute;r&eacute;es
-        par un mod&egrave;le d'apprentissage automatique exp&eacute;rimental. L'auteur ne garantit ni
-        l'exactitude, ni la fiabilit&eacute;, ni l'actualit&eacute;, ni l'exhaustivit&eacute; des
-        informations publi&eacute;es. Les donn&eacute;es peuvent contenir des erreurs, des omissions
-        ou des inexactitudes.</li>
-        <li><strong>Exclusion de responsabilit&eacute;.</strong> L'auteur de ce site d&eacute;cline toute
-        responsabilit&eacute;, quelle qu'en soit la nature, pour tout dommage direct, indirect, accessoire,
-        cons&eacute;cutif ou sp&eacute;cial d&eacute;coulant de l'utilisation ou de l'impossibilit&eacute;
-        d'utiliser les informations pr&eacute;sent&eacute;es sur ce site, y compris les pertes financi&egrave;res,
-        les dommages mat&eacute;riels ou les pr&eacute;judices corporels.</li>
-        <li><strong>Sources de donn&eacute;es tierces.</strong> Ce site utilise des donn&eacute;es provenant
-        de sources publiques tierces (CEHQ, ECCC, Open-Meteo). L'auteur n'est pas responsable de
-        l'exactitude ou de la disponibilit&eacute; de ces donn&eacute;es sources.</li>
+        <li><strong>No official affiliation.</strong> This website is an independent personal project.
+        It is not affiliated with, associated with, or endorsed by any governmental, municipal,
+        para-governmental, or other public authority, including but not limited to the Centre
+        d'expertise hydrique du Qu&eacute;bec (CEHQ), Environment and Climate Change Canada (ECCC),
+        or Crues Grand Montr&eacute;al.</li>
+        <li><strong>Information for indicative purposes only.</strong> All data, forecasts, charts,
+        and information presented on this site are provided strictly for informational and
+        experimental purposes. They do not constitute professional advice, a recommendation, or a
+        reliable source of information. No financial, property, safety, health, or well-being
+        decision affecting anyone should be based, in whole or in part, on the information
+        published on this site.</li>
+        <li><strong>No guarantee of accuracy.</strong> The forecasts are generated by an experimental
+        machine-learning model. The author does not guarantee the accuracy, reliability, timeliness,
+        or completeness of the information published. The data may contain errors, omissions, or
+        inaccuracies.</li>
+        <li><strong>Exclusion of liability.</strong> The author of this site disclaims any and all
+        liability, of any nature, for any direct, indirect, incidental, consequential, or special
+        damages arising from the use of, or inability to use, the information presented on this
+        site, including financial loss, property damage, or personal injury.</li>
+        <li><strong>Third-party data sources.</strong> This site uses data from public third-party
+        sources (CEHQ, ECCC, Open-Meteo). The author is not responsible for the accuracy or
+        availability of these source data.</li>
       </ol>
       <div class="legal-consent" onclick="document.getElementById('legal-check').click()">
         <input type="checkbox" id="legal-check" onclick="event.stopPropagation(); document.getElementById('legal-btn').disabled = !this.checked;">
-        <label for="legal-check" onclick="event.stopPropagation()">J'ai lu et j'accepte les mentions l&eacute;gales ci-dessus. Je comprends que les informations
-        pr&eacute;sent&eacute;es sur ce site sont exp&eacute;rimentales et ne doivent pas servir de base
-        &agrave; quelque d&eacute;cision que ce soit.</label>
+        <label for="legal-check" onclick="event.stopPropagation()">I have read and accept the legal
+        notice above. I understand that the information presented on this site is experimental and
+        must not serve as the basis for any decision.</label>
       </div>
-      <button class="legal-accept" id="legal-btn" disabled onclick="acceptLegal()">Acc&eacute;der au site</button>
+      <button class="legal-accept" id="legal-btn" disabled onclick="acceptLegal()">Enter the site</button>
     </div>
   </div>
 
   <!-- Lightbox -->
-  <div id="lb"><img id="lb-img" draggable="false" alt="Graphique agrandi"><button id="lb-close" aria-label="Fermer">✕</button></div>
+  <div id="lb"><img id="lb-img" draggable="false" alt="Enlarged chart"><button id="lb-close" aria-label="Close">✕</button></div>
 
   <script>
     // ── Lightbox ──────────────────────────────────────────────────────────────
@@ -1196,12 +1172,12 @@
       const btn   = document.getElementById('disclaimer-toggle');
       if (collapsed) {
         box.classList.add('collapsed');
-        label.textContent = 'Informations importantes concernant les données.';
-        btn.textContent = '+'; btn.setAttribute('aria-label', 'Ouvrir');
+        label.textContent = 'Important information regarding the data.';
+        btn.textContent = '+'; btn.setAttribute('aria-label', 'Open');
       } else {
         box.classList.remove('collapsed');
-        label.textContent = 'Avertissement';
-        btn.textContent = '✕'; btn.setAttribute('aria-label', 'Fermer');
+        label.textContent = 'Disclaimer';
+        btn.textContent = '✕'; btn.setAttribute('aria-label', 'Close');
       }
     }
     function toggleDisclaimer() {
@@ -1219,12 +1195,12 @@
       const btn   = document.getElementById('about-toggle');
       if (collapsed) {
         box.classList.add('collapsed');
-        label.textContent = 'Le projet — cliquer pour en savoir plus';
-        btn.textContent = '+'; btn.setAttribute('aria-label', 'Ouvrir');
+        label.textContent = 'About the project — click to learn more';
+        btn.textContent = '+'; btn.setAttribute('aria-label', 'Open');
       } else {
         box.classList.remove('collapsed');
-        label.textContent = 'Le projet';
-        btn.textContent = '✕'; btn.setAttribute('aria-label', 'Fermer');
+        label.textContent = 'About the project';
+        btn.textContent = '✕'; btn.setAttribute('aria-label', 'Close');
       }
     }
     function toggleAbout() {
@@ -1260,13 +1236,12 @@
     document.addEventListener('keydown', function(e) {
       if (e.key === 'Escape' && document.getElementById('legal-modal').classList.contains('open') && !legalIsFirstVisit) acceptLegal();
     });
-    // Show on first visit
     try {
       if (!localStorage.getItem('legal_accepted')) { legalIsFirstVisit = true; openLegal(); }
     } catch(e) { legalIsFirstVisit = true; openLegal(); }
 
     // ── Forecast table ────────────────────────────────────────────────────────
-    const FR_DAYS = ['Dimanche','Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi'];
+    const EN_DAYS = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
     const DANGER  = 22.5;
 
     function levelCls(l) {
@@ -1275,19 +1250,19 @@
       return 'ok';
     }
 
-    fetch('forecast.json')
+    fetch('../forecast.json')
       .then(r => r.json())
       .then(data => {
         const gen = new Date(data.generated_at);
         document.getElementById('generated-time').textContent =
-          'Généré le ' + gen.toLocaleString('fr-CA', { dateStyle: 'medium', timeStyle: 'short' });
+          'Generated on ' + gen.toLocaleString('en-CA', { dateStyle: 'medium', timeStyle: 'short' });
 
         const rows = data.forecast.map(d => {
           const dt  = new Date(d.date + 'T12:00:00');
-          const dow = FR_DAYS[dt.getDay()];
+          const dow = EN_DAYS[dt.getDay()];
           const cls = levelCls(d.level_m);
           return `<div class="f-row">
-            <div class="f-day">J+${d.day}</div>
+            <div class="f-day">D+${d.day}</div>
             <div class="f-date">${d.date}<span class="dow">${dow}</span></div>
             <div class="f-flow">
               <span class="flow-val">${d.flow_m3s.toFixed(0)}</span>
@@ -1303,16 +1278,16 @@
           `<div class="forecast-col-headers">
             <span class="col-label"></span>
             <span class="col-label">Date</span>
-            <span class="col-label r">Débit</span>
-            <span class="col-label r">Niveau</span>
+            <span class="col-label r">Flow</span>
+            <span class="col-label r">Level</span>
           </div>
           <div class="forecast-rows">${rows}</div>
-          <p class="danger-note">Seuil de danger&nbsp;: <span>${DANGER} m</span></p>`;
+          <p class="danger-note">Danger threshold:&nbsp;<span>${DANGER} m</span></p>`;
       })
       .catch(() => {
         document.getElementById('generated-time').textContent = '';
         document.getElementById('table-container').innerHTML =
-          '<p class="error">Impossible de charger les prévisions.</p>';
+          '<p class="error">Unable to load forecast.</p>';
       });
   </script>
 </body>
