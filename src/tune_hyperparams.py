@@ -50,11 +50,12 @@ from model import (
 )
 from lightgbm import LGBMRegressor
 
-TUNED_PATH              = Path("models/lgbm_forecast_tuned.pkl")
-QUANTILE_TUNED_PATH     = Path("models/lgbm_forecast_quantile_tuned.pkl")
-EXT10_PATH              = Path("models/lgbm_forecast_ext10.pkl")
-PARAMS_PATH             = Path("models/best_params.json")
-QUANTILE_PARAMS_PATH    = Path("models/best_params_quantile.json")
+TUNED_PATH              = Path("models/lgbm_forecast_10d_tuned.pkl")
+QUANTILE_TUNED_PATH     = Path("models/lgbm_forecast_10d_quantile_tuned.pkl")
+# Baseline for test-set comparison: the just-trained untuned 10-horizon MSE
+EXT10_PATH              = Path("models/lgbm_forecast_10d.pkl")
+PARAMS_PATH             = Path("models/best_params_10d.json")
+QUANTILE_PARAMS_PATH    = Path("models/best_params_10d_quantile.json")
 
 # MSE mode: 5 folds including flood years (objective is RMSE on all days)
 CV_FOLD_YEARS      = [2019, 2020, 2021, 2022, 2023]

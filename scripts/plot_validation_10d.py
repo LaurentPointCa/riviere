@@ -1,6 +1,7 @@
 """
-Validation plot: observed flow/level vs all forecast horizons (t+1..t+5).
-Reads from docs/forecast_history.json. Saves to docs/forecast_validation.png.
+Validation plot for the 10-day experimental model: observed flow/level vs
+forecast horizons t+1..t+10. Reads from docs/forecast_10d_history.json.
+Saves to docs/forecast_10d_validation.png.
 """
 import sys, json
 from pathlib import Path
@@ -13,17 +14,18 @@ import matplotlib.dates as mdates
 import pandas as pd
 from load_data import load_flow, load_level
 
-MODEL_START    = "2026-03-14"   # first day of current model
-MODEL_SWITCH   = "2026-03-22"   # date quantile production model replaced MSE
-HORIZONS       = list(range(1, 6))
-HISTORY_PATH   = Path(__file__).parent.parent / "docs" / "forecast_history.json"
-OUT_PATH       = Path(__file__).parent.parent / "docs" / "forecast_validation.png"
+MODEL_START    = "2026-04-18"   # first day 10-day experimental model produced history
+HORIZONS       = list(range(1, 11))
+HISTORY_PATH   = Path(__file__).parent.parent / "docs" / "forecast_10d_history.json"
+OUT_PATH       = Path(__file__).parent.parent / "docs" / "forecast_10d_validation.png"
 
-# ── Load forecast history ─────────────────────────────────────────────────────
+if not HISTORY_PATH.exists():
+    print(f"No history yet at {HISTORY_PATH}; skipping 10-day validation plot.")
+    sys.exit(0)
+
 with open(HISTORY_PATH) as f:
     history = json.load(f)
 
-# Build per-horizon DataFrames: index = predicted date
 pred = {h: [] for h in HORIZONS}
 for entry in history:
     anchor = entry["anchor_date"]
@@ -44,17 +46,17 @@ for h in HORIZONS:
         df = pd.DataFrame(pred[h]).drop_duplicates("date").set_index("date").sort_index()
         pred_df[h] = df
 
-# ── Load observations ─────────────────────────────────────────────────────────
 flow_obs  = load_flow().loc[MODEL_START:,  "flow_m3s"]
 level_obs = load_level().loc[MODEL_START:, "level_m"]
 
-# ── Plot ──────────────────────────────────────────────────────────────────────
-COLORS  = {1: "#E91E63", 2: "#FF6D00", 3: "#FFC107", 4: "#7C4DFF", 5: "#00BCD4"}
-MARKERS = {1: "o",       2: "s",       3: "^",       4: "D",       5: "P"}
+COLORS  = {1: "#E91E63", 2: "#FF6D00", 3: "#FFC107", 4: "#7C4DFF", 5: "#00BCD4",
+           6: "#4CAF50", 7: "#9C27B0", 8: "#3F51B5", 9: "#795548", 10: "#607D8B"}
+MARKERS = {1: "o",       2: "s",       3: "^",       4: "D",       5: "P",
+           6: "v",       7: "X",       8: "*",       9: "h",       10: "<"}
 
 fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(13, 8), sharex=True)
 fig.suptitle(
-    f"Station 043301 — Observed vs Forecast by Horizon (from {MODEL_START})",
+    f"Station 043301 — Observed vs 10-day Experimental Forecast (from {MODEL_START})",
     fontsize=13, fontweight="bold",
 )
 
@@ -75,17 +77,7 @@ for ax, obs, col, ylabel in [
 
     ax.set_ylabel(ylabel, fontsize=11)
     ax.grid(True, alpha=0.25)
-    ax.legend(loc="upper left", fontsize=9, ncol=3, framealpha=0.9)
-
-    # Model switch annotation
-    switch_ts = pd.Timestamp(MODEL_SWITCH)
-    ax.axvline(switch_ts, color="#555", lw=1.2, ls="--", zorder=4, alpha=0.7)
-    ymin, ymax = ax.get_ylim()
-    ymid = ymin + (ymax - ymin) * 0.97
-    ax.text(switch_ts - pd.Timedelta(hours=12), ymid, "MSE",
-            ha="right", va="top", fontsize=8, color="#555", style="italic")
-    ax.text(switch_ts + pd.Timedelta(hours=12), ymid, "Quantile (prod)",
-            ha="left",  va="top", fontsize=8, color="#555", style="italic")
+    ax.legend(loc="upper left", fontsize=8, ncol=5, framealpha=0.9)
 
 ax2.xaxis.set_major_formatter(mdates.DateFormatter("%b %d"))
 ax2.xaxis.set_major_locator(mdates.DayLocator())

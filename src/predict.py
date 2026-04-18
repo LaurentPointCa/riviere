@@ -1,5 +1,11 @@
 """
-5-day forecast script for station 043301 — Des Prairies.
+Forecast script for station 043301 — Des Prairies.
+
+Produces:
+  - Production 5-day forecast (quantile-tuned) → docs/forecast.*
+  - Reference 5-day MSE forecast              → docs/forecast_mse.*
+  - Experimental 10-day forecast (quantile-tuned, 10-horizon)
+                                              → docs/forecast_10d.*
 
 Usage:
     python src/predict.py                       # forecast from latest available date
@@ -20,9 +26,9 @@ from features import build_dataset
 from model import load_model, season_for
 from load_forecast import load_weather_forecast
 
-MODEL_PATH      = Path("models/lgbm_forecast.pkl")
-MSE_MODEL_PATH  = Path("models/lgbm_forecast_mse.pkl")
-EXT10_MODEL_PATH = Path("models/lgbm_forecast_ext10.pkl")
+MODEL_PATH      = Path("models/lgbm_forecast.pkl")                     # 5-day quantile prod
+MSE_MODEL_PATH  = Path("models/lgbm_forecast_mse.pkl")                  # 5-day MSE reference
+EXP10_MODEL_PATH = Path("models/lgbm_forecast_10d_quantile_tuned.pkl")  # 10-day experimental
 
 
 def _inject_weather_forecast(row: pd.DataFrame, wf: pd.DataFrame) -> pd.DataFrame:
@@ -60,7 +66,8 @@ def _inject_weather_forecast(row: pd.DataFrame, wf: pd.DataFrame) -> pd.DataFram
 def forecast(anchor_date: pd.Timestamp, X: pd.DataFrame,
              model_path: Path = MODEL_PATH) -> pd.DataFrame:
     """
-    Generate a 5-day forecast of flow and level from the given anchor date.
+    Generate a forecast of flow and level from the given anchor date.
+    Horizon count (5 or 10) is inferred from the model's target keys.
 
     Parameters
     ----------
@@ -70,7 +77,7 @@ def forecast(anchor_date: pd.Timestamp, X: pd.DataFrame,
 
     Returns
     -------
-    pd.DataFrame with columns date, flow_m3s, level_m; indexed 1..5 (horizon)
+    pd.DataFrame with columns date, flow_m3s, level_m; index is the horizon.
     """
     all_models = load_model(model_path)
     # Support both seasonal ({"cold": ..., "warm": ...}) and legacy flat dicts
@@ -80,6 +87,8 @@ def forecast(anchor_date: pd.Timestamp, X: pd.DataFrame,
         print(f"Using {season} season model ({anchor_date.strftime('%b %d')}).")
     else:
         models = all_models
+
+    max_h = max(int(k.split("_t")[1]) for k in models if k.startswith("flow_t"))
     row = X.loc[[anchor_date]]
 
     # For the latest available date, inject real weather forecast.
@@ -99,11 +108,12 @@ def forecast(anchor_date: pd.Timestamp, X: pd.DataFrame,
 
     preds = {target: float(model.predict(row)[0]) for target, model in models.items()}
 
+    horizons = range(1, max_h + 1)
     return pd.DataFrame({
-        "date":     [anchor_date + pd.Timedelta(days=h) for h in range(1, 6)],
-        "flow_m3s": [preds[f"flow_t{h}"] for h in range(1, 6)],
-        "level_m":  [preds[f"level_t{h}"] for h in range(1, 6)],
-    }, index=range(1, 6))
+        "date":     [anchor_date + pd.Timedelta(days=h) for h in horizons],
+        "flow_m3s": [preds[f"flow_t{h}"] for h in horizons],
+        "level_m":  [preds[f"level_t{h}"] for h in horizons],
+    }, index=list(horizons))
 
 
 def print_forecast(
@@ -111,11 +121,12 @@ def print_forecast(
     anchor_date: pd.Timestamp,
     X: pd.DataFrame,
 ) -> None:
-    """Print the 5-day forecast table with observed context."""
+    """Print the forecast table with observed context."""
+    n = len(result)
     W = 60
     print()
     print("═" * W)
-    print("  5-day forecast — Station 043301 (Des Prairies)")
+    print(f"  {n}-day forecast — Station 043301 (Des Prairies)")
     print(f"  Anchor: {anchor_date.date()}")
     print("═" * W)
 
@@ -182,7 +193,7 @@ def plot_forecast(
     Generate and save a 2-panel chart (flow + level) showing:
       - Past `days_back` days of observed data
       - Historical min/max envelope and mean per day-of-year
-      - 5-day forecast
+      - Forecast (horizon count from `result`)
 
     Parameters
     ----------
@@ -240,12 +251,20 @@ def plot_forecast(
         fontsize=13, color=_TEXT,
     )
 
-    # RMSE per horizon — cold season test-set (2024-03-17 → 2026-03-16), ext-10 model
-    # Cold season used as conservative upper bound across seasons
-    _RMSE = {
+    # RMSE per horizon, cold season, used as conservative upper bound.
+    # First 5 values: 5-day production model test-set (ext-10 MSE).
+    # Full 10 values: tuned quantile-α=0.85 10-horizon model (2024-04 → 2026-04).
+    _RMSE_5D = {
         "flow_m3s": [45.21, 65.09, 84.22, 96.42, 104.99],
         "level_m":  [0.062, 0.089, 0.111, 0.131, 0.148],
     }
+    _RMSE_10D = {
+        "flow_m3s": [51.80, 72.86, 92.64, 100.74, 123.40,
+                     121.84, 123.96, 128.55, 140.28, 146.21],
+        "level_m":  [0.0835, 0.1155, 0.1483, 0.1692, 0.1877,
+                     0.2042, 0.2074, 0.2156, 0.2257, 0.2306],
+    }
+    _RMSE = _RMSE_10D if len(result) > 5 else _RMSE_5D
 
     for ax, var, unit, obs_color in [
         (ax_f, "flow_m3s",  "Débit (m³/s)", _FLOW),
@@ -262,7 +281,7 @@ def plot_forecast(
         # Observed history
         ax.plot(obs.index, obs[var], color=obs_color, lw=1.8, label="Observé")
 
-        # 5-day forecast — connect last observed point for continuity
+        # Forecast — connect last observed point for continuity
         bridge_dates  = [anchor_date] + result["date"].tolist()
         bridge_values = [obs[var].iloc[-1]] + result[var].tolist()
         ax.plot(bridge_dates, bridge_values, color=_FC, lw=2,
@@ -397,7 +416,7 @@ def append_forecast_history(result: pd.DataFrame, anchor_date: pd.Timestamp,
 
 def save_forecast_json(result: pd.DataFrame, anchor_date: pd.Timestamp,
                        out_name: str = "forecast") -> Path:
-    """Save the 5-day forecast as JSON to docs/{out_name}.json."""
+    """Save the forecast as JSON to docs/{out_name}.json."""
     import json
     from datetime import datetime, UTC
 
@@ -430,7 +449,7 @@ def save_forecast_json(result: pd.DataFrame, anchor_date: pd.Timestamp,
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Generate a 5-day forecast for station 043301.")
+    parser = argparse.ArgumentParser(description="Generate a forecast for station 043301.")
     parser.add_argument(
         "--date",
         metavar="YYYY-MM-DD",
@@ -471,14 +490,14 @@ def main() -> None:
         save_forecast_json(result_mse, anchor, "forecast_mse")
         append_forecast_history(result_mse, anchor, "forecast_mse")
 
-    if EXT10_MODEL_PATH.exists():
-        print(f"\n── Ext10 model ({EXT10_MODEL_PATH.name}) ──")
-        result_ext10 = forecast(anchor, X, EXT10_MODEL_PATH)
-        print_forecast(result_ext10, anchor, X)
-        plot_forecast(result_ext10, anchor, X, days_back=365, docs_name="forecast_ext10.png",    figsize=(14, 8))
-        plot_forecast(result_ext10, anchor, X, days_back=30,  docs_name="forecast_ext10_30d.png", figsize=(7, 8))
-        save_forecast_json(result_ext10, anchor, "forecast_ext10")
-        append_forecast_history(result_ext10, anchor, "forecast_ext10")
+    if EXP10_MODEL_PATH.exists():
+        print(f"\n── Experimental 10-day model ({EXP10_MODEL_PATH.name}) ──")
+        result_10d = forecast(anchor, X, EXP10_MODEL_PATH)
+        print_forecast(result_10d, anchor, X)
+        # 30-day chart only — no 365-day chart for the experimental horizon
+        plot_forecast(result_10d, anchor, X, days_back=30, docs_name="forecast_10d_30d.png", figsize=(8, 8))
+        save_forecast_json(result_10d, anchor, "forecast_10d")
+        append_forecast_history(result_10d, anchor, "forecast_10d")
 
 
 if __name__ == "__main__":

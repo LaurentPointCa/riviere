@@ -35,6 +35,13 @@ ECCC_DAILY_URL = (
     "https://api.weather.gc.ca/collections/hydrometric-daily-mean/items"
     "?STATION_NUMBER={station}&datetime={start}/{end}&limit=500&f=json&sortby=DATE"
 )
+# Realtime fallback: daily-mean is only published ~Dec 31 of prior year, so the
+# realtime collection (5-min samples) fills the recent gap. Aggregated to daily.
+ECCC_REALTIME_URL = (
+    "https://api.weather.gc.ca/collections/hydrometric-realtime/items"
+    "?STATION_NUMBER={station}&datetime={start}T00:00:00Z/{end}T23:59:59Z"
+    "&limit=10000&f=json&sortby=DATETIME"
+)
 
 DATA_DIR = Path(__file__).parent.parent / "data"
 
@@ -279,6 +286,11 @@ def _fetch_eccc_recent(station: str, start: str, end: str, col_name: str,
     """
     Fetch recent daily hydrometric data from the MSC GeoMet API.
 
+    Tries the hydrometric-daily-mean collection first (reviewed daily values).
+    Falls back to hydrometric-realtime (5-min samples) for any trailing gap,
+    aggregating to daily means. The daily-mean collection typically lags ~12
+    months; the realtime fallback keeps recent weeks current.
+
     Parameters
     ----------
     station  : ECCC station number (e.g. '02KF005')
@@ -287,25 +299,63 @@ def _fetch_eccc_recent(station: str, start: str, end: str, col_name: str,
     col_name : output column name
     field    : 'DISCHARGE' or 'LEVEL'
     """
-    url = ECCC_DAILY_URL.format(station=station, start=start, end=end)
+    empty = pd.DataFrame(columns=[col_name]).rename_axis("date")
+
+    # 1. Daily-mean collection
+    daily = empty
     try:
+        url = ECCC_DAILY_URL.format(station=station, start=start, end=end)
         resp = requests.get(url, timeout=30)
         resp.raise_for_status()
         features = resp.json().get("features", [])
-        if not features:
-            return pd.DataFrame(columns=[col_name]).rename_axis("date")
         rows = [
             {"date": pd.to_datetime(f["properties"]["DATE"]),
              col_name: f["properties"][field]}
             for f in features
             if f["properties"].get(field) is not None
         ]
-        if not rows:
-            return pd.DataFrame(columns=[col_name]).rename_axis("date")
-        return pd.DataFrame(rows).set_index("date").sort_index()
+        if rows:
+            daily = pd.DataFrame(rows).set_index("date").sort_index()
     except Exception as e:
-        print(f"Warning: could not fetch ECCC recent data for {station} ({e})")
-        return pd.DataFrame(columns=[col_name]).rename_axis("date")
+        print(f"Warning: could not fetch ECCC daily-mean for {station} ({e})")
+
+    # 2. Realtime fallback for anything after the daily-mean cutoff
+    rt_start = pd.Timestamp(start) if daily.empty else daily.index.max() + pd.Timedelta(days=1)
+    rt_end   = pd.Timestamp(end)
+    if rt_start <= rt_end:
+        try:
+            url = ECCC_REALTIME_URL.format(
+                station=station,
+                start=rt_start.strftime("%Y-%m-%d"),
+                end=rt_end.strftime("%Y-%m-%d"),
+            )
+            resp = requests.get(url, timeout=60)
+            resp.raise_for_status()
+            features = resp.json().get("features", [])
+            rt_rows = [
+                {"datetime": pd.to_datetime(f["properties"]["DATETIME"]),
+                 col_name: f["properties"][field]}
+                for f in features
+                if f["properties"].get(field) is not None
+            ]
+            if rt_rows:
+                rt = (pd.DataFrame(rt_rows)
+                      .set_index("datetime")
+                      .sort_index())
+                # Daily mean, naive index matching the rest of the pipeline
+                rt_daily = rt[col_name].resample("D").mean().to_frame()
+                rt_daily.index = rt_daily.index.tz_localize(None)
+                rt_daily.index.name = "date"
+                # Keep only full days; last partial day may be incomplete
+                today = pd.Timestamp.today().normalize()
+                rt_daily = rt_daily[rt_daily.index < today]
+                daily = pd.concat([daily, rt_daily]).groupby(level=0).mean()
+        except Exception as e:
+            print(f"Warning: could not fetch ECCC realtime for {station} ({e})")
+
+    if not daily.empty:
+        daily[col_name] = pd.to_numeric(daily[col_name], errors="coerce")
+    return daily if not daily.empty else empty
 
 
 def _parse_eccc_xml(path: Path, col_name: str) -> pd.DataFrame:

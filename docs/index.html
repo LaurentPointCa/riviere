@@ -257,6 +257,8 @@
     .col-label.r { text-align: right; }
 
     .forecast-rows { padding: 2px 0 4px; }
+    .f-row.tentative { opacity: 0.62; }
+    .f-row.tentative .f-day { color: var(--muted); }
 
     .f-row {
       display: grid;
@@ -842,6 +844,7 @@
       .legend-card    { grid-column: 1; grid-row: 2; }
       .ext-links-card { grid-column: 1; grid-row: 3; }
       .disclaimer     { grid-column: 1; grid-row: 4; }
+      .experimental-card { grid-column: 1 / -1; grid-row: 5; }
 
       /* Remove side margins — columns provide structure */
       .site-header { padding: 20px 0 22px; }
@@ -853,6 +856,51 @@
       .disclaimer { margin-left: 0; margin-right: 0; }
 
       .btn-bar { display: none; }
+    }
+
+    /* ── Experimental 10-day section ──────────────────────────────────────── */
+    .experimental-card {
+      margin-top: 24px;
+      border: 1px dashed #4a6280;
+      background: rgba(14, 231, 197, 0.02);
+    }
+    .experimental-card .card-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .experimental-badge {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      padding: 2px 8px;
+      border-radius: 3px;
+      background: #f59e0b;
+      color: #0b0f17;
+    }
+    .experimental-intro {
+      font-size: 13px;
+      color: var(--muted);
+      margin: 8px 0 16px;
+      line-height: 1.5;
+    }
+    .experimental-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+    @media (min-width: 760px) {
+      .experimental-grid {
+        grid-template-columns: minmax(280px, 38%) 1fr;
+        align-items: start;
+      }
+    }
+    .experimental-grid .forecast-img {
+      width: 100%;
+      height: auto;
+      display: block;
+      border-radius: 4px;
+      cursor: zoom-in;
     }
 
     /* ── Wide desktop layout (3-column) ──────────────────────────────────── */
@@ -1017,6 +1065,24 @@
           <span class="ext-label">Carillon</span>
           <span class="ext-desc">Niveaux du barrage de Carillon</span>
         </a>
+      </div>
+    </div>
+
+    <!-- Experimental 10-day forecast (bottom, full width) -->
+    <div class="card experimental-card">
+      <div class="card-header">
+        <span class="card-title">Prévision expérimentale sur 10 jours</span>
+        <span class="experimental-badge">EXPÉRIMENTAL</span>
+      </div>
+      <p class="experimental-intro">
+        Modèle alternatif qui étend la prévision à 10 jours. Mêmes données d'entrée que
+        la prévision principale, mais entraîné pour optimiser la détection de crue sur 10
+        horizons. La précision diminue avec l'horizon&nbsp;: les jours 6 à 10 sont
+        fournis à titre indicatif uniquement.
+      </p>
+      <div class="experimental-grid">
+        <div id="table-10d-container"><p class="loading">Chargement…</p></div>
+        <img class="forecast-img" data-src="forecast_10d_30d.png" alt="Prévision expérimentale sur 10 jours — Rivière des Prairies (station CEHQ 043301)" loading="lazy" />
       </div>
     </div>
 
@@ -1342,6 +1408,42 @@
         document.getElementById('generated-time').textContent = '';
         document.getElementById('table-container').innerHTML =
           '<p class="error">Impossible de charger les prévisions.</p>';
+      });
+
+    // ── Experimental 10-day forecast table ──────────────────────────────────
+    fetch('forecast_10d.json?v=' + CACHE_VERSION, { cache: 'no-cache' })
+      .then(r => r.json())
+      .then(data => {
+        const rows = data.forecast.map(d => {
+          const dt  = new Date(d.date + 'T12:00:00');
+          const dow = FR_DAYS[dt.getDay()];
+          const cls = levelCls(d.level_m);
+          const tentative = d.day > 5 ? ' tentative' : '';
+          return `<div class="f-row${tentative}">
+            <div class="f-day">J+${d.day}</div>
+            <div class="f-date">${d.date}<span class="dow">${dow}</span></div>
+            <div class="f-flow">
+              <span class="flow-val">${d.flow_m3s.toFixed(0)}</span>
+              <span class="flow-unit">m³/s</span>
+            </div>
+            <div class="f-level">
+              <span class="level-val ${cls}">${d.level_m.toFixed(3)}</span>
+            </div>
+          </div>`;
+        }).join('');
+
+        document.getElementById('table-10d-container').innerHTML =
+          `<div class="forecast-col-headers">
+            <span class="col-label"></span>
+            <span class="col-label">Date</span>
+            <span class="col-label r">Débit</span>
+            <span class="col-label r">Niveau</span>
+          </div>
+          <div class="forecast-rows">${rows}</div>`;
+      })
+      .catch(() => {
+        document.getElementById('table-10d-container').innerHTML =
+          '<p class="error">Prévision 10 jours indisponible.</p>';
       });
   </script>
 </body>

@@ -3,7 +3,7 @@ Flood detection evaluation framework for the Des Prairies forecast model.
 
 Walk-forward evaluation on flood years (2017, 2019, 2023):
   - For each year Y, trains a cold-season model on all data before Y (honest OOS)
-  - Reports precision/recall at each horizon t+1..t+5 for the concern threshold
+  - Reports precision/recall at each horizon t+1..t+10 for the concern threshold
   - Reports lead time: days before first threshold crossing that model first alerted
 
 Primary threshold: 2500 m³/s (residents concerned)
@@ -31,8 +31,8 @@ sys.path.insert(0, str(Path(__file__).parent))
 from features import build_dataset
 from model import _season_mask, COLD_MONTHS, LGBM_PARAMS
 
-FLOW_TARGETS       = [f"flow_t{h}" for h in range(1, 6)]
-HORIZONS           = list(range(1, 6))
+FLOW_TARGETS       = [f"flow_t{h}" for h in range(1, 11)]
+HORIZONS           = list(range(1, 11))
 DEFAULT_THRESHOLD  = 2500   # m³/s — residents start to feel concerned
 DEFAULT_EVAL_YEARS = [2017, 2019, 2023]
 
@@ -43,7 +43,7 @@ def _train_cold(X_tr: pd.DataFrame, y_tr: pd.DataFrame,
                 alpha: float | None = None,
                 best_params: dict | None = None) -> dict:
     """
-    Train cold-season flow models (t+1..t+5 only).
+    Train cold-season flow models (t+1..t+10).
     alpha=None        → MSE / regression (default)
     alpha=float       → quantile regression at that quantile level
     best_params       → per-target hyperparams from best_params_quantile.json
@@ -75,7 +75,7 @@ def predict_year(
     Train on all cold-season data before `year`, predict cold season of `year`.
 
     Returns DataFrame indexed by date with columns:
-      flow_today, actual_t{h}, pred_t{h}  for h in 1..5
+      flow_today, actual_t{h}, pred_t{h}  for h in 1..10
     """
     cutoff = pd.Timestamp(f"{year - 1}-12-31")
     y0     = pd.Timestamp(f"{year}-01-01")
@@ -150,7 +150,7 @@ def lead_time_events(df: pd.DataFrame, threshold: float) -> list[dict]:
     find the earliest advance warning the model gave.
 
     For onset date E, checks whether pred_t{h}[E - h days] > threshold,
-    starting from h=5 downward. Reports the largest h for which the model
+    starting from h=10 downward. Reports the largest h for which the model
     raised an alert — that is the lead time in days.
 
     Returns list of dicts: onset, flow_today, lead_days
@@ -168,7 +168,7 @@ def lead_time_events(df: pd.DataFrame, threshold: float) -> list[dict]:
 
         # Search from largest to smallest horizon for earliest warning
         lead = 0
-        for h in HORIZONS[::-1]:  # 5 → 1
+        for h in HORIZONS[::-1]:  # 10 → 1
             lookback = onset - pd.Timedelta(days=h)
             if lookback not in df.index:
                 continue
@@ -219,7 +219,7 @@ def print_year_results(
             if e["lead_days"] > 0:
                 warning = f"{e['lead_days']}-day advance warning"
             else:
-                warning = "no advance warning within t+5"
+                warning = "no advance warning within t+10"
             print(f"    {e['onset']}  flow={e['flow_today']:,} m³/s  →  {warning}")
     else:
         print(f"    (none — flow never crossed {threshold:,} m³/s in cold season)")

@@ -4,7 +4,7 @@ Station:        043301         Des Prairies - à la tête du rapide du Cheval Blan
 Bassin versant: 146920 km²     Régime: Influencé                                         
 Coordonnées:    (NAD83) 45° 31' 18" // -73° 50' 44"
 
-Date de création du fichier: 2026-03-17 18:26
+Date de création du fichier: 2026-04-11 10:20
 Particularité(s):
 - Le 31 mai 2018, les données historiques de cette station ont été mises à jour pour uniformiser les données en considérant la courbe de tarage la plus récente. L'impact majeur de cette mise à jour est que les débits de crues des années antérieures à 1997 sont diminués. L'effet se fait particulièrement sentir pour les débits supérieurs à 2000 m³/s.
 - 
@@ -37807,4 +37807,29 @@ Station        Date                Débit (m³/s)   Remarque
 043301         2026/03/13          1573           P
 043301         2026/03/14          1531           P
 043301         2026/03/15          1475           P
-043301         2026/03/16          1348           P
+043301         2026/03/16          1350           P
+043301         2026/03/17          1355           P
+043301         2026/03/18          1450           P
+043301         2026/03/19          1415           P
+043301         2026/03/20          1397           P
+043301         2026/03/21          1362           P
+043301         2026/03/22          1328           P
+043301         2026/03/23          1339           P
+043301         2026/03/24          1302           P
+043301         2026/03/25          1281           P
+043301         2026/03/26          1265           P
+043301         2026/03/27          1284           P
+043301         2026/03/28          1282           P
+043301         2026/03/29          1236           P
+043301         2026/03/30          1198           P
+043301         2026/03/31          1209           P
+043301         2026/04/01          1322           P
+043301         2026/04/02          1386           P
+043301         2026/04/03          1434           P
+043301         2026/04/04          1484           P
+043301         2026/04/05          1609           P
+043301         2026/04/06          1800           P
+043301         2026/04/07          1855           P
+043301         2026/04/08          1879           P
+043301         2026/04/09          1859           P
+043301         2026/04/10          1860           P
