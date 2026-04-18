@@ -3,6 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="Cache-Control" content="no-cache, must-revalidate" />
+  <meta http-equiv="Expires" content="0" />
   <meta name="google-site-verification" content="slqk7T7lp31YEds61E1bOcd_2fRvb8jUJqLWdYvp-xI" />
   <title>Rivière des Prairies — Water Flow & Level Forecast (Laval, Québec)</title>
   <meta name="description" content="Experimental 5-day forecast of water flow and level for the Rivière des Prairies in Laval, Québec (CEHQ station 043301). Personal unofficial project, updated twice a day." />
@@ -920,7 +922,7 @@
         <div class="card-header">
           <span class="card-title">Last 30 days</span>
         </div>
-        <img class="forecast-img" src="../forecast_30d.png" alt="Water flow and level for the Rivière des Prairies — observations from the last 30 days and 5-day forecast" loading="lazy" />
+        <img class="forecast-img" data-src="../forecast_30d.png" alt="Water flow and level for the Rivière des Prairies — observations from the last 30 days and 5-day forecast" loading="lazy" />
         <p class="zoom-hint">↗ click to zoom</p>
       </div>
 
@@ -929,7 +931,7 @@
         <div class="card-header">
           <span class="card-title">One-year context</span>
         </div>
-        <img class="forecast-img" src="../forecast.png" alt="Water flow and level for the Rivière des Prairies — one-year context (CEHQ station 043301)" loading="lazy" />
+        <img class="forecast-img" data-src="../forecast.png" alt="Water flow and level for the Rivière des Prairies — one-year context (CEHQ station 043301)" loading="lazy" />
         <p class="zoom-hint">↗ click to zoom</p>
       </div>
 
@@ -1064,6 +1066,12 @@
   <div id="lb"><img id="lb-img" draggable="false" alt="Enlarged chart"><button id="lb-close" aria-label="Close">✕</button></div>
 
   <script>
+    // ── Daily cache-bust for forecast assets ────────────────────────────────
+    const CACHE_VERSION = new Date().toISOString().slice(0, 10);
+    document.querySelectorAll('img.forecast-img').forEach(img => {
+      img.src = img.dataset.src + '?v=' + CACHE_VERSION;
+    });
+
     // ── Lightbox ──────────────────────────────────────────────────────────────
     (function () {
       const overlay  = document.getElementById('lb');
@@ -1268,7 +1276,7 @@
       return 'ok';
     }
 
-    fetch('../forecast.json')
+    fetch('../forecast.json?v=' + CACHE_VERSION, { cache: 'no-cache' })
       .then(r => r.json())
       .then(data => {
         const gen = new Date(data.generated_at);

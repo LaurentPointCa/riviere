@@ -3,6 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="Cache-Control" content="no-cache, must-revalidate" />
+  <meta http-equiv="Expires" content="0" />
   <meta name="google-site-verification" content="slqk7T7lp31YEds61E1bOcd_2fRvb8jUJqLWdYvp-xI" />
   <title>Rivière des Prairies — Prévisions de débit et de niveau d'eau (Laval)</title>
   <meta name="description" content="Prévisions expérimentales sur 5 jours du débit et du niveau d'eau de la Rivière des Prairies à Laval (station CEHQ 043301). Projet personnel non-officiel, mis à jour deux fois par jour." />
@@ -942,7 +944,7 @@
         <div class="card-header">
           <span class="card-title">30 derniers jours</span>
         </div>
-        <img class="forecast-img" src="forecast_30d.png" alt="Débit et niveau d'eau de la Rivière des Prairies — observations des 30 derniers jours et prévisions sur 5 jours" loading="lazy" />
+        <img class="forecast-img" data-src="forecast_30d.png" alt="Débit et niveau d'eau de la Rivière des Prairies — observations des 30 derniers jours et prévisions sur 5 jours" loading="lazy" />
         <p class="zoom-hint">↗ cliquer pour zoomer</p>
       </div>
 
@@ -951,7 +953,7 @@
         <div class="card-header">
           <span class="card-title">Contexte annuel</span>
         </div>
-        <img class="forecast-img" src="forecast.png" alt="Débit et niveau d'eau de la Rivière des Prairies — contexte sur un an (station CEHQ 043301)" loading="lazy" />
+        <img class="forecast-img" data-src="forecast.png" alt="Débit et niveau d'eau de la Rivière des Prairies — contexte sur un an (station CEHQ 043301)" loading="lazy" />
         <p class="zoom-hint">↗ cliquer pour zoomer</p>
       </div>
 
@@ -1089,6 +1091,14 @@
   <div id="lb"><img id="lb-img" draggable="false" alt="Graphique agrandi"><button id="lb-close" aria-label="Fermer">✕</button></div>
 
   <script>
+    // ── Daily cache-bust for forecast assets ────────────────────────────────
+    // URL changes once per day so browsers always get fresh PNGs + JSON on new days,
+    // while still caching within the day for repeat visits.
+    const CACHE_VERSION = new Date().toISOString().slice(0, 10);
+    document.querySelectorAll('img.forecast-img').forEach(img => {
+      img.src = img.dataset.src + '?v=' + CACHE_VERSION;
+    });
+
     // ── Lightbox ──────────────────────────────────────────────────────────────
     (function () {
       const overlay  = document.getElementById('lb');
@@ -1294,7 +1304,7 @@
       return 'ok';
     }
 
-    fetch('forecast.json')
+    fetch('forecast.json?v=' + CACHE_VERSION, { cache: 'no-cache' })
       .then(r => r.json())
       .then(data => {
         const gen = new Date(data.generated_at);
