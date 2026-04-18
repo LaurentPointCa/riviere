@@ -33,15 +33,16 @@ EOF
 # Run forecast — also updates docs/forecast_sample.png
 .venv/bin/python src/predict.py
 
-# Generate validation plot (observed vs all forecast horizons)
+# Generate validation plots (observed vs forecast horizons) — 5-day + 10-day
 .venv/bin/python scripts/plot_validation.py
+.venv/bin/python scripts/plot_validation_10d.py
 
 # Commit and push only from the VM — on Mac, forecasts are for local validation only.
 if [[ "$(hostname -s)" == "riviere" ]]; then
     git add docs/forecast.png docs/forecast_30d.png docs/forecast.json docs/forecast_history.json \
             docs/forecast_mse.png docs/forecast_mse_30d.png docs/forecast_mse.json docs/forecast_mse_history.json \
-            docs/forecast_ext10.png docs/forecast_ext10_30d.png docs/forecast_ext10.json docs/forecast_ext10_history.json \
-            docs/forecast_validation.png
+            docs/forecast_10d_30d.png docs/forecast_10d.json docs/forecast_10d_history.json \
+            docs/forecast_validation.png docs/forecast_10d_validation.png
     if ! git diff --cached --quiet; then
         git commit -m "chore: daily forecast $(date +%Y-%m-%d)"
         git push --force-with-lease

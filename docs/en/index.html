@@ -822,6 +822,7 @@
       .legend-card    { grid-column: 1; grid-row: 2; }
       .ext-links-card { grid-column: 1; grid-row: 3; }
       .disclaimer     { grid-column: 1; grid-row: 4; }
+      .experimental-card { grid-column: 1 / -1; grid-row: 5; }
 
       .site-header { padding: 20px 0 22px; }
 
@@ -833,6 +834,53 @@
 
       .btn-bar { display: none; }
     }
+
+    /* Experimental 10-day section */
+    .experimental-card {
+      margin-top: 24px;
+      border: 1px dashed #4a6280;
+      background: rgba(14, 231, 197, 0.02);
+    }
+    .experimental-card .card-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .experimental-badge {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      padding: 2px 8px;
+      border-radius: 3px;
+      background: #f59e0b;
+      color: #0b0f17;
+    }
+    .experimental-intro {
+      font-size: 13px;
+      color: var(--muted);
+      margin: 8px 0 16px;
+      line-height: 1.5;
+    }
+    .experimental-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+    @media (min-width: 760px) {
+      .experimental-grid {
+        grid-template-columns: minmax(280px, 38%) 1fr;
+        align-items: start;
+      }
+    }
+    .experimental-grid .forecast-img {
+      width: 100%;
+      height: auto;
+      display: block;
+      border-radius: 4px;
+      cursor: zoom-in;
+    }
+    .f-row.tentative { opacity: 0.62; }
+    .f-row.tentative .f-day { color: var(--muted); }
 
     @media (min-width: 1920px) {
       .site-wrap {
@@ -995,6 +1043,23 @@
           <span class="ext-label">Carillon</span>
           <span class="ext-desc">Carillon Dam water levels</span>
         </a>
+      </div>
+    </div>
+
+    <!-- Experimental 10-day forecast (bottom, full width) -->
+    <div class="card experimental-card">
+      <div class="card-header">
+        <span class="card-title">10-day experimental forecast</span>
+        <span class="experimental-badge">EXPERIMENTAL</span>
+      </div>
+      <p class="experimental-intro">
+        Alternative model that extends the forecast to 10 days. Same inputs as the
+        main forecast, but trained to optimize flood detection across 10 horizons.
+        Accuracy decreases with horizon&nbsp;— days 6–10 are provided for reference only.
+      </p>
+      <div class="experimental-grid">
+        <div id="table-10d-container"><p class="loading">Loading…</p></div>
+        <img class="forecast-img" data-src="../forecast_10d_30d.png" alt="10-day experimental forecast — Rivière des Prairies (CEHQ station 043301)" loading="lazy" />
       </div>
     </div>
 
@@ -1314,6 +1379,42 @@
         document.getElementById('generated-time').textContent = '';
         document.getElementById('table-container').innerHTML =
           '<p class="error">Unable to load forecast.</p>';
+      });
+
+    // ── Experimental 10-day forecast table ──────────────────────────────────
+    fetch('../forecast_10d.json?v=' + CACHE_VERSION, { cache: 'no-cache' })
+      .then(r => r.json())
+      .then(data => {
+        const rows = data.forecast.map(d => {
+          const dt  = new Date(d.date + 'T12:00:00');
+          const dow = EN_DAYS[dt.getDay()];
+          const cls = levelCls(d.level_m);
+          const tentative = d.day > 5 ? ' tentative' : '';
+          return `<div class="f-row${tentative}">
+            <div class="f-day">D+${d.day}</div>
+            <div class="f-date">${d.date}<span class="dow">${dow}</span></div>
+            <div class="f-flow">
+              <span class="flow-val">${d.flow_m3s.toFixed(0)}</span>
+              <span class="flow-unit">m³/s</span>
+            </div>
+            <div class="f-level">
+              <span class="level-val ${cls}">${d.level_m.toFixed(3)}</span>
+            </div>
+          </div>`;
+        }).join('');
+
+        document.getElementById('table-10d-container').innerHTML =
+          `<div class="forecast-col-headers">
+            <span class="col-label"></span>
+            <span class="col-label">Date</span>
+            <span class="col-label r">Flow</span>
+            <span class="col-label r">Level</span>
+          </div>
+          <div class="forecast-rows">${rows}</div>`;
+      })
+      .catch(() => {
+        document.getElementById('table-10d-container').innerHTML =
+          '<p class="error">10-day forecast unavailable.</p>';
       });
   </script>
 </body>

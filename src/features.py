@@ -5,8 +5,8 @@ Public API:
     build_dataset() -> tuple[pd.DataFrame, pd.DataFrame]
         Returns (X, y) where:
           X: feature matrix, indexed by date
-          y: target matrix with 10 columns:
-             flow_t1…flow_t5, level_t1…level_t5
+          y: target matrix with 20 columns:
+             flow_t1…flow_t10, level_t1…level_t10
 """
 
 import sys
@@ -194,7 +194,7 @@ def _add_forecast_features(df: pd.DataFrame) -> pd.DataFrame:
 
 def _add_targets(df: pd.DataFrame) -> pd.DataFrame:
     new_cols = {}
-    for h in range(1, 6):
+    for h in range(1, 11):
         new_cols[f"flow_t{h}"]  = df["flow_m3s"].shift(-h)
         new_cols[f"level_t{h}"] = df["level_m"].shift(-h)
     return pd.concat([df, pd.DataFrame(new_cols, index=df.index)], axis=1)
@@ -209,7 +209,7 @@ def build_dataset(drop_incomplete: bool = True) -> tuple[pd.DataFrame, pd.DataFr
     X : pd.DataFrame
         Feature matrix indexed by date (~17,500 rows, ~70 columns).
     y : pd.DataFrame
-        Target matrix with columns flow_t1…flow_t5, level_t1…level_t5.
+        Target matrix with columns flow_t1…flow_t10, level_t1…level_t10.
     """
     # ── 1. Load and merge data sources ─────────────────────────────────────
     flow = load_flow()[["flow_m3s"]]
@@ -246,13 +246,13 @@ def build_dataset(drop_incomplete: bool = True) -> tuple[pd.DataFrame, pd.DataFr
     df = _add_targets(df)
 
     # ── 4. Split X / y and drop rows with missing targets ──────────────────
-    target_cols = [f"flow_t{h}" for h in range(1, 6)] + [f"level_t{h}" for h in range(1, 6)]
+    target_cols = [f"flow_t{h}" for h in range(1, 11)] + [f"level_t{h}" for h in range(1, 11)]
     feature_cols = [c for c in df.columns if c not in target_cols]
 
     y = df[target_cols].copy()
     X = df[feature_cols].copy()
 
-    # Drop rows where any target is NaN (last 5 rows due to forward shift)
+    # Drop rows where any target is NaN (last 10 rows due to forward shift)
     if drop_incomplete:
         valid = y.notna().all(axis=1)
         X = X.loc[valid]

@@ -2,7 +2,7 @@
 LightGBM forecast model for station 043301 — Des Prairies.
 
 Strategy: two seasonal model sets (cold: Nov–May, warm: Jun–Oct),
-each with one LGBMRegressor per target horizon (10 models × 2 seasons = 20 total).
+each with one LGBMRegressor per target horizon (20 models × 2 seasons = 40 total).
 The saved pickle has the structure:
     {"cold": {target: model, ...}, "warm": {target: model, ...}}
 
@@ -47,8 +47,8 @@ LGBM_PARAMS = {
 }
 
 TARGET_COLS = (
-    [f"flow_t{h}"  for h in range(1, 6)] +
-    [f"level_t{h}" for h in range(1, 6)]
+    [f"flow_t{h}"  for h in range(1, 11)] +
+    [f"level_t{h}" for h in range(1, 11)]
 )
 
 # Nov 1 – May 31: snowpack accumulation + spring freshet
@@ -341,6 +341,8 @@ if __name__ == "__main__":
     parser.add_argument("--quantile", type=float, default=None, metavar="ALPHA",
                         help="Train quantile model at ALPHA (e.g. 0.85) and save as "
                              "models/lgbm_forecast_quantile.pkl")
+    parser.add_argument("--out", type=str, default=None, metavar="PATH",
+                        help="Override output pkl path")
     args = parser.parse_args()
 
     # 1. Build dataset
@@ -361,8 +363,9 @@ if __name__ == "__main__":
     print(f"Test:  {len(X_test):,} rows  ({X_test.index[0].date()} → {X_test.index[-1].date()})")
 
     train_fn   = lambda X, y: train(X, y, alpha=args.quantile)
-    out_path   = ("models/lgbm_forecast_quantile.pkl" if args.quantile
-                  else "models/lgbm_forecast.pkl")
+    default_out = ("models/lgbm_forecast_quantile.pkl" if args.quantile
+                   else "models/lgbm_forecast.pkl")
+    out_path   = args.out if args.out else default_out
     label_sfx  = f" (quantile α={args.quantile})" if args.quantile else ""
 
     seasonal_models = {}
