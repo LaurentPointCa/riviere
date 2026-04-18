@@ -1,6 +1,52 @@
 # Rivière des Prairies — Task Backlog
 
-## Flood Detection Reorientation (current focus)
+## SEO pass + English version (complete)
+
+Goal: make the GitHub Pages site discoverable in both French and English.
+Canonical base URL: `https://laurentpointca.github.io/riviere/`.
+
+- [x] Add SEO meta tags to `docs/index.html` (title, description, canonical, robots, OG, Twitter)
+- [x] Add hreflang alternates (fr, en, x-default) on both pages
+- [x] Add JSON-LD structured data (WebApplication + Dataset) to both pages
+- [x] Create `docs/en/index.html` — full English translation (UI, about, legal, disclaimer, legend)
+- [x] Add FR ↔ EN language switcher to both pages (4th button in info-links row)
+- [x] Improve image `alt` text on charts (descriptive rather than generic)
+- [x] Create `docs/robots.txt`
+- [x] Create `docs/sitemap.xml` listing both language URLs with xhtml:link alternates
+
+### Review
+- French page: added full SEO head block (title, description, canonical, robots, hreflang × 3,
+  OG, Twitter Card, JSON-LD with WebApplication + Dataset schema), language switcher, better
+  alt text on the two forecast charts. No layout changes, no JS logic changes.
+- English page (`docs/en/index.html`): full standalone translation with adjusted relative paths
+  (`../forecast.json`, `../forecast_30d.png`, `../forecast.png`) and back-link to `../` for FR.
+  Uses `lang="en"`, `en-CA` locale, English day names and legal copy.
+- SEO artifacts: `robots.txt` allows all and points to sitemap; `sitemap.xml` lists both URLs
+  with `xhtml:link rel="alternate"` for Google's international SEO guidelines.
+- Post-deploy follow-ups (manual, outside code): submit sitemap in Google Search Console and
+  Bing Webmaster Tools under both language URLs; optionally create a dedicated 1200×630 OG
+  image instead of reusing `forecast_30d.png`.
+
+---
+
+## Carillon Dam Integration (current focus)
+
+Context: Carillon dam (Hydro-Québec) controls Ottawa River inflow upstream of the Des Prairies
+confluence. Historical discharge data has been obtained — integrate into the model as a new
+upstream feature.
+
+- [ ] Make flow graphs log-scale instead of linear
+- [ ] Fix VM/Mac git push conflicts: move VM forecast commits to a separate `forecast` branch (preferred), and have GitHub Pages serve from that branch — or alternatively merge `forecast` into `master` via Action. Goal: single writer per branch, no more force-with-lease races.
+- [ ] Load and explore Carillon historical discharge data
+- [ ] Add `load_carillon()` to `src/load_data.py`
+- [ ] Add Carillon features (lags, rolling stats) to `src/features.py`
+- [ ] Retrain model with Carillon features
+- [ ] Evaluate with flood detection framework — must meet: recall@t+3>=0.90, precision>=0.85
+- [ ] If improved, promote to production and SCP to VM
+
+---
+
+## Flood Detection Reorientation (complete)
 
 Context: The model's real goal is to predict upcoming flow increases concerning to residents
 (2500 m³/s = concern threshold, 3000 m³/s = near flood). RMSE optimization on a test set
@@ -60,6 +106,45 @@ analysis in memory/project_flood_detection_reorientation.md.
   - `flood_risk.max_predicted_flow_m3s` = max flow across all horizons
 - [x] Add threshold lines to forecast charts (forecast.png, forecast_30d.png)
   - Amber line at 2500 m³/s ("Préoccupation") and red at 3000 m³/s ("Quasi-crue")
+
+---
+
+## Forecast Horizon Experiments
+
+- [ ] **10-day forecast** — extend predictions from current t+5 to t+10 horizon
+  - Evaluate performance: check recall@t+3/t+5/t+10 on flood detection framework, precision, lead time
+  - Compare against current 5-day baseline
+  - If marginal degradation (recall drop <5%), promote to prod
+  
+- [ ] **Same-day forecast (24h)** — add t+0 (next 24 hours) to the forecast output
+  - Useful for immediate flood monitoring / decision support (current forecast starts at t+1)
+  - Train on available features lagged appropriately
+  - Evaluate on flood framework — should have highest recall/precision since it's the shortest horizon
+
+---
+
+## Model Retraining
+
+- [ ] **Annual retrain — October** (after warm season closes, before cold season freshet risk)
+  - Update ECCC XML exports for 02KF005 and 02LA015 (drop updated files in `data/` before retraining)
+  - Run `python src/model.py` on Mac, SCP new pkl files to VM
+  - Evaluate with `src/evaluate_flood.py` — must meet: recall@t+3≥0.90, precision≥0.85, lead>0d
+  - Check validation plot for drift before and after
+
+- [ ] **Event-triggered retrain — after any observed flow >2500 m³/s**
+  - Same prep as above; new flood year is highest-value training addition
+  - Update flood eval baseline in memory after
+
+- [ ] **Drift monitoring** — watch validation plot for persistent bias across all horizons
+
+---
+
+## Backlog / Future Work
+
+- [ ] Recursive multi-step forecasting
+- [ ] Proper walk-forward cross-validation
+- [ ] Prediction intervals (confidence bands on forecast output)
+- [ ] Better snowpack modeling
 
 ---
 
