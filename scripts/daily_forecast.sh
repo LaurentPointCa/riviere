@@ -39,13 +39,26 @@ EOF
 
 # Commit and push only from the VM — on Mac, forecasts are for local validation only.
 if [[ "$(hostname -s)" == "riviere" ]]; then
+    # Sync with remote first so commits made elsewhere (e.g. Mac) don't block the push.
+    # Stash any auto-refreshed cache files so rebase is clean, then restore them.
+    STASHED=0
+    if ! git diff --quiet; then
+        git stash push -u -m "daily-forecast-autostash" >/dev/null
+        STASHED=1
+    fi
+    git fetch origin master
+    git rebase origin/master
+    if [[ $STASHED -eq 1 ]]; then
+        git stash pop >/dev/null
+    fi
+
     git add docs/forecast.png docs/forecast_30d.png docs/forecast.json docs/forecast_history.json \
             docs/forecast_mse.png docs/forecast_mse_30d.png docs/forecast_mse.json docs/forecast_mse_history.json \
             docs/forecast_10d_30d.png docs/forecast_10d.json docs/forecast_10d_history.json \
             docs/forecast_validation.png docs/forecast_10d_validation.png
     if ! git diff --cached --quiet; then
         git commit -m "chore: daily forecast $(date +%Y-%m-%d)"
-        git push --force-with-lease
+        git push
         echo "Chart and forecast JSON committed and pushed."
     else
         echo "Forecast unchanged, nothing to push."
