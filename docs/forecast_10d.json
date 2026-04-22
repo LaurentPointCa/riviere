@@ -1,71 +1,71 @@
 {
-  "generated_at": "2026-04-21T20:02:03Z",
-  "anchor_date": "2026-04-21",
+  "generated_at": "2026-04-22T11:01:43Z",
+  "anchor_date": "2026-04-22",
   "flood_risk": {
     "concern": true,
     "near_flood": false,
-    "max_predicted_flow_m3s": 2949.9
+    "max_predicted_flow_m3s": 2955.4
   },
   "forecast": [
     {
       "day": 1,
-      "date": "2026-04-22",
-      "flow_m3s": 2788.3,
-      "level_m": 21.984
+      "date": "2026-04-23",
+      "flow_m3s": 2883.3,
+      "level_m": 22.102
     },
     {
       "day": 2,
-      "date": "2026-04-23",
-      "flow_m3s": 2949.9,
-      "level_m": 22.177
+      "date": "2026-04-24",
+      "flow_m3s": 2955.4,
+      "level_m": 22.176
     },
     {
       "day": 3,
-      "date": "2026-04-24",
-      "flow_m3s": 2666.2,
-      "level_m": 21.777
+      "date": "2026-04-25",
+      "flow_m3s": 2747.7,
+      "level_m": 21.919
     },
     {
       "day": 4,
-      "date": "2026-04-25",
-      "flow_m3s": 2836.1,
-      "level_m": 21.933
+      "date": "2026-04-26",
+      "flow_m3s": 2826.2,
+      "level_m": 21.896
     },
     {
       "day": 5,
-      "date": "2026-04-26",
-      "flow_m3s": 2709.5,
-      "level_m": 21.909
+      "date": "2026-04-27",
+      "flow_m3s": 2707.3,
+      "level_m": 21.905
     },
     {
       "day": 6,
-      "date": "2026-04-27",
-      "flow_m3s": 2612.1,
-      "level_m": 21.819
+      "date": "2026-04-28",
+      "flow_m3s": 2609.3,
+      "level_m": 21.887
     },
     {
       "day": 7,
-      "date": "2026-04-28",
-      "flow_m3s": 2585.5,
-      "level_m": 21.816
+      "date": "2026-04-29",
+      "flow_m3s": 2581.2,
+      "level_m": 21.783
     },
     {
       "day": 8,
-      "date": "2026-04-29",
-      "flow_m3s": 2631.2,
-      "level_m": 21.579
+      "date": "2026-04-30",
+      "flow_m3s": 2584.5,
+      "level_m": 21.564
     },
     {
       "day": 9,
-      "date": "2026-04-30",
-      "flow_m3s": 2524.4,
-      "level_m": 21.697
+      "date": "2026-05-01",
+      "flow_m3s": 2542.6,
+      "level_m": 21.654
     },
     {
       "day": 10,
-      "date": "2026-05-01",
-      "flow_m3s": 2422.3,
-      "level_m": 21.688
+      "date": "2026-05-02",
+      "flow_m3s": 2417.6,
+      "level_m": 21.641
     }
   ]
 }
