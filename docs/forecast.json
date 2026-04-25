@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-04-25T18:19:17Z",
+  "generated_at": "2026-04-25T20:01:22Z",
   "anchor_date": "2026-04-25",
   "flood_risk": {
     "concern": true,
@@ -11,12 +11,12 @@
       "day": 1,
       "date": "2026-04-26",
       "flow_m3s": 2962.9,
-      "level_m": 21.905
+      "level_m": 21.906
     },
     {
       "day": 2,
       "date": "2026-04-27",
-      "flow_m3s": 2917.9,
+      "flow_m3s": 2917.8,
       "level_m": 21.889
     },
     {
@@ -28,13 +28,13 @@
     {
       "day": 4,
       "date": "2026-04-29",
-      "flow_m3s": 2767.5,
+      "flow_m3s": 2767.4,
       "level_m": 21.976
     },
     {
       "day": 5,
       "date": "2026-04-30",
-      "flow_m3s": 2729.2,
+      "flow_m3s": 2730.0,
       "level_m": 21.932
     }
   ]
