@@ -2592,38 +2592,38 @@
     ]
   },
   {
-    "generated_at": "2026-06-07T11:01:28Z",
+    "generated_at": "2026-06-07T20:01:44Z",
     "anchor_date": "2026-06-07",
     "forecast": [
       {
         "day": 1,
         "date": "2026-06-08",
-        "flow_m3s": 1242.0,
-        "level_m": 20.085
+        "flow_m3s": 1238.8,
+        "level_m": 20.076
       },
       {
         "day": 2,
         "date": "2026-06-09",
-        "flow_m3s": 1223.2,
-        "level_m": 20.049
+        "flow_m3s": 1222.0,
+        "level_m": 20.043
       },
       {
         "day": 3,
         "date": "2026-06-10",
-        "flow_m3s": 1159.5,
-        "level_m": 20.0
+        "flow_m3s": 1204.7,
+        "level_m": 20.015
       },
       {
         "day": 4,
         "date": "2026-06-11",
-        "flow_m3s": 1241.3,
-        "level_m": 19.97
+        "flow_m3s": 1292.3,
+        "level_m": 20.029
       },
       {
         "day": 5,
         "date": "2026-06-12",
-        "flow_m3s": 1204.7,
-        "level_m": 20.008
+        "flow_m3s": 1231.2,
+        "level_m": 20.05
       }
     ]
   }
