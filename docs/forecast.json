@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-01T11:01:24Z",
+  "generated_at": "2026-07-01T20:00:59Z",
   "anchor_date": "2026-07-01",
   "flood_risk": {
     "concern": false,
@@ -11,31 +11,31 @@
       "day": 1,
       "date": "2026-07-02",
       "flow_m3s": 983.5,
-      "level_m": 19.76
+      "level_m": 19.764
     },
     {
       "day": 2,
       "date": "2026-07-03",
-      "flow_m3s": 974.3,
-      "level_m": 19.725
+      "flow_m3s": 983.1,
+      "level_m": 19.734
     },
     {
       "day": 3,
       "date": "2026-07-04",
-      "flow_m3s": 957.7,
-      "level_m": 19.703
+      "flow_m3s": 960.1,
+      "level_m": 19.706
     },
     {
       "day": 4,
       "date": "2026-07-05",
-      "flow_m3s": 948.6,
-      "level_m": 19.691
+      "flow_m3s": 943.7,
+      "level_m": 19.69
     },
     {
       "day": 5,
       "date": "2026-07-06",
-      "flow_m3s": 956.2,
-      "level_m": 19.672
+      "flow_m3s": 968.5,
+      "level_m": 19.684
     }
   ]
 }
