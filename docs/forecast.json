@@ -1,41 +1,41 @@
 {
-  "generated_at": "2026-07-23T11:01:29Z",
+  "generated_at": "2026-07-23T20:01:32Z",
   "anchor_date": "2026-07-23",
   "flood_risk": {
     "concern": false,
     "near_flood": false,
-    "max_predicted_flow_m3s": 799.1
+    "max_predicted_flow_m3s": 795.3
   },
   "forecast": [
     {
       "day": 1,
       "date": "2026-07-24",
-      "flow_m3s": 782.4,
-      "level_m": 19.448
+      "flow_m3s": 768.2,
+      "level_m": 19.42
     },
     {
       "day": 2,
       "date": "2026-07-25",
-      "flow_m3s": 757.9,
-      "level_m": 19.429
+      "flow_m3s": 755.8,
+      "level_m": 19.417
     },
     {
       "day": 3,
       "date": "2026-07-26",
-      "flow_m3s": 799.1,
-      "level_m": 19.433
+      "flow_m3s": 795.3,
+      "level_m": 19.422
     },
     {
       "day": 4,
       "date": "2026-07-27",
-      "flow_m3s": 790.8,
-      "level_m": 19.457
+      "flow_m3s": 783.5,
+      "level_m": 19.442
     },
     {
       "day": 5,
       "date": "2026-07-28",
-      "flow_m3s": 791.1,
-      "level_m": 19.454
+      "flow_m3s": 783.6,
+      "level_m": 19.461
     }
   ]
 }
