@@ -13068,68 +13068,68 @@
     ]
   },
   {
-    "generated_at": "2026-11-26T12:02:10Z",
+    "generated_at": "2026-11-26T21:01:23Z",
     "anchor_date": "2026-11-26",
     "forecast": [
       {
         "day": 1,
         "date": "2026-11-27",
-        "flow_m3s": 714.6,
-        "level_m": 19.334
+        "flow_m3s": 712.6,
+        "level_m": 19.336
       },
       {
         "day": 2,
         "date": "2026-11-28",
-        "flow_m3s": 761.8,
-        "level_m": 19.36
+        "flow_m3s": 759.9,
+        "level_m": 19.369
       },
       {
         "day": 3,
         "date": "2026-11-29",
-        "flow_m3s": 758.0,
-        "level_m": 19.386
+        "flow_m3s": 765.3,
+        "level_m": 19.415
       },
       {
         "day": 4,
         "date": "2026-11-30",
-        "flow_m3s": 737.4,
-        "level_m": 19.438
+        "flow_m3s": 759.4,
+        "level_m": 19.491
       },
       {
         "day": 5,
         "date": "2026-12-01",
-        "flow_m3s": 744.5,
-        "level_m": 19.412
+        "flow_m3s": 756.9,
+        "level_m": 19.467
       },
       {
         "day": 6,
         "date": "2026-12-02",
-        "flow_m3s": 717.6,
-        "level_m": 19.376
+        "flow_m3s": 787.3,
+        "level_m": 19.436
       },
       {
         "day": 7,
         "date": "2026-12-03",
-        "flow_m3s": 715.7,
-        "level_m": 19.398
+        "flow_m3s": 763.3,
+        "level_m": 19.456
       },
       {
         "day": 8,
         "date": "2026-12-04",
-        "flow_m3s": 759.5,
-        "level_m": 19.449
+        "flow_m3s": 787.4,
+        "level_m": 19.464
       },
       {
         "day": 9,
         "date": "2026-12-05",
-        "flow_m3s": 766.8,
-        "level_m": 19.478
+        "flow_m3s": 824.2,
+        "level_m": 19.481
       },
       {
         "day": 10,
         "date": "2026-12-06",
-        "flow_m3s": 725.8,
-        "level_m": 19.462
+        "flow_m3s": 827.6,
+        "level_m": 19.559
       }
     ]
   }
